@@ -1,7 +1,7 @@
 # Assignment A2: Mesh Generator
 
   - Davis Lenover [lenoverd@mcmaster.ca]
-  - Author #2 [email@mcmaster.ca]
+  - Jasmine Wang [wangj500@mcmaster.ca]
   - Author #3 [email@mcmaster.ca]
 
 ## How to run the product
