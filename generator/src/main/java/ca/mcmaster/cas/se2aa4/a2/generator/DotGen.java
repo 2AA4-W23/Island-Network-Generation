@@ -47,8 +47,8 @@ public class DotGen {
         for (Vertex v1: verticesWithColors){
             for (Vertex v2: verticesWithColors){
 
-                //only draw segment if vertices are in either the same row or column
-                if ((v1.getX() == v2.getX() &&  v1.getY() != v2.getY() )|| (v1.getX() != v2.getX() &&  v1.getY() == v2.getY())) {
+                //only draw segment if vertices are adjacent in either the same row or column
+                if ((v1.getX() == v2.getX() &&  v1.getY() == (v2.getY()+square_size))||(v1.getX() == v2.getX() &&  v1.getY() == (v2.getY()-square_size))|| ((v1.getY() == v2.getY()) &&  v1.getX() == (v2.getX()+square_size))||(v1.getY() == v2.getY() &&  v1.getX() == (v2.getX()-square_size))) {
 
                     Color v1Color = extractColor(v1.getPropertiesList());
                     Color v2Color = extractColor(v2.getPropertiesList());

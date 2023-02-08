@@ -37,6 +37,7 @@ public class GraphicRenderer {
             String startVertex = null;
             String endVertex = null;
 
+            //find the start and end vertex properties for each line segment
             for(Property p: s.getPropertiesList()) {
                 if (p.getKey().equals("start_vertex")) {
                     startVertex = p.getValue();
@@ -54,7 +55,7 @@ public class GraphicRenderer {
             double x_End = Double.parseDouble(rawEnd[0]);
             double y_End = Double.parseDouble(rawEnd[1]);
 
-            //set the start and end poitns of each line segment from the properties
+            //set the start and end points of each line segment from the properties
             Point2D startPoint = new Point2D.Double(x_Start,y_Start);
             Point2D endPoint = new Point2D.Double(x_End,y_End);
             
