@@ -40,6 +40,10 @@ public class Polygons extends Polygon {
 
     }
 
+    /**
+     * Return a 2D Point object that contains the x and y coordinates for the centroid of the given polygon
+     * @return the centroid as a Point object
+     */
     public Point getCentroid() {
 
         List<Vertex> vertexList = this.getVerticiesList();
