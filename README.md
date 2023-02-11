@@ -65,6 +65,17 @@ When you develop features and enrich the product, remember that you have first t
 
 | Id | Feature title | Who? | Start | End | Status |
 |:--:|---------------|------|-------|-----|--------|
-|    |               |      |       |     |        |
+| 01 |      Create a Polygon Class         |      |       |     |        |
+| 02 |      Ensure Polygon object can reference the index of its immediate neighbours         |      |       |     |        |
+| 01 |      Ensure Polygon object can reference the index of the centroid vertex        |      |       |     |        |
+| 01 |      Ensure Polygon object can have color          |      |       |     |        |
+| 01 |      Ensure Polygon object has an alpha value to play with transparency         |      |       |     |        |
+| 01 |      Ensure Vertices can have color          |      |       |     |        |
+| 01 |      Ensure Vertices has an alpha value to play with transparency         |      |       |     |        |
+| 01 |      Ensure Segments can have color          |      |       |     |        |
+| 01 |      Ensure Segments has an alpha value to play with transparency         |      |       |     |        |
+| 01 |      Ensure Vertices can have thickness information          |      |       |     |        |
+| 01 |      Ensure Polygon object can have thickness information          |      |       |     |        |
+| 01 |      Ensure Segments can have thickness information          |      |       |     |        |
 
 
