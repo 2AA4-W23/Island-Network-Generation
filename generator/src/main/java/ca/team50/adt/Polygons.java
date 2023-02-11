@@ -40,17 +40,34 @@ public class Polygons extends Polygon {
 
     }
 
+    public Point getCentroid() {
+
+        List<Vertex> vertexList = this.getVerticiesList();
+
+        int yAverage = 0;
+        int xAverage = 0;
+        int listSize = vertexList.size();
+
+        // Find average x and y position
+        for (Vertex currentVertex : vertexList) {
+            xAverage+=currentVertex.getX();
+            yAverage+=currentVertex.getY();
+        }
+
+        yAverage = yAverage/listSize;
+        xAverage = xAverage/listSize;
+
+        Point centroid = new Point(xAverage,yAverage);
+
+        return centroid;
+    }
+
     public List<Vertex> getVerticiesList() {
-        return verticiesList;
+        return this.verticiesList;
     }
 
     public List<Segment> getSegmentsList() {
-        return segmentsList;
-    }
-
-    public Point getCentroid() {
-        Point returnPoint = new Point();
-        return returnPoint;
+        return this.segmentsList;
     }
 
 }
