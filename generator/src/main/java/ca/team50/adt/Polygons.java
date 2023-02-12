@@ -13,17 +13,29 @@ import java.util.List;
 
 public class Polygons extends Polygon {
 
-    private List<Vertex> verticiesList;
+    private List<Vertex> verticesList;
     private List<Segment> segmentsList;
+    private Vertex centroid;
 
-    // Vertices and Segments
-    public Polygons(List<Vertex> vertices) {
-        this.verticiesList = vertices;
+
+    /**
+     * Returns a Polygon object that describes an abstract shape based on the amount of vertices in a list
+     * @param vertexList the list of all vertices in the shape, in-order
+     * @exception IllegalStateException if list passed is empty
+     * @return the abstract shape as a Polygon object
+     */
+    public Polygons(List<Vertex> vertexList) throws IllegalStateException {
+
+        if (vertexList.isEmpty()) {
+            throw new IllegalStateException("Vertex list cannot be empty");
+        }
+
+        this.verticesList = vertexList;
 
         this.segmentsList = new ArrayList<>();
 
-        Iterator<Vertex> curentVertexIterator = this.verticiesList.iterator();
-        Iterator<Vertex> nextVertexIterator = this.verticiesList.iterator();
+        Iterator<Vertex> curentVertexIterator = this.verticesList.iterator();
+        Iterator<Vertex> nextVertexIterator = this.verticesList.iterator();
         nextVertexIterator.next();
 
         while (nextVertexIterator.hasNext()) {
@@ -31,25 +43,21 @@ public class Polygons extends Polygon {
             Vertex curentVertex = curentVertexIterator.next();
             Vertex nextVertex = nextVertexIterator.next();
 
-            Segment v1Segment = Segment.newBuilder().setV1Idx(verticiesList.indexOf(curentVertex)).build();
-            Segment v2Segment = v1Segment.toBuilder().setV2Idx(verticiesList.indexOf(nextVertex)).build();
+            Segment v1Segment = Segment.newBuilder().setV1Idx(verticesList.indexOf(curentVertex)).build();
+            Segment v2Segment = v1Segment.toBuilder().setV2Idx(verticesList.indexOf(nextVertex)).build();
             segmentsList.add(v2Segment);
 
         }
 
-
+        this.centroid = calculateCentroid();
     }
 
-    /**
-     * Return a 2D Point object that contains the x and y coordinates for the centroid of the given polygon
-     * @return the centroid as a Point object
-     */
-    public Point getCentroid() {
+    private Vertex calculateCentroid() {
 
-        List<Vertex> vertexList = this.getVerticiesList();
+        List<Vertex> vertexList = this.getVerticesList();
 
-        int yAverage = 0;
-        int xAverage = 0;
+        double yAverage = 0;
+        double xAverage = 0;
         int listSize = vertexList.size();
 
         // Find average x and y position
@@ -61,13 +69,17 @@ public class Polygons extends Polygon {
         yAverage = yAverage/listSize;
         xAverage = xAverage/listSize;
 
-        Point centroid = new Point(xAverage,yAverage);
+        Vertex centroid = Vertex.newBuilder().setX(xAverage).setY(yAverage).build();
 
         return centroid;
     }
 
-    public List<Vertex> getVerticiesList() {
-        return this.verticiesList;
+    public Vertex getCentroid() {
+        return this.centroid;
+    }
+
+    public List<Vertex> getVerticesList() {
+        return this.verticesList;
     }
 
     public List<Segment> getSegmentsList() {
