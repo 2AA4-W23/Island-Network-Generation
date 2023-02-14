@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 
 public class Polygons extends Polygon {
 
@@ -86,4 +87,34 @@ public class Polygons extends Polygon {
         return this.segmentsList;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        try {
+            Polygons polygonToCompare = (Polygons) o;
+
+            if (this.verticesList.size() != polygonToCompare.getVerticesList().size()) {
+                return false;
+            }
+
+            Iterator<Vertex> thisPolygonList = this.verticesList.iterator();
+            Iterator<Vertex> comparePolygonList = polygonToCompare.getVerticesList().iterator();
+
+            while(comparePolygonList.hasNext() && thisPolygonList.hasNext()) {
+
+                Vertex thisCurrentVertex = thisPolygonList.next();
+                Vertex compareCurrentVertex = comparePolygonList.next();
+
+                if (thisCurrentVertex.getX() != compareCurrentVertex.getX() || thisCurrentVertex.getY() != compareCurrentVertex.getY()) {
+                    return false;
+                }
+
+            }
+
+            return true;
+
+        } catch (ClassCastException e) {
+            throw new ClassCastException(o.getClass().getName() + " is not comparable to Polygons");
+        }
+    }
 }
