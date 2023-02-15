@@ -9,11 +9,6 @@ public class PolyMesh<T extends Polygons> implements Collection<T>{
     Polygons[] polygonsArray = new Polygons[1];
     int arrayCurrentSize = 0;
 
-    boolean isNeighbor(T polygon1, T polygon2) {
-        return true;
-    }
-
-
     @Override
     public int size() {
         return arrayCurrentSize;
@@ -80,7 +75,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T>{
     public boolean add(T t) {
 
         if (size() == polygonsArray.length) {
-            allocateNewSpace();
+            grow();
         }
 
         polygonsArray[arrayCurrentSize] = t;
@@ -146,7 +141,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T>{
         arrayCurrentSize = 0;
     }
 
-    private void allocateNewSpace() {
+    private void grow() {
         Polygons[] newArray = new Polygons[polygonsArray.length*2];
 
         for (int index = 0; index < size(); index++) {
@@ -157,5 +152,8 @@ public class PolyMesh<T extends Polygons> implements Collection<T>{
 
     }
 
+    boolean isNeighbor(T polygon1, T polygon2) {
+        return true;
+    }
 
 }
