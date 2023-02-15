@@ -34,10 +34,6 @@ public class DotGen {
             }
         }
 
-        Polygons testPolygon = new Polygons(vertices);
-
-        System.out.println(testPolygon.getSegmentsList());
-
         // Distribute colors randomly. Vertices are immutable, need to enrich them
         Set<Vertex> verticesWithColors = new HashSet<>();
         Random bag = new Random();
