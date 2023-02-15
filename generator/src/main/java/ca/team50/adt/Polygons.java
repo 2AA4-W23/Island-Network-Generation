@@ -114,7 +114,7 @@ public class Polygons extends Polygon {
             return true;
 
         } catch (ClassCastException e) {
-            throw new ClassCastException(o.getClass().getName() + " is not comparable to Polygons");
+            return false;
         }
     }
 }
