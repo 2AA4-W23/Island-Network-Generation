@@ -35,16 +35,27 @@ public class Polygons extends Polygon {
 
         this.segmentsList = new ArrayList<>();
 
-        Iterator<Vertex> curentVertexIterator = this.verticesList.iterator();
-        Iterator<Vertex> nextVertexIterator = this.verticesList.iterator();
-        nextVertexIterator.next();
+        for (int index = 0; index < vertexList.size(); index++) {
 
-        while (nextVertexIterator.hasNext()) {
+            Vertex currentVertex = this.verticesList.get(index);
 
-            Vertex curentVertex = curentVertexIterator.next();
-            Vertex nextVertex = nextVertexIterator.next();
+            // Check if the end of the list was reached
+            if (index+1 >= verticesList.size()) {
 
-            Segment v1Segment = Segment.newBuilder().setV1Idx(verticesList.indexOf(curentVertex)).build();
+                // If so, connect the final segment from the last to the first Vertex
+                Vertex firstVertex = this.verticesList.get(0);
+
+                Segment v1Segment = Segment.newBuilder().setV1Idx(verticesList.indexOf(currentVertex)).build();
+                Segment v2Segment = v1Segment.toBuilder().setV2Idx(verticesList.indexOf(firstVertex)).build();
+
+                segmentsList.add(v2Segment);
+                break;
+
+            }
+
+            Vertex nextVertex = this.verticesList.get(index+1);
+
+            Segment v1Segment = Segment.newBuilder().setV1Idx(verticesList.indexOf(currentVertex)).build();
             Segment v2Segment = v1Segment.toBuilder().setV2Idx(verticesList.indexOf(nextVertex)).build();
             segmentsList.add(v2Segment);
 
