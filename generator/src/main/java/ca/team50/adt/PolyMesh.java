@@ -3,15 +3,15 @@ package ca.team50.adt;
 import java.util.*;
 
 // Any class which derives from the Polygons class can be used to create a mesh
-public class PolyMesh<T extends Polygons> implements Collection<T>{
+public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     // Mesh is a collection of Polygons and can operate on them
-    Polygons[] polygonsArray = new Polygons[1];
-    int arrayCurrentSize = 0;
+    private Polygons[] polygonsArray = new Polygons[1];
+    private int arrayCurrentSize = 0;
 
     @Override
     public int size() {
-        return arrayCurrentSize;
+        return this.arrayCurrentSize;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T>{
             Polygons testPolygon = (Polygons) o;
 
             for (int index = 0; index < size(); index++) {
-                if (polygonsArray[index] == testPolygon) {
+                if (this.polygonsArray[index] == testPolygon) {
                     return true;
                 }
             }
@@ -60,7 +60,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T>{
         Polygons[] returnArray = new Polygons[size()];
 
         for (int index = 0; index < size(); index++) {
-            returnArray[index] = polygonsArray[index];
+            returnArray[index] = this.polygonsArray[index];
         }
 
         return returnArray;
@@ -74,14 +74,19 @@ public class PolyMesh<T extends Polygons> implements Collection<T>{
     @Override
     public boolean add(T t) {
 
-        if (size() == polygonsArray.length) {
-            grow();
+        if (!contains(t)) {
+            if (size() == this.polygonsArray.length) {
+                grow();
+            }
+
+            this.polygonsArray[arrayCurrentSize] = t;
+            this.arrayCurrentSize++;
+
+            return true;
         }
 
-        polygonsArray[arrayCurrentSize] = t;
-        arrayCurrentSize++;
+        return false;
 
-        return true;
     }
 
     @Override
@@ -89,21 +94,21 @@ public class PolyMesh<T extends Polygons> implements Collection<T>{
 
         for (int index = 0; index < size(); index++) {
 
-            if (polygonsArray[index]==o) {
-                polygonsArray[index] = null;
+            if (this.polygonsArray[index]==o) {
+                this.polygonsArray[index] = null;
 
                 int previousIndex = index;
 
                 for (int forwardIndex = index+1; forwardIndex < size(); forwardIndex++) {
 
-                    polygonsArray[previousIndex] = polygonsArray[forwardIndex];
+                    this.polygonsArray[previousIndex] = this.polygonsArray[forwardIndex];
 
                     previousIndex++;
 
                 }
 
-                polygonsArray[size()-1] = null;
-                arrayCurrentSize--;
+                this.polygonsArray[size()-1] = null;
+                this.arrayCurrentSize--;
 
                 return true;
 
@@ -117,35 +122,147 @@ public class PolyMesh<T extends Polygons> implements Collection<T>{
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+
+        for (Object currentObject : c) {
+
+            try {
+
+                boolean doesPolygonExist = false;
+
+                Polygons currentPolygon = (Polygons) currentObject;
+
+                Iterator<T> iterator = iterator();
+
+                while (iterator.hasNext()) {
+                    Polygons checkingPolygons = iterator.next();
+                    if (checkingPolygons == currentPolygon) {
+                        doesPolygonExist = true;
+                        break;
+                    }
+                }
+
+                if (!doesPolygonExist) {
+                    return false;
+                }
+
+            } catch (ClassCastException e) {
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        return false;
+
+        boolean collectionModified = false;
+
+        for (T currentPolygon : c) {
+            if(this.add(currentPolygon)) {
+                collectionModified = true;
+            }
+        }
+
+        return collectionModified;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+
+        boolean collectionModified = false;
+
+        for (Object currentObject : c) {
+
+            try {
+
+                Polygons currentPolygon = (Polygons) currentObject;
+
+                if(this.remove(currentPolygon)) {
+                    collectionModified = true;
+                }
+
+            } catch (ClassCastException e) {
+                return false;
+            }
+        }
+
+        return collectionModified;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+
+        boolean collectionModified = false;
+
+        while(true) {
+
+            boolean isDone = true;
+
+            for (int index = 0; index < size(); index++){
+                if (!c.contains(this.polygonsArray[index])) {
+                    this.remove(this.polygonsArray[index]);
+                    collectionModified = true;
+                    isDone = false;
+                    break;
+                }
+            }
+
+            if (isDone) {
+                break;
+            }
+
+        }
+
+        return collectionModified;
     }
 
     @Override
     public void clear() {
-        polygonsArray = new Polygons[1];
-        arrayCurrentSize = 0;
+        this.polygonsArray = new Polygons[1];
+        this.arrayCurrentSize = 0;
+    }
+
+    public T get(int index) {
+        if (index < size()) {
+            return (T) this.polygonsArray[index];
+        } else {
+            throw new IndexOutOfBoundsException("Index " + index + " is not within collection range");
+        }
+    }
+
+    public boolean remove(int index) {
+
+        if (index < size()) {
+
+            this.polygonsArray[index] = null;
+
+            int previousIndex = index;
+
+            for (int forwardIndex = index+1; forwardIndex < size(); forwardIndex++) {
+
+                this.polygonsArray[previousIndex] = this.polygonsArray[forwardIndex];
+
+                previousIndex++;
+
+            }
+
+            this.polygonsArray[size()-1] = null;
+            this.arrayCurrentSize--;
+
+            return true;
+
+        } else {
+            throw new IndexOutOfBoundsException("Index " + index + " is not within collection range");
+        }
     }
 
     private void grow() {
-        Polygons[] newArray = new Polygons[polygonsArray.length*2];
+        Polygons[] newArray = new Polygons[this.polygonsArray.length*2];
 
         for (int index = 0; index < size(); index++) {
-            newArray[index] = polygonsArray[index];
+            newArray[index] = this.polygonsArray[index];
         }
 
         this.polygonsArray = newArray;
