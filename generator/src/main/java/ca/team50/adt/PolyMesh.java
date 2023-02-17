@@ -164,21 +164,52 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
         return false;
     }
 
+    private void removeSegment(Vertex idx1, Vertex idx2) {
+
+
+
+    }
+
     private void removeSegments(Polygons polygonToRemove, int indexOfRemoval) {
 
         int index = 0;
+
+        boolean[] segmentsToKeepBool = new boolean[polygonToRemove.getSegmentsList().size()];
 
         for (Polygons checkingPolygon : this.polygonsArray) {
 
             if (isNeighbor(indexOfRemoval,index)) {
 
-                Vertex[][] segmentsToKeep = isNeighborSpecific(polygonToRemove,checkingPolygon);
+                Segment[] segmentsToKeep = isNeighborSpecific(polygonToRemove,checkingPolygon);
 
+                int boolindex = 0;
 
+                for (Segment polygonToRemoveSegment : polygonToRemove.getSegmentsList()) {
+
+                    segmentsToKeepBool[boolindex] = false;
+
+                    for (Segment segmentKeeping : segmentsToKeep) {
+
+                        if (polygonToRemoveSegment == segmentKeeping) {
+
+                            segmentsToKeepBool[boolindex] = true;
+                            break;
+
+                        }
+
+                    }
+
+                    boolindex++;
+
+                }
 
             }
 
+            index++;
+
         }
+
+
 
 
     }
@@ -410,9 +441,9 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     }
 
-    private Vertex[][] isNeighborSpecific(Polygons polygon1, Polygons polygon2) {
+    private Segment[] isNeighborSpecific(Polygons polygon1, Polygons polygon2) {
 
-        Vertex[][] returnArray = new Vertex[polygon1.getSegmentsList().size()][2];
+        Segment[] itemsToReturn = new Segment[polygon1.getSegmentsList().size()];
 
         int index = 0;
 
@@ -429,8 +460,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
                 if ((Vertex1Idx1.getX() == Vertex2Idx1.getX() && Vertex1Idx1.getY() == Vertex2Idx1.getY()) || (Vertex1Idx1.getX() == Vertex2Idx2.getX() && Vertex1Idx1.getY() == Vertex2Idx2.getY())) {
                     if ((Vertex1Idx2.getX() == Vertex2Idx1.getX() && Vertex1Idx2.getY() == Vertex2Idx1.getY()) || (Vertex1Idx2.getX() == Vertex2Idx2.getX() && Vertex1Idx2.getY() == Vertex2Idx2.getY())) {
 
-                        returnArray[index][0] = Vertex2Idx1;
-                        returnArray[index][1] = Vertex2Idx2;
+                        itemsToReturn[index] = polygon1Segments;
 
                         index++;
 
@@ -438,6 +468,14 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
                 }
 
             }
+
+        }
+
+        Segment[] returnArray = new Segment[index];
+
+        for (int checkIndex = 0; checkIndex < index-1; checkIndex++) {
+
+            returnArray[checkIndex] = itemsToReturn[checkIndex];
 
         }
 
