@@ -9,11 +9,17 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     // Mesh is a collection of Polygons and can operate on them
     private Polygons[] polygonsArray = new Polygons[1];
+    private Vertex[][] drawableSegmentsArray = new Vertex[1][2];
     private int arrayCurrentSize = 0;
+    private int segmentsArrayCurrentSize = 0;
 
     @Override
     public int size() {
         return this.arrayCurrentSize;
+    }
+
+    private int segmentSize() {
+        return this.segmentsArrayCurrentSize;
     }
 
     @Override
@@ -37,6 +43,23 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
             return false;
         }
         return false;
+    }
+
+    private boolean containsSegment(Vertex idx1, Vertex idx2) {
+
+        for (Vertex[] segment : this.drawableSegmentsArray) {
+
+            if ((segment[0].getX() == idx1.getX() && segment[0].getY() == idx1.getY()) || (segment[0].getX() == idx2.getX() && segment[0].getY() == idx2.getY())) {
+                if ((segment[1].getX() == idx1.getX() && segment[1].getY() == idx1.getY()) || (segment[1].getX() == idx2.getX() && segment[1].getY() == idx2.getY())) {
+                    return true;
+                }
+
+            }
+
+        }
+
+        return false;
+
     }
 
     @Override
@@ -84,12 +107,31 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
             this.polygonsArray[arrayCurrentSize] = t;
             this.arrayCurrentSize++;
 
+            calculateDrawableSegments();
+
             return true;
         }
 
         return false;
 
     }
+
+    private void addSegment(Vertex Idx1, Vertex Idx2) {
+
+        if (!containsSegment(Idx1,Idx2)) {
+
+            if (segmentSize() == this.drawableSegmentsArray.length) {
+                growSegments();
+            }
+
+            this.drawableSegmentsArray[segmentsArrayCurrentSize][0] = Idx1;
+            this.drawableSegmentsArray[segmentsArrayCurrentSize][1] = Idx2;
+
+            this.segmentsArrayCurrentSize++;
+
+            }
+
+        }
 
     @Override
     public boolean remove(Object o) {
@@ -120,6 +162,25 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
         }
 
         return false;
+    }
+
+    private void removeSegments(Polygons polygonToRemove, int indexOfRemoval) {
+
+        int index = 0;
+
+        for (Polygons checkingPolygon : this.polygonsArray) {
+
+            if (isNeighbor(indexOfRemoval,index)) {
+
+                Vertex[][] segmentsToKeep = isNeighborSpecific(polygonToRemove,checkingPolygon);
+
+
+
+            }
+
+        }
+
+
     }
 
     @Override
@@ -271,6 +332,37 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     }
 
+    private void growSegments() {
+
+        Vertex[][] newArray = new Vertex[this.drawableSegmentsArray.length*2][2];
+
+        for (int index = 0; index < segmentSize(); index++) {
+            newArray[index][0] = this.drawableSegmentsArray[index][0];
+            newArray[index][1] = this.drawableSegmentsArray[index][1];
+        }
+
+        this.drawableSegmentsArray = newArray;
+
+    }
+
+
+    private void calculateDrawableSegments() {
+
+        Polygons currentPolygon = this.polygonsArray[size()-1];
+
+        List<Vertex> vertexList = currentPolygon.getVerticesList();
+
+        for (Segment currentSegment : currentPolygon.getSegmentsList()) {
+
+            Vertex Idx1 = vertexList.get(currentSegment.getV1Idx());
+            Vertex Idx2 = vertexList.get(currentSegment.getV2Idx());
+
+            this.addSegment(Idx1,Idx2);
+
+        }
+
+    }
+
     /**
      * Comparison to check if two polygons share a segment
      * @param index1 the first polygon index position in the collection to compare
@@ -315,6 +407,41 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
             throw new IndexOutOfBoundsException("One or more indices specified are out of range: " + e.getMessage());
         }
 
+
+    }
+
+    private Vertex[][] isNeighborSpecific(Polygons polygon1, Polygons polygon2) {
+
+        Vertex[][] returnArray = new Vertex[polygon1.getSegmentsList().size()][2];
+
+        int index = 0;
+
+        for (Segment polygon1Segments : polygon1.getSegmentsList()) {
+
+            Vertex Vertex1Idx1 = polygon1.getVerticesList().get(polygon1Segments.getV1Idx());
+            Vertex Vertex1Idx2 = polygon1.getVerticesList().get(polygon1Segments.getV2Idx());
+
+            for (Segment polygon2Segments : polygon2.getSegmentsList()) {
+
+                Vertex Vertex2Idx1 = polygon2.getVerticesList().get(polygon2Segments.getV1Idx());
+                Vertex Vertex2Idx2 = polygon2.getVerticesList().get(polygon2Segments.getV2Idx());
+
+                if ((Vertex1Idx1.getX() == Vertex2Idx1.getX() && Vertex1Idx1.getY() == Vertex2Idx1.getY()) || (Vertex1Idx1.getX() == Vertex2Idx2.getX() && Vertex1Idx1.getY() == Vertex2Idx2.getY())) {
+                    if ((Vertex1Idx2.getX() == Vertex2Idx1.getX() && Vertex1Idx2.getY() == Vertex2Idx1.getY()) || (Vertex1Idx2.getX() == Vertex2Idx2.getX() && Vertex1Idx2.getY() == Vertex2Idx2.getY())) {
+
+                        returnArray[index][0] = Vertex2Idx1;
+                        returnArray[index][1] = Vertex2Idx2;
+
+                        index++;
+
+                    }
+                }
+
+            }
+
+        }
+
+        return returnArray;
 
     }
 
