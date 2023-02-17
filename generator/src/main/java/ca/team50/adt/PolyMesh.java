@@ -1,5 +1,7 @@
 package ca.team50.adt;
 
+import ca.mcmaster.cas.se2aa4.a2.io.Structs.*;
+
 import java.util.*;
 
 // Any class which derives from the Polygons class can be used to create a mesh
@@ -269,8 +271,53 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     }
 
-    boolean isNeighbor(T polygon1, T polygon2) {
-        return true;
+    /**
+     * Comparison to check if two polygons share a segment
+     * @param index1 the first polygon index position in the collection to compare
+     * @param index2 the second polygon index position in the collection to compare
+     * @exception IndexOutOfBoundsException if one or more of the two indices passed are out of bounds in the collection
+     * @return the boolean result of the comparison (true if they share a segment, false otherwise)
+     */
+    public boolean isNeighbor(int index1, int index2) {
+
+        // Check if polygons share at least one segment
+
+        try {
+
+            Polygons polygon1 = this.get(index1);
+            Polygons polygon2 = this.get(index2);
+
+            for (Segment polygon1Segments : polygon1.getSegmentsList()) {
+
+                Vertex Vertex1Idx1 = polygon1.getVerticesList().get(polygon1Segments.getV1Idx());
+                Vertex Vertex1Idx2 = polygon1.getVerticesList().get(polygon1Segments.getV2Idx());
+
+                for (Segment polygon2Segments : polygon2.getSegmentsList()) {
+
+                    Vertex Vertex2Idx1 = polygon2.getVerticesList().get(polygon2Segments.getV1Idx());
+                    Vertex Vertex2Idx2 = polygon2.getVerticesList().get(polygon2Segments.getV2Idx());
+
+
+                    if ((Vertex1Idx1.getX() == Vertex2Idx1.getX() && Vertex1Idx1.getY() == Vertex2Idx1.getY()) || (Vertex1Idx1.getX() == Vertex2Idx2.getX() && Vertex1Idx1.getY() == Vertex2Idx2.getY())) {
+                        if ((Vertex1Idx2.getX() == Vertex2Idx1.getX() && Vertex1Idx2.getY() == Vertex2Idx1.getY()) || (Vertex1Idx2.getX() == Vertex2Idx2.getX() && Vertex1Idx2.getY() == Vertex2Idx2.getY())) {
+                            return true;
+                        }
+                    }
+
+
+                }
+
+            }
+
+            return false;
+
+        } catch (IndexOutOfBoundsException e) {
+            throw new IndexOutOfBoundsException("One or more indices specified are out of range: " + e.getMessage());
+        }
+
+
     }
+
+
 
 }
