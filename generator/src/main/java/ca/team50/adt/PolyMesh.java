@@ -18,7 +18,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
         return this.arrayCurrentSize;
     }
 
-    private int segmentSize() {
+    public int segmentSize() {
         return this.segmentsArrayCurrentSize;
     }
 
@@ -47,7 +47,9 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     private boolean containsSegment(Vertex idx1, Vertex idx2) {
 
-        for (Vertex[] segment : this.drawableSegmentsArray) {
+        for (int index = 0; index < segmentsArrayCurrentSize; index++) {
+
+            Vertex[] segment = this.drawableSegmentsArray[index];
 
             if ((segment[0].getX() == idx1.getX() && segment[0].getY() == idx1.getY()) || (segment[0].getX() == idx2.getX() && segment[0].getY() == idx2.getY())) {
                 if ((segment[1].getX() == idx1.getX() && segment[1].getY() == idx1.getY()) || (segment[1].getX() == idx2.getX() && segment[1].getY() == idx2.getY())) {
@@ -139,6 +141,9 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
         for (int index = 0; index < size(); index++) {
 
             if (this.polygonsArray[index]==o) {
+
+                removeSegments(this.polygonsArray[index],index);
+
                 this.polygonsArray[index] = null;
 
                 int previousIndex = index;
@@ -166,19 +171,55 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     private void removeSegment(Vertex idx1, Vertex idx2) {
 
+        int removalIndex = 0;
+
+        for (int index = 0; index < segmentsArrayCurrentSize; index++) {
+
+            Vertex[] testVertex = this.drawableSegmentsArray[index];
+
+            Vertex testVertex1 = testVertex[0];
+            Vertex testVertex2 = testVertex[1];
+
+            if (areSegmentsEqual(idx1,idx2,testVertex1,testVertex2)) {
+
+                break;
+
+            }
+
+            removalIndex++;
+
+        }
+
+        this.drawableSegmentsArray[removalIndex][0] = null;
+        this.drawableSegmentsArray[removalIndex][1] = null;
+
+        int previousIndex = removalIndex;
+
+        for (int forwardIndex = removalIndex+1; forwardIndex < segmentSize(); forwardIndex++) {
+
+            this.drawableSegmentsArray[previousIndex][0] = this.drawableSegmentsArray[forwardIndex][0];
+            this.drawableSegmentsArray[previousIndex][1] = this.drawableSegmentsArray[forwardIndex][1];
+
+            previousIndex++;
+
+        }
+
+        this.drawableSegmentsArray[segmentSize()-1][0] = null;
+        this.drawableSegmentsArray[segmentSize()-1][1] = null;
+        this.segmentsArrayCurrentSize--;
 
 
     }
 
     private void removeSegments(Polygons polygonToRemove, int indexOfRemoval) {
 
-        int index = 0;
-
         boolean[] segmentsToKeepBool = new boolean[polygonToRemove.getSegmentsList().size()];
 
-        for (Polygons checkingPolygon : this.polygonsArray) {
+        for (int checkingPolygonIndex = 0; checkingPolygonIndex < size(); checkingPolygonIndex++) {
 
-            if (isNeighbor(indexOfRemoval,index)) {
+            Polygons checkingPolygon = this.polygonsArray[checkingPolygonIndex];
+
+            if (isNeighbor(indexOfRemoval,checkingPolygonIndex) && checkingPolygon != polygonToRemove) {
 
                 Segment[] segmentsToKeep = isNeighborSpecific(polygonToRemove,checkingPolygon);
 
@@ -188,9 +229,15 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
                     segmentsToKeepBool[boolindex] = false;
 
+                    Vertex Vertex1Idx1 = polygonToRemove.getVerticesList().get(polygonToRemoveSegment.getV1Idx());
+                    Vertex Vertex1Idx2 = polygonToRemove.getVerticesList().get(polygonToRemoveSegment.getV2Idx());
+
                     for (Segment segmentKeeping : segmentsToKeep) {
 
-                        if (polygonToRemoveSegment == segmentKeeping) {
+                        Vertex Vertex2Idx1 = polygonToRemove.getVerticesList().get(segmentKeeping.getV1Idx());
+                        Vertex Vertex2Idx2 = polygonToRemove.getVerticesList().get(segmentKeeping.getV2Idx());
+
+                        if (areSegmentsEqual(Vertex1Idx1,Vertex1Idx2,Vertex2Idx1,Vertex2Idx2)) {
 
                             segmentsToKeepBool[boolindex] = true;
                             break;
@@ -205,11 +252,23 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
             }
 
-            index++;
-
         }
 
+        int boolIndex = 0;
 
+        for (Segment currentSegment : polygonToRemove.getSegmentsList()) {
+
+            if (!segmentsToKeepBool[boolIndex]) {
+
+                Vertex idx1 = polygonToRemove.getVerticesList().get(currentSegment.getV1Idx());
+                Vertex idx2 = polygonToRemove.getVerticesList().get(currentSegment.getV2Idx());
+
+                removeSegment(idx1,idx2);
+            }
+
+            boolIndex++;
+
+        }
 
 
     }
@@ -326,9 +385,21 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
         }
     }
 
+    public Vertex[] getSegment(int index) {
+
+        if (index < segmentSize()) {
+            return new Vertex[]{this.drawableSegmentsArray[index][0], this.drawableSegmentsArray[index][1]};
+        } else {
+            throw new IndexOutOfBoundsException("Index " + index + " is not within segment collection range");
+        }
+
+    }
+
     public boolean remove(int index) {
 
         if (index < size()) {
+
+            removeSegments(this.polygonsArray[index],index);
 
             this.polygonsArray[index] = null;
 
@@ -421,10 +492,8 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
                     Vertex Vertex2Idx2 = polygon2.getVerticesList().get(polygon2Segments.getV2Idx());
 
 
-                    if ((Vertex1Idx1.getX() == Vertex2Idx1.getX() && Vertex1Idx1.getY() == Vertex2Idx1.getY()) || (Vertex1Idx1.getX() == Vertex2Idx2.getX() && Vertex1Idx1.getY() == Vertex2Idx2.getY())) {
-                        if ((Vertex1Idx2.getX() == Vertex2Idx1.getX() && Vertex1Idx2.getY() == Vertex2Idx1.getY()) || (Vertex1Idx2.getX() == Vertex2Idx2.getX() && Vertex1Idx2.getY() == Vertex2Idx2.getY())) {
-                            return true;
-                        }
+                    if (areSegmentsEqual(Vertex1Idx1,Vertex1Idx2,Vertex2Idx1,Vertex2Idx2)) {
+                        return true;
                     }
 
 
@@ -441,6 +510,12 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     }
 
+    /**
+     * Comparison to check if two polygons share segments and if so specify which ones
+     * @param polygon1 the first polygon object
+     * @param polygon2 the second polygon object
+     * @return an array of type Segment which specifies which segments are being shared between polygon1 and polygon2. The vertex indices of each shared segment is relative to polygon1
+     */
     private Segment[] isNeighborSpecific(Polygons polygon1, Polygons polygon2) {
 
         Segment[] itemsToReturn = new Segment[polygon1.getSegmentsList().size()];
@@ -457,14 +532,9 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
                 Vertex Vertex2Idx1 = polygon2.getVerticesList().get(polygon2Segments.getV1Idx());
                 Vertex Vertex2Idx2 = polygon2.getVerticesList().get(polygon2Segments.getV2Idx());
 
-                if ((Vertex1Idx1.getX() == Vertex2Idx1.getX() && Vertex1Idx1.getY() == Vertex2Idx1.getY()) || (Vertex1Idx1.getX() == Vertex2Idx2.getX() && Vertex1Idx1.getY() == Vertex2Idx2.getY())) {
-                    if ((Vertex1Idx2.getX() == Vertex2Idx1.getX() && Vertex1Idx2.getY() == Vertex2Idx1.getY()) || (Vertex1Idx2.getX() == Vertex2Idx2.getX() && Vertex1Idx2.getY() == Vertex2Idx2.getY())) {
-
-                        itemsToReturn[index] = polygon1Segments;
-
-                        index++;
-
-                    }
+                if (areSegmentsEqual(Vertex1Idx1,Vertex1Idx2,Vertex2Idx1,Vertex2Idx2)) {
+                    itemsToReturn[index] = polygon1Segments;
+                    index++;
                 }
 
             }
@@ -473,13 +543,26 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
         Segment[] returnArray = new Segment[index];
 
-        for (int checkIndex = 0; checkIndex < index-1; checkIndex++) {
+        for (int checkIndex = 0; checkIndex < index; checkIndex++) {
 
             returnArray[checkIndex] = itemsToReturn[checkIndex];
 
         }
 
         return returnArray;
+
+    }
+
+
+    private boolean areSegmentsEqual(Vertex seg1Vertex1, Vertex seg1Vertex2, Vertex seg2Vertex1, Vertex seg2Vertex2) {
+
+        if ((seg1Vertex1.getX() == seg2Vertex1.getX() || seg1Vertex1.getX() == seg2Vertex2.getX()) && (seg1Vertex1.getY() == seg2Vertex1.getY() || seg1Vertex1.getY() == seg2Vertex2.getY())) {
+            if ((seg1Vertex2.getX() == seg2Vertex1.getX() || seg1Vertex2.getX() == seg2Vertex2.getX()) && (seg1Vertex2.getY() == seg2Vertex1.getY() || seg1Vertex2.getY() == seg2Vertex2.getY())) {
+                return true;
+            }
+        }
+
+        return false;
 
     }
 

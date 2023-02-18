@@ -45,19 +45,17 @@ public class Polygons extends Polygon {
                 // If so, connect the final segment from the last to the first Vertex
                 Vertex firstVertex = this.verticesList.get(0);
 
-                Segment v1Segment = Segment.newBuilder().setV1Idx(verticesList.indexOf(currentVertex)).build();
-                Segment v2Segment = v1Segment.toBuilder().setV2Idx(verticesList.indexOf(firstVertex)).build();
+                Segment segment = Segment.newBuilder().setV1Idx(verticesList.indexOf(currentVertex)).setV2Idx(verticesList.indexOf(firstVertex)).build();
 
-                segmentsList.add(v2Segment);
+                segmentsList.add(segment);
                 break;
 
             }
 
             Vertex nextVertex = this.verticesList.get(index+1);
 
-            Segment v1Segment = Segment.newBuilder().setV1Idx(verticesList.indexOf(currentVertex)).build();
-            Segment v2Segment = v1Segment.toBuilder().setV2Idx(verticesList.indexOf(nextVertex)).build();
-            segmentsList.add(v2Segment);
+            Segment segment = Segment.newBuilder().setV1Idx(verticesList.indexOf(currentVertex)).setV2Idx(verticesList.indexOf(nextVertex)).build();
+            segmentsList.add(segment);
 
         }
 
