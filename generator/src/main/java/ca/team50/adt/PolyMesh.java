@@ -5,6 +5,13 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.*;
 import java.util.*;
 
 // Any class which derives from the Polygons class can be used to create a mesh
+
+/**
+ * A collection to store and refer to Polygons that make up a mesh.
+ * While this collection realizes the collection interface, it also calculates all drawable segments as two Vertices which can be referenced for drawing.
+ * If a method does not specify if either Polygon or Segment collection is used, it is assumed to be Polygon
+ * @return A PolyMesh object in which only specified Polygon class types are allowed to be operated on
+ */
 public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     // Mesh is a collection of Polygons and can operate on them
@@ -13,20 +20,37 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
     private int arrayCurrentSize = 0;
     private int segmentsArrayCurrentSize = 0;
 
+    /**
+     * Get the size of the Polygon collection
+     * @return an integer value representing the current size of the Polygon collection
+     */
     @Override
     public int size() {
         return this.arrayCurrentSize;
     }
 
+    /**
+     * Get the size of the segment collection
+     * @return an integer value representing the current size of the segment collection
+     */
     public int segmentSize() {
         return this.segmentsArrayCurrentSize;
     }
 
+    /**
+     * Check if the size of the Polygon and Segment collection are both empty
+     * @return true if empty, false otherwise
+     */
     @Override
     public boolean isEmpty() {
         return (size()==0);
     }
 
+    /**
+     * Check if a Polygon exists within the Polygon collection
+     * @param o the Polygon object to check for existence
+     * @return true if the Polygon exists within the segment collection, false otherwise
+     */
     @Override
     public boolean contains(Object o) {
 
@@ -45,7 +69,13 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
         return false;
     }
 
-    private boolean containsSegment(Vertex idx1, Vertex idx2) {
+    /**
+     * Check if a Segment exists within the segment collection
+     * @param idx1 the starting Vertex of the Segment
+     * @param idx2 the end Vertex of the Segment
+     * @return true if the Segment exists within the segment collection, false otherwise
+     */
+    public boolean containsSegment(Vertex idx1, Vertex idx2) {
 
         for (int index = 0; index < segmentsArrayCurrentSize; index++) {
 
@@ -98,6 +128,11 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
         return null;
     }
 
+    /**
+     * Add a Polygon Object to the collection. Note that this subsequently updates the drawable segments collection to account for the added polygon
+     * @param t the Polygon object to add
+     * @return true if the collection was modified as a result of the addition
+     */
     @Override
     public boolean add(T t) {
 
@@ -135,6 +170,12 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
         }
 
+    /**
+     * Removes the corresponding Polygons object (or subclass derivative) from the polygon collection. Note that this subsequently updates the drawable segments collection to account for the removed polygon
+     * @param o the Polygon object to delete
+     * @exception IndexOutOfBoundsException if the index passed is out of bounds in the collection
+     * @return true if the collection was modified as a result of the removal
+     */
     @Override
     public boolean remove(Object o) {
 
@@ -385,6 +426,12 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
         }
     }
 
+    /**
+     * Gets a corresponding Vertex array composed of a start Vertex and an end Vertex
+     * @param index the index to retrieve in the Segment collection (NOT polygon collection)
+     * @exception IndexOutOfBoundsException if one or more of the two indices passed are out of bounds in the collection
+     * @return an array of two Vertex objects, a starting Vertex and an ending Vertex that make up one Segment
+     */
     public Vertex[] getSegment(int index) {
 
         if (index < segmentSize()) {
@@ -395,6 +442,12 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     }
 
+    /**
+     * Removes the corresponding index of a polygon from the polygon collection. Note that this subsequently updates the drawable segments collection to account for the removed polygon
+     * @param index the index position to delete
+     * @exception IndexOutOfBoundsException if the index passed is out of bounds in the collection
+     * @return true if the collection was modified as a result of the removal
+     */
     public boolean remove(int index) {
 
         if (index < size()) {
