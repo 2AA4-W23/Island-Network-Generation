@@ -62,7 +62,6 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
                     return true;
                 }
             }
-
         } catch (ClassCastException e) {
             return false;
         }
@@ -373,6 +372,14 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
                 Polygons currentPolygon = (Polygons) currentObject;
 
+                for (int index = 0; index < size(); index++) {
+
+                    if (currentPolygon == this.polygonsArray[index]) {
+                        removeSegments(this.polygonsArray[index],index);
+                        break;
+                    }
+                }
+
                 if(this.remove(currentPolygon)) {
                     collectionModified = true;
                 }
@@ -396,6 +403,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
             for (int index = 0; index < size(); index++){
                 if (!c.contains(this.polygonsArray[index])) {
+                    removeSegments(this.polygonsArray[index],index);
                     this.remove(this.polygonsArray[index]);
                     collectionModified = true;
                     isDone = false;
@@ -416,6 +424,10 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
     public void clear() {
         this.polygonsArray = new Polygons[1];
         this.arrayCurrentSize = 0;
+
+        this.drawableSegmentsArray = new Vertex[1][2];
+        this.segmentsArrayCurrentSize = 0;
+
     }
 
     public T get(int index) {
