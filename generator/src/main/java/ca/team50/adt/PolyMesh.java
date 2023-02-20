@@ -441,6 +441,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
         return this.segmentsArrayCurrentSize;
     }
 
+    // Entrance method to check if the segments collection needs to be updated (typically if a polygon is added)
     private void calculateDrawableSegments() {
 
         Polygons currentPolygon = this.polygonsArray[size()-1];
@@ -458,6 +459,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     }
 
+    // Method to grow segments array if it fills up
     private void growSegments() {
 
         Vertex[][] newArray = new Vertex[this.drawableSegmentsArray.length*2][2];
@@ -487,20 +489,28 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     }
 
+    // Batch remove all segments that are not shared by the given Polygon to be removed
     private void removeSegments(Polygons polygonToRemove, int indexOfRemoval) {
 
+        // Create a boolean array of the same size as the Segments list in the polygon
+        // These will be set to true or false depending on if they are shared by another polygon
         boolean[] segmentsToKeepBool = new boolean[polygonToRemove.getSegmentsList().size()];
 
+        // Loop through all polygons in the polygon collection
         for (int checkingPolygonIndex = 0; checkingPolygonIndex < size(); checkingPolygonIndex++) {
 
+            // Get the next polygon to check
             Polygons checkingPolygon = this.polygonsArray[checkingPolygonIndex];
 
+            // Check if it is a neighbour of the polygon to remove (and not the same polygon)
             if (isNeighbor(indexOfRemoval,checkingPolygonIndex) && checkingPolygon != polygonToRemove) {
 
+                // Calculate all segments that are shared by the two polygons
                 Segment[] segmentsToKeep = isNeighborSpecific(polygonToRemove,checkingPolygon);
 
                 int boolindex = 0;
 
+                // For each segment that is shared, set the corresponding position in the index of the boolean array to true
                 for (Segment polygonToRemoveSegment : polygonToRemove.getSegmentsList()) {
 
                     segmentsToKeepBool[boolindex] = false;
@@ -532,6 +542,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
         int boolIndex = 0;
 
+        // Remove all corresponding segments from the segments array given the boolean list
         for (Segment currentSegment : polygonToRemove.getSegmentsList()) {
 
             if (!segmentsToKeepBool[boolIndex]) {
@@ -549,6 +560,8 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     }
 
+    // Method to remove a specific segment from the segments array
+    // Note this method does as it's told and removes segments without checking neighbours
     private void removeSegment(Vertex idx1, Vertex idx2) {
 
         int removalIndex = 0;
@@ -570,6 +583,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
         }
 
+        // Once the segment is removed, move everything in array 1 over
         this.drawableSegmentsArray[removalIndex][0] = null;
         this.drawableSegmentsArray[removalIndex][1] = null;
 
