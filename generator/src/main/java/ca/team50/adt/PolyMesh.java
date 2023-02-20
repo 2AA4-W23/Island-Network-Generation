@@ -20,6 +20,8 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
     private int arrayCurrentSize = 0;
     private int segmentsArrayCurrentSize = 0;
 
+    // ----------All methods for Polygons----------
+
     /**
      * Get the size of the Polygon collection
      * @return an integer value representing the current size of the Polygon collection
@@ -27,14 +29,6 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
     @Override
     public int size() {
         return this.arrayCurrentSize;
-    }
-
-    /**
-     * Get the size of the segment collection
-     * @return an integer value representing the current size of the segment collection
-     */
-    public int segmentSize() {
-        return this.segmentsArrayCurrentSize;
     }
 
     /**
@@ -66,31 +60,6 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
             return false;
         }
         return false;
-    }
-
-    /**
-     * Check if a Segment exists within the segment collection
-     * @param idx1 the starting Vertex of the Segment
-     * @param idx2 the end Vertex of the Segment
-     * @return true if the Segment exists within the segment collection, false otherwise
-     */
-    public boolean containsSegment(Vertex idx1, Vertex idx2) {
-
-        for (int index = 0; index < segmentsArrayCurrentSize; index++) {
-
-            Vertex[] segment = this.drawableSegmentsArray[index];
-
-            if ((segment[0].getX() == idx1.getX() && segment[0].getY() == idx1.getY()) || (segment[0].getX() == idx2.getX() && segment[0].getY() == idx2.getY())) {
-                if ((segment[1].getX() == idx1.getX() && segment[1].getY() == idx1.getY()) || (segment[1].getX() == idx2.getX() && segment[1].getY() == idx2.getY())) {
-                    return true;
-                }
-
-            }
-
-        }
-
-        return false;
-
     }
 
     @Override
@@ -152,23 +121,6 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     }
 
-    private void addSegment(Vertex Idx1, Vertex Idx2) {
-
-        if (!containsSegment(Idx1,Idx2)) {
-
-            if (segmentSize() == this.drawableSegmentsArray.length) {
-                growSegments();
-            }
-
-            this.drawableSegmentsArray[segmentsArrayCurrentSize][0] = Idx1;
-            this.drawableSegmentsArray[segmentsArrayCurrentSize][1] = Idx2;
-
-            this.segmentsArrayCurrentSize++;
-
-            }
-
-        }
-
     /**
      * Removes the corresponding Polygons object (or subclass derivative) from the polygon collection. Note that this subsequently updates the drawable segments collection to account for the removed polygon
      * @param o the Polygon object to delete
@@ -207,110 +159,6 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
         }
 
         return false;
-    }
-
-    private void removeSegment(Vertex idx1, Vertex idx2) {
-
-        int removalIndex = 0;
-
-        for (int index = 0; index < segmentsArrayCurrentSize; index++) {
-
-            Vertex[] testVertex = this.drawableSegmentsArray[index];
-
-            Vertex testVertex1 = testVertex[0];
-            Vertex testVertex2 = testVertex[1];
-
-            if (areSegmentsEqual(idx1,idx2,testVertex1,testVertex2)) {
-
-                break;
-
-            }
-
-            removalIndex++;
-
-        }
-
-        this.drawableSegmentsArray[removalIndex][0] = null;
-        this.drawableSegmentsArray[removalIndex][1] = null;
-
-        int previousIndex = removalIndex;
-
-        for (int forwardIndex = removalIndex+1; forwardIndex < segmentSize(); forwardIndex++) {
-
-            this.drawableSegmentsArray[previousIndex][0] = this.drawableSegmentsArray[forwardIndex][0];
-            this.drawableSegmentsArray[previousIndex][1] = this.drawableSegmentsArray[forwardIndex][1];
-
-            previousIndex++;
-
-        }
-
-        this.drawableSegmentsArray[segmentSize()-1][0] = null;
-        this.drawableSegmentsArray[segmentSize()-1][1] = null;
-        this.segmentsArrayCurrentSize--;
-
-
-    }
-
-    private void removeSegments(Polygons polygonToRemove, int indexOfRemoval) {
-
-        boolean[] segmentsToKeepBool = new boolean[polygonToRemove.getSegmentsList().size()];
-
-        for (int checkingPolygonIndex = 0; checkingPolygonIndex < size(); checkingPolygonIndex++) {
-
-            Polygons checkingPolygon = this.polygonsArray[checkingPolygonIndex];
-
-            if (isNeighbor(indexOfRemoval,checkingPolygonIndex) && checkingPolygon != polygonToRemove) {
-
-                Segment[] segmentsToKeep = isNeighborSpecific(polygonToRemove,checkingPolygon);
-
-                int boolindex = 0;
-
-                for (Segment polygonToRemoveSegment : polygonToRemove.getSegmentsList()) {
-
-                    segmentsToKeepBool[boolindex] = false;
-
-                    Vertex Vertex1Idx1 = polygonToRemove.getVerticesList().get(polygonToRemoveSegment.getV1Idx());
-                    Vertex Vertex1Idx2 = polygonToRemove.getVerticesList().get(polygonToRemoveSegment.getV2Idx());
-
-                    for (Segment segmentKeeping : segmentsToKeep) {
-
-                        Vertex Vertex2Idx1 = polygonToRemove.getVerticesList().get(segmentKeeping.getV1Idx());
-                        Vertex Vertex2Idx2 = polygonToRemove.getVerticesList().get(segmentKeeping.getV2Idx());
-
-                        if (areSegmentsEqual(Vertex1Idx1,Vertex1Idx2,Vertex2Idx1,Vertex2Idx2)) {
-
-                            segmentsToKeepBool[boolindex] = true;
-                            break;
-
-                        }
-
-                    }
-
-                    boolindex++;
-
-                }
-
-            }
-
-        }
-
-        int boolIndex = 0;
-
-        for (Segment currentSegment : polygonToRemove.getSegmentsList()) {
-
-            if (!segmentsToKeepBool[boolIndex]) {
-
-                Vertex idx1 = polygonToRemove.getVerticesList().get(currentSegment.getV1Idx());
-                Vertex idx2 = polygonToRemove.getVerticesList().get(currentSegment.getV2Idx());
-
-                removeSegment(idx1,idx2);
-            }
-
-            boolIndex++;
-
-        }
-
-
     }
 
     @Override
@@ -439,22 +287,6 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
     }
 
     /**
-     * Gets a corresponding Vertex array composed of a start Vertex and an end Vertex
-     * @param index the index to retrieve in the Segment collection (NOT polygon collection)
-     * @exception IndexOutOfBoundsException if one or more of the two indices passed are out of bounds in the collection
-     * @return an array of two Vertex objects, a starting Vertex and an ending Vertex that make up one Segment
-     */
-    public Vertex[] getSegment(int index) {
-
-        if (index < segmentSize()) {
-            return new Vertex[]{this.drawableSegmentsArray[index][0], this.drawableSegmentsArray[index][1]};
-        } else {
-            throw new IndexOutOfBoundsException("Index " + index + " is not within segment collection range");
-        }
-
-    }
-
-    /**
      * Removes the corresponding index of a polygon from the polygon collection. Note that this subsequently updates the drawable segments collection to account for the removed polygon
      * @param index the index position to delete
      * @exception IndexOutOfBoundsException if the index passed is out of bounds in the collection
@@ -496,37 +328,6 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
         }
 
         this.polygonsArray = newArray;
-
-    }
-
-    private void growSegments() {
-
-        Vertex[][] newArray = new Vertex[this.drawableSegmentsArray.length*2][2];
-
-        for (int index = 0; index < segmentSize(); index++) {
-            newArray[index][0] = this.drawableSegmentsArray[index][0];
-            newArray[index][1] = this.drawableSegmentsArray[index][1];
-        }
-
-        this.drawableSegmentsArray = newArray;
-
-    }
-
-
-    private void calculateDrawableSegments() {
-
-        Polygons currentPolygon = this.polygonsArray[size()-1];
-
-        List<Vertex> vertexList = currentPolygon.getVerticesList();
-
-        for (Segment currentSegment : currentPolygon.getSegmentsList()) {
-
-            Vertex Idx1 = vertexList.get(currentSegment.getV1Idx());
-            Vertex Idx2 = vertexList.get(currentSegment.getV2Idx());
-
-            this.addSegment(Idx1,Idx2);
-
-        }
 
     }
 
@@ -618,6 +419,7 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     }
 
+    // ----------All methods for segments----------
 
     private boolean areSegmentsEqual(Vertex seg1Vertex1, Vertex seg1Vertex2, Vertex seg2Vertex1, Vertex seg2Vertex2) {
 
@@ -625,6 +427,206 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
             if ((seg1Vertex2.getX() == seg2Vertex1.getX() || seg1Vertex2.getX() == seg2Vertex2.getX()) && (seg1Vertex2.getY() == seg2Vertex1.getY() || seg1Vertex2.getY() == seg2Vertex2.getY())) {
                 return true;
             }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Get the size of the segment collection
+     * @return an integer value representing the current size of the segment collection
+     */
+    public int segmentSize() {
+        return this.segmentsArrayCurrentSize;
+    }
+
+    private void calculateDrawableSegments() {
+
+        Polygons currentPolygon = this.polygonsArray[size()-1];
+
+        List<Vertex> vertexList = currentPolygon.getVerticesList();
+
+        for (Segment currentSegment : currentPolygon.getSegmentsList()) {
+
+            Vertex Idx1 = vertexList.get(currentSegment.getV1Idx());
+            Vertex Idx2 = vertexList.get(currentSegment.getV2Idx());
+
+            this.addSegment(Idx1,Idx2);
+
+        }
+
+    }
+
+    private void growSegments() {
+
+        Vertex[][] newArray = new Vertex[this.drawableSegmentsArray.length*2][2];
+
+        for (int index = 0; index < segmentSize(); index++) {
+            newArray[index][0] = this.drawableSegmentsArray[index][0];
+            newArray[index][1] = this.drawableSegmentsArray[index][1];
+        }
+
+        this.drawableSegmentsArray = newArray;
+
+    }
+
+    /**
+     * Gets a corresponding Vertex array composed of a start Vertex and an end Vertex
+     * @param index the index to retrieve in the Segment collection (NOT polygon collection)
+     * @exception IndexOutOfBoundsException if one or more of the two indices passed are out of bounds in the collection
+     * @return an array of two Vertex objects, a starting Vertex and an ending Vertex that make up one Segment
+     */
+    public Vertex[] getSegment(int index) {
+
+        if (index < segmentSize()) {
+            return new Vertex[]{this.drawableSegmentsArray[index][0], this.drawableSegmentsArray[index][1]};
+        } else {
+            throw new IndexOutOfBoundsException("Index " + index + " is not within segment collection range");
+        }
+
+    }
+
+    private void removeSegments(Polygons polygonToRemove, int indexOfRemoval) {
+
+        boolean[] segmentsToKeepBool = new boolean[polygonToRemove.getSegmentsList().size()];
+
+        for (int checkingPolygonIndex = 0; checkingPolygonIndex < size(); checkingPolygonIndex++) {
+
+            Polygons checkingPolygon = this.polygonsArray[checkingPolygonIndex];
+
+            if (isNeighbor(indexOfRemoval,checkingPolygonIndex) && checkingPolygon != polygonToRemove) {
+
+                Segment[] segmentsToKeep = isNeighborSpecific(polygonToRemove,checkingPolygon);
+
+                int boolindex = 0;
+
+                for (Segment polygonToRemoveSegment : polygonToRemove.getSegmentsList()) {
+
+                    segmentsToKeepBool[boolindex] = false;
+
+                    Vertex Vertex1Idx1 = polygonToRemove.getVerticesList().get(polygonToRemoveSegment.getV1Idx());
+                    Vertex Vertex1Idx2 = polygonToRemove.getVerticesList().get(polygonToRemoveSegment.getV2Idx());
+
+                    for (Segment segmentKeeping : segmentsToKeep) {
+
+                        Vertex Vertex2Idx1 = polygonToRemove.getVerticesList().get(segmentKeeping.getV1Idx());
+                        Vertex Vertex2Idx2 = polygonToRemove.getVerticesList().get(segmentKeeping.getV2Idx());
+
+                        if (areSegmentsEqual(Vertex1Idx1,Vertex1Idx2,Vertex2Idx1,Vertex2Idx2)) {
+
+                            segmentsToKeepBool[boolindex] = true;
+                            break;
+
+                        }
+
+                    }
+
+                    boolindex++;
+
+                }
+
+            }
+
+        }
+
+        int boolIndex = 0;
+
+        for (Segment currentSegment : polygonToRemove.getSegmentsList()) {
+
+            if (!segmentsToKeepBool[boolIndex]) {
+
+                Vertex idx1 = polygonToRemove.getVerticesList().get(currentSegment.getV1Idx());
+                Vertex idx2 = polygonToRemove.getVerticesList().get(currentSegment.getV2Idx());
+
+                removeSegment(idx1,idx2);
+            }
+
+            boolIndex++;
+
+        }
+
+
+    }
+
+    private void removeSegment(Vertex idx1, Vertex idx2) {
+
+        int removalIndex = 0;
+
+        for (int index = 0; index < segmentsArrayCurrentSize; index++) {
+
+            Vertex[] testVertex = this.drawableSegmentsArray[index];
+
+            Vertex testVertex1 = testVertex[0];
+            Vertex testVertex2 = testVertex[1];
+
+            if (areSegmentsEqual(idx1,idx2,testVertex1,testVertex2)) {
+
+                break;
+
+            }
+
+            removalIndex++;
+
+        }
+
+        this.drawableSegmentsArray[removalIndex][0] = null;
+        this.drawableSegmentsArray[removalIndex][1] = null;
+
+        int previousIndex = removalIndex;
+
+        for (int forwardIndex = removalIndex+1; forwardIndex < segmentSize(); forwardIndex++) {
+
+            this.drawableSegmentsArray[previousIndex][0] = this.drawableSegmentsArray[forwardIndex][0];
+            this.drawableSegmentsArray[previousIndex][1] = this.drawableSegmentsArray[forwardIndex][1];
+
+            previousIndex++;
+
+        }
+
+        this.drawableSegmentsArray[segmentSize()-1][0] = null;
+        this.drawableSegmentsArray[segmentSize()-1][1] = null;
+        this.segmentsArrayCurrentSize--;
+
+
+    }
+
+    private void addSegment(Vertex Idx1, Vertex Idx2) {
+
+        if (!containsSegment(Idx1,Idx2)) {
+
+            if (segmentSize() == this.drawableSegmentsArray.length) {
+                growSegments();
+            }
+
+            this.drawableSegmentsArray[segmentsArrayCurrentSize][0] = Idx1;
+            this.drawableSegmentsArray[segmentsArrayCurrentSize][1] = Idx2;
+
+            this.segmentsArrayCurrentSize++;
+
+        }
+
+    }
+
+    /**
+     * Check if a Segment exists within the segment collection
+     * @param idx1 the starting Vertex of the Segment
+     * @param idx2 the end Vertex of the Segment
+     * @return true if the Segment exists within the segment collection, false otherwise
+     */
+    public boolean containsSegment(Vertex idx1, Vertex idx2) {
+
+        for (int index = 0; index < segmentsArrayCurrentSize; index++) {
+
+            Vertex[] segment = this.drawableSegmentsArray[index];
+
+            if ((segment[0].getX() == idx1.getX() && segment[0].getY() == idx1.getY()) || (segment[0].getX() == idx2.getX() && segment[0].getY() == idx2.getY())) {
+                if ((segment[1].getX() == idx1.getX() && segment[1].getY() == idx1.getY()) || (segment[1].getX() == idx2.getX() && segment[1].getY() == idx2.getY())) {
+                    return true;
+                }
+
+            }
+
         }
 
         return false;
