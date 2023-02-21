@@ -66,7 +66,7 @@ public class DotGen {
             }
         }
 
-        System.out.println(polygons);
+        polygonsArray.addAll(polygons);
         
     } 
 
