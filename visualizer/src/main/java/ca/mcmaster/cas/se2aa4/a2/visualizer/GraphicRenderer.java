@@ -15,27 +15,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import ca.team50.adt.PolyMesh;
 
 public class GraphicRenderer{
 
     private static final int THICKNESS = 3;
 
 
-    public <PolyMesh> void render(PolyMesh polygons , Graphics2D canvas) {
+    public void render(PolyMesh polygons , Graphics2D canvas) {
         
         canvas.setColor(Color.BLACK);
         Stroke stroke = new BasicStroke(0.5f);
         canvas.setStroke(stroke);
 
-        if (debugMode){
+        if (debugMode) {
 
-            for (int index = 0; index < polygonsArray.length(); index++){
+            for (int index = 0; index < polygons.size(); index++){
                 
-                Vertex centroid = polygonsArray[index].getCentroid();
+                Vertex centroid = polygons.get(index).getCentroid();
                 
-                for (int index1 = 0; index < polygonsArray.length(); index++){
+                for (int index1 = 0; index < polygons.size(); index++){
                     //color Centroids RED 
-                    Vertex centroid1 = polygonsArray[index1].getCentroid();
+                    Vertex centroid1 = polygons.get(index1).getCentroid();
                     double centre_x = centroid1.getX() - (THICKNESS/2.0d);
                     double centre_y = centroid1.getY() - (THICKNESS/2.0d);
                     Color old = canvas.getColor();
@@ -45,7 +46,7 @@ public class GraphicRenderer{
                     canvas.setColor(old);
 
                     //color neighborhood relations grey
-                    if (isNeighbor(index, index1)){
+                    if (polygons.isNeighbor(index, index1)){
                         Point2D startPoint = new Point2D.Double(centroid.getX(), centroid.getY());
                         Point2D endPoint = new Point2D.Double(centroid1.getX(), centroid1.getY());
             
@@ -57,7 +58,7 @@ public class GraphicRenderer{
                 }
             }
             // Color all polygons BLACK
-            for (int index = 0; index < segmentsArrayCurrentSize; index++) {
+            for (int index = 0; index < polygons.segmentSize(); index++) {
             
                 Vertex[] segment = polygons.getSegment(index);
                 Vertex start_Point = segment[0];
@@ -77,7 +78,7 @@ public class GraphicRenderer{
         else {
 
             //iterate through and draw each line segment with appropriate color
-            for (int index = 0; index < segmentsArrayCurrentSize; index++) {
+            for (int index = 0; index < polygons.segmentSize(); index++) {
             
                 Vertex[] segment = polygons.getSegment(index);
                 Vertex start_Point = segment[0];

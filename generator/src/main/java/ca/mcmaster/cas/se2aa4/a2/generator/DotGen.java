@@ -15,11 +15,11 @@ import java.awt.Color;
 
 public class DotGen {
 
-    private final int width = 500;
-    private final int height = 500;
-    private final int square_size = 20;
+    private final static int width = 500;
+    private final static int height = 500;
+    private final static int square_size = 20;
 
-    public Mesh generate() {
+    public static void polygonGenerate() {
         List<Vertex> vertices = new ArrayList<>();
         // Create all the vertices
         for(int x = 0; x < width; x += square_size) {
@@ -32,7 +32,7 @@ public class DotGen {
         }
 
             // Distribute colors randomly. Vertices are immutable, need to enrich them
-        Set<Vertex> verticesWithColors = new HashSet<>();
+        ArrayList<Vertex> verticesWithColors = new ArrayList<Vertex>();
         Random bag = new Random();
         for(Vertex v: vertices){
             int red = bag.nextInt(255);
@@ -44,61 +44,31 @@ public class DotGen {
             verticesWithColors.add(colored);
         }
 
-        Set <Segment> segments = new HashSet<>();
+        ArrayList<Vertex> polygonVertices = new ArrayList<Vertex>();
+        ArrayList<Polygons> polygons = new ArrayList<Polygons>();
+
         for (Vertex v1: verticesWithColors){
             for (Vertex v2: verticesWithColors){
+                for (Vertex v3: verticesWithColors){
+                    for (Vertex v4: verticesWithColors){
+                        if ((v1.getY() == v2.getY() && v1.getX() == v2.getX() + square_size) && (v1.getX() == v3.getX() && v3.getY() == v1.getY() + square_size) && (v2.getX() == v4.getX() && v4.getY() == v2.getY() + square_size) && (v3.getY() == v4.getY() && v4.getX() == v3.getX() + square_size)){
+                            polygonVertices.add(v1);
+                            polygonVertices.add(v2);
+                            polygonVertices.add(v3);
+                            polygonVertices.add(v4);
 
-                //only draw segment if vertices are adjacent in either the same row or column
-                if ((v1.getX() == v2.getX() &&  v1.getY() == (v2.getY()+square_size))||(v1.getX() == v2.getX() &&  v1.getY() == (v2.getY()-square_size))|| ((v1.getY() == v2.getY()) &&  v1.getX() == (v2.getX()+square_size))||(v1.getY() == v2.getY() &&  v1.getX() == (v2.getX()-square_size))) {
+                            polygons.add(new Polygons(polygonVertices)); 
 
-                    Color v1Color = extractColor(v1.getPropertiesList());
-                    Color v2Color = extractColor(v2.getPropertiesList());
-
-                    //calculate average color and set as segment color
-                    int averageR = (v1Color.getRed() + v2Color.getRed())/2;
-                    int averageG = (v1Color.getGreen() + v2Color.getGreen())/2;
-                    int averageB = (v1Color.getBlue() + v2Color.getBlue())/2;
-                
-                    String segmentColor = averageR + "," + averageG + "," + averageB;
-                    String startVertex = v1.getX() + "," + v1.getY();
-                    String endVertex = v2.getX() + "," + v2.getY();
-
-                    //create and add properties(color, start & end vertices) to each line segment
-                    Property color = Property.newBuilder().setKey("rgb_color").setValue(segmentColor).build();
-                    Property startPos = Property.newBuilder().setKey("start_vertex").setValue(startVertex ).build();
-                    Property endPos = Property.newBuilder().setKey("end_vertex").setValue(endVertex).build();
-
-                    Segment newS = Segment.newBuilder().addProperties(color).build();
-                    newS = newS.toBuilder().addProperties(startPos).build();
-                    newS = newS.toBuilder().addProperties(endPos).build();
-
-                    segments.add(newS);
+                            polygonVertices.clear();
+                        } 
+                    }
                 }
             }
         }
 
-        //generate mesh with colored vertices and line segments
-        Mesh mesh = Mesh.newBuilder().addAllVertices(verticesWithColors).build();
-        Mesh meshWithSegments = mesh.toBuilder().addAllSegments(segments).build();
-
-        return meshWithSegments; 
+        System.out.println(polygons);
+        
     } 
-    
-    private Color extractColor(List<Property> properties) {
-        String val = null;
-        for(Property p: properties) {
-            if (p.getKey().equals("rgb_color")) {
-                val = p.getValue();
-            }
-        }
-        if (val == null)
-            return Color.BLACK;
-        String[] raw = val.split(",");
-        int red = Integer.parseInt(raw[0]);
-        int green = Integer.parseInt(raw[1]);
-        int blue = Integer.parseInt(raw[2]);
-        return new Color(red, green, blue);
-    }
 
 }
 
