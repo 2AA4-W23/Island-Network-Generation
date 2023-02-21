@@ -59,7 +59,9 @@ public class DotGen {
 
         PolyMesh<Polygons> polygonMesh = new PolyMesh<Polygons>();
 
-        polygonMesh.addAll(polygonsList);
+        for (Polygons currentPolygon : polygonsList) {
+            polygonMesh.add(currentPolygon);
+        }
 
         return polygonMesh;
     

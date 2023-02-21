@@ -31,7 +31,8 @@ public class Polygons extends Polygon {
             throw new IllegalStateException("Vertex list cannot be empty");
         }
 
-        this.verticesList = vertexList;
+        this.verticesList = new ArrayList<>();
+        this.verticesList.addAll(vertexList);
 
         this.segmentsList = new ArrayList<>();
 
