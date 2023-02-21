@@ -15,10 +15,12 @@ import java.util.*;
 public class PolyMesh<T extends Polygons> implements Collection<T> {
 
     // Mesh is a collection of Polygons and can operate on them
+
     public Polygons[] polygonsArray = new Polygons[1];
     public Vertex[][] drawableSegmentsArray = new Vertex[1][2];
     public int arrayCurrentSize = 0;
     public int segmentsArrayCurrentSize = 0;
+
 
     // ----------All methods for Polygons----------
 
