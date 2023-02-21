@@ -16,13 +16,15 @@ public class DotGen {
 
     public static PolyMesh<Polygons> polygonGenerate() {
         List<Vertex> vertices = new ArrayList<>();
+
         // Create all the vertices
         for(int x = 0; x < width; x += square_size) {
             for(int y = 0; y < height; y += square_size) {
-                vertices.add(Vertex.newBuilder().setX((double) x).setY((double) y).build());
-                vertices.add(Vertex.newBuilder().setX((double) x+square_size).setY((double) y).build());
-                vertices.add(Vertex.newBuilder().setX((double) x).setY((double) y+square_size).build());
-                vertices.add(Vertex.newBuilder().setX((double) x+square_size).setY((double) y+square_size).build());
+
+                vertices.add(Vertex.newBuilder().setX((double) x).setY((double) y).build()); // X:0 Y:0
+                vertices.add(Vertex.newBuilder().setX((double) x+square_size).setY((double) y).build()); // X: 20 Y:0
+                vertices.add(Vertex.newBuilder().setX((double) x+square_size).setY((double) y+square_size).build()); // X:20 Y:20
+                vertices.add(Vertex.newBuilder().setX((double) x).setY((double) y+square_size).build()); // X: 0 Y:20
             }
         }
 
@@ -39,27 +41,25 @@ public class DotGen {
             verticesWithColors.add(colored);
         }
 
-        ArrayList<Vertex> polygonVertices = new ArrayList<Vertex>();
+        List<Vertex> vertexSetOf4 = new ArrayList<>();
+        List<Polygons> polygonsList = new ArrayList<>();
+
+        for (Vertex currentVertex : verticesWithColors) {
+
+            if (vertexSetOf4.size() < 4) {
+                vertexSetOf4.add(currentVertex);
+            } else {
+
+                polygonsList.add(new Polygons(vertexSetOf4));
+                vertexSetOf4.clear();
+
+            }
+
+        }
+
         PolyMesh<Polygons> polygonMesh = new PolyMesh<Polygons>();
 
-        for (Vertex v1: verticesWithColors){
-            for (Vertex v2: verticesWithColors){
-                for (Vertex v3: verticesWithColors){
-                    for (Vertex v4: verticesWithColors){
-                        if ((v1.getY() == v2.getY() && v1.getX() == v2.getX() + square_size) && (v1.getX() == v3.getX() && v3.getY() == v1.getY() + square_size) && (v2.getX() == v4.getX() && v4.getY() == v2.getY() + square_size) && (v3.getY() == v4.getY() && v4.getX() == v3.getX() + square_size)){
-                            polygonVertices.add(v1);
-                            polygonVertices.add(v2);
-                            polygonVertices.add(v3);
-                            polygonVertices.add(v4);
-
-                            polygonMesh.add(new Polygons(polygonVertices)); 
-
-                            polygonVertices.clear();
-                        } 
-                    }
-                }
-            }
-        }
+        polygonMesh.addAll(polygonsList);
 
         return polygonMesh;
     

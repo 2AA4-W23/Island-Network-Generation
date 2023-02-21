@@ -202,10 +202,14 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
         boolean collectionModified = false;
 
+        int testIndex = 0;
+
         for (T currentPolygon : c) {
+            System.out.println(testIndex);
             if(this.add(currentPolygon)) {
                 collectionModified = true;
             }
+            testIndex++;
         }
 
         return collectionModified;
@@ -448,7 +452,10 @@ public class PolyMesh<T extends Polygons> implements Collection<T> {
 
         Polygons currentPolygon = this.polygonsArray[size()-1];
 
+        System.out.println(currentPolygon);
+
         List<Vertex> vertexList = currentPolygon.getVerticesList();
+        System.out.println(Arrays.toString(vertexList.toArray()));
 
         for (Segment currentSegment : currentPolygon.getSegmentsList()) {
 
