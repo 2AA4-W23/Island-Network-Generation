@@ -1,17 +1,12 @@
 package ca.mcmaster.cas.se2aa4.a2.generator;
 
-import java.io.IOException;
 import java.util.*;
 
-import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
-import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
-import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
 
-import java.awt.Color;
 
 public class DotGen {
 
@@ -19,7 +14,7 @@ public class DotGen {
     private final static int height = 500;
     private final static int square_size = 20;
 
-    public static void polygonGenerate() {
+    public static PolyMesh<Polygons> polygonGenerate() {
         List<Vertex> vertices = new ArrayList<>();
         // Create all the vertices
         for(int x = 0; x < width; x += square_size) {
@@ -45,7 +40,7 @@ public class DotGen {
         }
 
         ArrayList<Vertex> polygonVertices = new ArrayList<Vertex>();
-        ArrayList<Polygons> polygons = new ArrayList<Polygons>();
+        PolyMesh<Polygons> polygonMesh = new PolyMesh<Polygons>();
 
         for (Vertex v1: verticesWithColors){
             for (Vertex v2: verticesWithColors){
@@ -57,7 +52,7 @@ public class DotGen {
                             polygonVertices.add(v3);
                             polygonVertices.add(v4);
 
-                            polygons.add(new Polygons(polygonVertices)); 
+                            polygonMesh.add(new Polygons(polygonVertices)); 
 
                             polygonVertices.clear();
                         } 
@@ -66,8 +61,8 @@ public class DotGen {
             }
         }
 
-        polygonsArray.addAll(polygons);
-        
+        return polygonMesh;
+    
     } 
 
 }
