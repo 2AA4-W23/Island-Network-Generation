@@ -25,11 +25,11 @@ public class Main {
         Graphics2D canvas = SVGCanvas.build((int) Math.ceil(max_x), (int) Math.ceil(max_y));
         GraphicRenderer renderer = new GraphicRenderer();
         // Painting the mesh on the canvas
-        renderer.render(aMesh, canvas);
+        renderer.render(PolyMesh, canvas);
         // Storing the result in an SVG file
         SVGCanvas.write(canvas, output);
         // Dump the mesh to stdout
         MeshDump dumper = new MeshDump();
-        dumper.dump(aMesh);
+        dumper.dump(PolyMesh);
     }
 }

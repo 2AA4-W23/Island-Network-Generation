@@ -15,8 +15,6 @@ public class Main {
             }
         }
         
-        Mesh mesh = // create a 3D mesh object
-        
         Renderer renderer = new Renderer(mesh);
         // Update the value of debugMode based on if the previous flag was found or not
         renderer.setDebugMode(debugMode);
