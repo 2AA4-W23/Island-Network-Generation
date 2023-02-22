@@ -67,7 +67,7 @@ When you develop features and enrich the product, remember that you have first t
 |:--:|---------------|------|-------|-----|--------|
 | F01 |      Create a Polygon Class         |   All   |    2023-02-11   |  2023-02-12    |    D    |
 | F02 |      Create mesh collection         |   lenoverd   |    2023-02-14   |  2023-02-16   |     D   |
-| F03 |      Add calculating drawable segments to mesh collection      |   lenoverd   |   2023-02-16  |   2023-02-17  |   D  |
+| F03 |      Add drawable segments to mesh collection      |   lenoverd   |   2023-02-16  |   2023-02-17  |   D  |
 | F04 |     Ensure Polygon object can have color          |      |       |     |        |
 | 01 |      Ensure Polygon object has an alpha value to play with transparency         |      |       |     |        |
 | 01 |      Ensure Vertices can have color          |      |       |     |        |
