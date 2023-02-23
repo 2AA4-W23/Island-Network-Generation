@@ -36,12 +36,13 @@ public class DotGen {
             String width = String.valueOf(vertexWidth);
             Property thickness = Property.newBuilder().setKey("thickness").setValue(width).build();
             v = v.toBuilder().addProperties(thickness).build();
+            verticesWithThickness.add(v);
         }
 
         // Distribute colors randomly. Vertices are immutable, need to enrich them
         ArrayList<Vertex> verticesWithColors = new ArrayList<Vertex>();
         Random bag1 = new Random();
-        for(Vertex v: vertices){
+        for(Vertex v: verticesWithThickness) {
             int red = bag1.nextInt(255);
             int green = bag1.nextInt(255);
             int blue = bag1.nextInt(255);
@@ -63,6 +64,7 @@ public class DotGen {
 
                 polygonsList.add(new Polygons(vertexSetOf4));
                 vertexSetOf4.clear();
+                vertexSetOf4.add(currentVertex);
 
             }
 
