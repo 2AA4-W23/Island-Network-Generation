@@ -74,7 +74,7 @@ When you develop features and enrich the product, remember that you have first t
 | F07 |      Ensure Vertices and Segments has an alpha value to play with transparency         |      |       |     |        |
 | F08 |      Ensure Vertices and Segmentscan have thickness information          |  wangj500    |   2023-02-21    |  2023-02-21   |   IN PROGRESS     |
 | F12 |      Generate random points for each expected polygon         |  lenoverd   |   2023-02-23    |  2023-02-23  |   D    |
-| F13 |      Compute Voronoi diagram         |  lenoverd   |       |     |   B(F12)     |
-| F14 |      Apply Lloyd relaxation        |  lenoverd   |      |     |   B(F13)     |
+| F13 |      Compute Voronoi diagram         |  lenoverd   |    2023-02-23   |   2023-02-23  |   D    |
+| F14 |      Apply Lloyd relaxation        |  lenoverd   |  2023-02-23    |     |   IN PROGRESS     |
 
 
