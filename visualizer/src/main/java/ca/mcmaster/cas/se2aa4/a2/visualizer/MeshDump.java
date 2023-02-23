@@ -4,6 +4,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.MeshFactory;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
+import ca.team50.adt.PolyMesh;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +17,7 @@ public class MeshDump {
         this.dump(aMesh);
     }
 
-    public void dump(Mesh aMesh) {
+    public void dump(PolyMesh aMesh) {
         List<Vertex> vertices = aMesh.getVerticesList();
         System.out.println("|Vertices| = " + vertices.size());
         for (Vertex v : vertices){

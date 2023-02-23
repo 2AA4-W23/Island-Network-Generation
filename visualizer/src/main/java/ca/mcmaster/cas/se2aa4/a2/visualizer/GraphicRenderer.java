@@ -25,8 +25,7 @@ public class GraphicRenderer{
         Stroke stroke = new BasicStroke(0.5f);
         canvas.setStroke(stroke);
 
-        boolean debugMode = false;
-        if (debugMode) {
+        if (polygons.debugMode) {
             System.out.println("Debug mode enabled");
 
             for (int index = 0; index < polygons.size(); index++){
