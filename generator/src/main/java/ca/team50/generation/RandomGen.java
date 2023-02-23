@@ -4,6 +4,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -16,9 +17,9 @@ public class RandomGen {
      * @param maxY the maximum value y can be (0 to maxY) (both values are inclusive)
      * @param numOfPoints the number of points to be generated
      * @exception IllegalArgumentException if maxX or maxY are less than or equal to 0. If numOfPoints exceeds the maximum possible number of unique points (that is maxX*maxY)
-     * @return an array of Point objects containing unique x and y positions
+     * @return an Arraylist of Point objects containing unique x and y positions
      */
-    public static Point[] genPoints(int maxX, int maxY, int numOfPoints) {
+    public static ArrayList<Point> genPoints(int maxX, int maxY, int numOfPoints) {
 
         // Check for illegal arguments
         if (maxX <= 0) {
@@ -34,19 +35,15 @@ public class RandomGen {
         // Create GeometryFactory for creating new points
         GeometryFactory factory = new GeometryFactory();
 
-        // Create points array to store all points in
-        // Note this creates an array of null points
-        Point[] pointArray = new Point[numOfPoints];
+        // Create points ArrayList to store all points in
+        ArrayList<Point> pointArray = new ArrayList<>();
 
         Random randomGen = new Random();
 
-        for (int index = 0; index < pointArray.length; index++) {
+        for (int iterate = 0; iterate < numOfPoints; iterate++) {
 
             // Create newPoint Point object (null)
             Point newPoint;
-
-            // Convert updated point array to Arraylist to for checking if objects exist within the array (do-while loop below)
-            List<Point> arrayAsList = Arrays.asList(pointArray);
 
             // Keep re-generating point position if a point with the position already exists
             do {
@@ -58,10 +55,10 @@ public class RandomGen {
                 // Update point with newly generated coordinates
                 newPoint = factory.createPoint(new Coordinate(xPos,yPos));
 
-            } while (arrayAsList.contains(newPoint));
+            } while (pointArray.contains(newPoint));
 
             // After while loop, a unique point exists thus, add to array
-            pointArray[index] = newPoint;
+            pointArray.add(newPoint);
 
         }
 
