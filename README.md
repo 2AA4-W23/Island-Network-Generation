@@ -68,14 +68,10 @@ When you develop features and enrich the product, remember that you have first t
 | F01 |      Create a Polygon Class         |   All   |    2023-02-11   |  2023-02-12    |    D    |
 | F02 |      Create mesh collection         |   lenoverd   |    2023-02-14   |  2023-02-16   |     D   |
 | F03 |      Add drawable segments to mesh collection      |   lenoverd   |   2023-02-16  |   2023-02-17  |   D  |
-| F04 |     Ensure Polygon object can have color          |      |       |     |        |
-| 01 |      Ensure Polygon object has an alpha value to play with transparency         |      |       |     |        |
-| 01 |      Ensure Vertices can have color          |      |       |     |        |
-| 01 |      Ensure Vertices has an alpha value to play with transparency         |      |       |     |        |
-| 01 |      Ensure Segments can have color          |      |       |     |        |
-| 01 |      Ensure Segments has an alpha value to play with transparency         |      |       |     |        |
-| 01 |      Ensure Vertices can have thickness information          |      |       |     |        |
-| 01 |      Ensure Polygon object can have thickness information          |      |       |     |        |
-| 01 |      Ensure Segments can have thickness information          |      |       |     |        |
+| F04 |     Ensure Polygon object can have color          |  wangj500    |    2023-02-18   |  2023-02-20   | IN PROGRESS|
+| F05 |      Ensure Vertices can have color          |   wangj500   |    2023-02-18   |   2023-02-20  |    IN PROGRESS    |
+| F06 |      Ensure Segments can have color          |   wangj500   |    2023-02-18   |  2023-02-20   |   IN PROGRESS     |
+| F07 |      Ensure Vertices, Segments and Polygons has an alpha value to play with transparency         |      |       |     |        |
+| F08 |      Ensure Vertices, Segments and Polygons can have thickness information          |      |       |     |        |
 
 
