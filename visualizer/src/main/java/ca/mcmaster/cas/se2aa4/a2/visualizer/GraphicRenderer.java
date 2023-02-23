@@ -19,7 +19,13 @@ import ca.team50.adt.PolyMesh;
 
 public class GraphicRenderer{
 
-    private static int THICKNESS = 3;
+    private static final int THICKNESS = 3;
+    private boolean debugMode = false;
+
+
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
+    }
 
 
     public void render(PolyMesh polygons , Graphics2D canvas) {
