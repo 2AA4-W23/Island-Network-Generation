@@ -7,10 +7,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 
 import java.awt.Polygon;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Polygons extends Polygon {
 
@@ -81,6 +78,23 @@ public class Polygons extends Polygon {
         xAverage = xAverage/listSize;
 
         Vertex centroid = Vertex.newBuilder().setX(xAverage).setY(yAverage).build();
+
+        //add color to centroid
+        Random bag1 = new Random();
+        int red = bag1.nextInt(255);
+        int green = bag1.nextInt(255);
+        int blue = bag1.nextInt(255);
+        String colorCode = red + "," + green + "," + blue;
+        Property color = Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
+        centroid = centroid.toBuilder().addProperties(color).build();
+
+        //add thickness to centroid
+        Random bag = new Random();
+        Float vertexWidth = bag.nextFloat(5);
+        String width = String.valueOf(vertexWidth);
+        Property thickness = Property.newBuilder().setKey("thickness").setValue(width).build();
+        centroid = centroid.toBuilder().addProperties(thickness).build();
+
 
         return centroid;
     }
