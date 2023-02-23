@@ -42,7 +42,7 @@ public class RandomGen {
 
         for (int index = 0; index < pointArray.length; index++) {
 
-            // Create newPoint Point object
+            // Create newPoint Point object (null)
             Point newPoint;
 
             // Convert updated point array to Arraylist to for checking if objects exist within the array (do-while loop below)
