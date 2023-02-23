@@ -27,7 +27,6 @@
 		  <artifactId>batik-rasterizer</artifactId>
 		  <version>1.16</version>
 	  </dependency>
-<<<<<<< Updated upstream
 
 	  <!-- Need generator adt classes to function -->
 	  <dependency>
@@ -47,14 +46,12 @@
           <version>1.4</version>
       </dependency>
 
-=======
       <dependency>
           <groupId>io.github.ace-design</groupId>
           <artifactId>2aa4.mesh.generator</artifactId>
           <version>1.0</version>
       </dependency>
->>>>>>> Stashed changes
-  </dependencies>
+  	</dependencies>
 
   <build>
 	<plugins>
