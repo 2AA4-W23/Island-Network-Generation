@@ -38,9 +38,9 @@ public class MeshFactoryTest {
         List<Structs.Vertex> vertices = new ArrayList<>();
         for (int i = 0; i < bag.nextInt(10,50); i++){
             Structs.Vertex v = Structs.Vertex.newBuilder()
-                                    .setX(bag.nextDouble(0.0, 1000.0))
-                                    .setY(bag.nextDouble(0.0, 1000.0))
-                                .build();
+                    .setX(bag.nextDouble(0.0, 1000.0))
+                    .setY(bag.nextDouble(0.0, 1000.0))
+                    .build();
             vertices.add(v);
         }
         // random segments:
@@ -53,9 +53,9 @@ public class MeshFactoryTest {
         }
 
         Structs.Mesh result = Structs.Mesh.newBuilder()
-                                    .addAllVertices(vertices)
-                                    .addAllSegments(segments)
-                                .build();
+                .addAllVertices(vertices)
+                .addAllSegments(segments)
+                .build();
         return result;
     }
 
