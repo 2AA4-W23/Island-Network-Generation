@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class MeshFactory {
 
-    public Structs.Mesh read(String filename) throws IOException {
+    public ca.team50.adt.PolyMesh read(String filename) throws IOException {
         return Structs.Mesh.parseFrom(new FileInputStream(filename));
     }
 

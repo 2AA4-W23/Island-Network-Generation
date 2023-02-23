@@ -1,20 +1,19 @@
 package ca.mcmaster.cas.se2aa4.a2.visualizer;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
-import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
-import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
+import ca.team50.adt.PolyMesh;
 
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+
 import java.lang.Float;
 import ca.team50.adt.PolyMesh;
 
@@ -29,7 +28,8 @@ public class GraphicRenderer{
         Stroke stroke = new BasicStroke(0.5f);
         canvas.setStroke(stroke);
 
-        if (debugMode) {
+        if (polygons.debugMode) {
+            System.out.println("Debug mode enabled");
 
             for (int index = 0; index < polygons.size(); index++){
                 
@@ -91,7 +91,9 @@ public class GraphicRenderer{
 
         }
 
+
         else {
+            System.out.println("Normal mode enabled");
             //iterate through and draw each centroid with appropriate color and thickness
             for (int index = 0; index < polygons.size(); index++){
 
