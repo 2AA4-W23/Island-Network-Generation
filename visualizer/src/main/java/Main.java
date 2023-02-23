@@ -1,4 +1,4 @@
-import ca.mcmaster.cas.se2aa4.a2.io.MeshFactory;
+
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.visualizer.GraphicRenderer;
 import ca.mcmaster.cas.se2aa4.a2.visualizer.MeshDump;
@@ -20,7 +20,6 @@ public class Main {
         // Extracting command line parameters
         String input = args[0];
         String output = args[1];
-        String mode = args[2];
 
         PolyMesh<Polygons> mesh = DotGen.polygonGenerate();
         Graphics2D canvas = null;
