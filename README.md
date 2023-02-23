@@ -72,6 +72,6 @@ When you develop features and enrich the product, remember that you have first t
 | F05 |      Ensure Vertices can have color          |   wangj500   |    2023-02-18   |   2023-02-20  |    IN PROGRESS    |
 | F06 |      Ensure Segments can have color          |   wangj500   |    2023-02-18   |  2023-02-20   |   IN PROGRESS     |
 | F07 |      Ensure Vertices, Segments and Polygons has an alpha value to play with transparency         |      |       |     |        |
-| F08 |      Ensure Vertices, Segments and Polygons can have thickness information          |      |       |     |        |
+| F08 |      Ensure Vertices, Segments and Polygons can have thickness information          |  wangj500    |   2023-02-21    |  2023-02-21   |   IN PROGRESS     |
 
 
