@@ -3,13 +3,11 @@ package ca.team50.adt;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
-import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 
-import java.awt.Polygon;
-import java.awt.Point;
+import java.io.Serializable;
 import java.util.*;
 
-public class Polygons extends Polygon {
+public class Polygons implements Serializable {
 
     private List<Vertex> verticesList;
     private List<Segment> segmentsList;
