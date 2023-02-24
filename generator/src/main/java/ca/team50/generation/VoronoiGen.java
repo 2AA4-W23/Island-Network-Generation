@@ -49,6 +49,7 @@ public class VoronoiGen {
      */
     public void relax(int iterations) {
 
+        // Error checking
         if (iterations < 0) {
             throw new IllegalArgumentException("Iterations cannot be less than 0 (" + iterations + ")");
         }
