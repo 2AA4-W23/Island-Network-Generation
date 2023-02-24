@@ -14,6 +14,7 @@ public class DotGen {
     private final static int height = 500;
     private final static int square_size = 20;
 
+
     public static PolyMesh<Polygons> polygonGenerate() {
         List<Vertex> vertices = new ArrayList<>();
 

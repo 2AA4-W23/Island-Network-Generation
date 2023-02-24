@@ -1,21 +1,22 @@
 package ca.mcmaster.cas.se2aa4.a2.visualizer;
 
-import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.team50.adt.PolyMesh;
+
+import java.util.ArrayList;
 
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
+import java.util.Iterator;
 import java.util.List;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 import java.lang.Float;
-import ca.team50.adt.PolyMesh;
 
 public class GraphicRenderer{
 
@@ -100,7 +101,10 @@ public class GraphicRenderer{
 
         else {
             System.out.println("Normal mode enabled");
-            //iterate through and draw each centroid with appropriate color and thickness
+            ArrayList<Vertex> vertices = new ArrayList<Vertex>();
+
+
+/*            //iterate through and draw each centroid with appropriate color and thickness
             for (int index = 0; index < polygons.size(); index++){
 
                 Vertex centroid = polygons.get(index).getCentroid();
@@ -114,30 +118,24 @@ public class GraphicRenderer{
                 Ellipse2D point = new Ellipse2D.Double(centre_x, centre_y, thickness, thickness);
                 canvas.fill(point);
                 canvas.setColor(old);
-            }
+            }*/
 
-                //iterate through and draw each line segment and regular vertex with appropriate color and thickness
+           //iterate through and draw each line segment with appropriate color and thickness
             for (int index = 0; index < polygons.segmentSize(); index++) {
                 Vertex[] segment = polygons.getSegment(index);
                 Vertex start_Point = segment[0];
                 Vertex end_Point = segment[1];
 
-                //set Vertices thickness
+                vertices.add(start_Point);
+                vertices.add(end_Point);
+
+                /*//set Vertices thickness
                 Float thicknessV1 = extractThickness(start_Point.getPropertiesList());
                 Float thicknessV2 = extractThickness(end_Point.getPropertiesList());
 
                 //set segment color
                 Color v1Color = extractColor(start_Point.getPropertiesList());
                 Color v2Color = extractColor(end_Point.getPropertiesList());
-
-                //draw vertices with thickness and color
-                canvas.setColor(extractColor(start_Point.getPropertiesList()));
-                Ellipse2D point1 = new Ellipse2D.Double(start_Point.getX(), start_Point.getY(), thicknessV1, thicknessV1);
-                canvas.fill(point1);
-
-                canvas.setColor(extractColor(end_Point.getPropertiesList()));
-                Ellipse2D point2 = new Ellipse2D.Double(end_Point.getX(), end_Point.getY(), thicknessV2, thicknessV2);
-                canvas.fill(point2);
 
                 //calculate average color and set as segment color
                 int R = (v1Color.getRed() + v2Color.getRed())/2;
@@ -153,12 +151,64 @@ public class GraphicRenderer{
                 //draw segments with averaged color and thickness
                 Point2D startPoint = new Point2D.Double(start_Point.getX(), start_Point.getY());
                 Point2D endPoint = new Point2D.Double(end_Point.getX(), end_Point.getY());
-            
+
                 Line2D line = new Line2D.Double(startPoint,endPoint);
 
                 canvas.draw(line);
-                canvas.fill(line);
+                canvas.fill(line);*/
             }
+
+
+            //Draw vertices with appropriate color and thickness
+            ArrayList<Vertex> vertices2 = new ArrayList<Vertex>();
+
+            for (int i = 1; i < vertices.size(); i++){
+                vertices2.add(vertices.get(i));
+            }
+
+            ArrayList<Vertex> duplicates = new ArrayList<Vertex>();
+
+            for (Vertex v1: vertices){
+                duplicates.add(v1);
+
+                for (Vertex v2: vertices2) {
+                    if ((v1.getX() == v2.getX()) && (v1.getY() == v2.getY()) ){
+                        duplicates.add(v2);
+
+                        if (duplicates.size() == 4){
+                            Float thicknessV1 = extractThickness(duplicates.get(0).getPropertiesList());
+                            Float thicknessV2 = extractThickness(duplicates.get(1).getPropertiesList());
+                            Float thicknessV3 = extractThickness(duplicates.get(2).getPropertiesList());
+                            Float thicknessV4 = extractThickness(duplicates.get(3).getPropertiesList());
+
+                            Color colorV1 = extractColor(duplicates.get(0).getPropertiesList());
+                            Color colorV2 = extractColor(duplicates.get(1).getPropertiesList());
+                            Color colorV3 = extractColor(duplicates.get(2).getPropertiesList());
+                            Color colorV4 = extractColor(duplicates.get(3).getPropertiesList());
+
+                            int R = (colorV1.getRed() + colorV2.getRed() + colorV3.getRed() + colorV4.getRed())/4;
+                            int G = (colorV1.getGreen() + colorV2.getGreen() + colorV3.getGreen() + colorV4.getGreen())/4;
+                            int B = (colorV1.getBlue() + colorV2.getBlue() + colorV3.getBlue() + colorV4.getBlue())/4;
+                            canvas.setColor(new Color(R, G, B));
+
+                            Float vertexThickness = (thicknessV1 + thicknessV2 + thicknessV3 + thicknessV4)/4;
+
+                            Ellipse2D point = new Ellipse2D.Double(v2.getX(), v2.getY(), vertexThickness, vertexThickness);
+                            canvas.fill(point);
+
+                            duplicates.clear();
+                        }
+
+                    }
+
+                }
+            }
+
+
+
+
+
+
         }
         
     }
