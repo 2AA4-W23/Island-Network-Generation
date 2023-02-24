@@ -1,3 +1,4 @@
+package ca.visMain;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.visualizer.GraphicRenderer;
@@ -32,7 +33,7 @@ public class Main {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             System.out.println(e.getMessage());
-            formatter.printHelp("Main", options);
+            formatter.printHelp("ca.visMain.Main", options);
             System.exit(1);
         }
 
