@@ -4,9 +4,10 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Polygons {
+public class Polygons implements Serializable {
 
     private List<Vertex> verticesList;
     private List<Segment> segmentsList;
