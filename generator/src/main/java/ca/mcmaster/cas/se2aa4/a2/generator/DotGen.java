@@ -6,6 +6,11 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
+import ca.team50.generation.RandomGen;
+import ca.team50.generation.VoronoiGen;
+import ca.team50.translation.JtsTranslation;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Polygon;
 
 
 public class DotGen {
@@ -76,7 +81,35 @@ public class DotGen {
             polygonMesh.add(currentPolygon);
         }
 
-        return polygonMesh;
+        // TESTING ------
+        VoronoiGen newGenTest = new VoronoiGen(500,500, RandomGen.genCoords(500,500,60));
+
+        newGenTest.relax(30);
+
+        Geometry testGeo = newGenTest.getGeoCollection();
+
+        PolyMesh<Polygons> testMesh = new PolyMesh<>();
+
+        for (int index = 0; index < testGeo.getNumGeometries(); index++) {
+
+            Polygon testPoly = (Polygon) testGeo.getGeometryN(index);
+
+            Polygons testPolygons = JtsTranslation.convertToPolygons(testPoly);
+            System.out.println("NEW POLYGON");
+            for (Vertex testVert : testPolygons.getVerticesList()) {
+                System.out.println("NEW VERTEX");
+                System.out.println("X: " + testVert.getX());
+                System.out.println("Y: " + testVert.getY());
+            }
+
+            testMesh.add(testPolygons);
+
+        }
+
+        // ---------
+
+        // ACTUAL RETURN polygonMesh
+        return testMesh;
     
     } 
 

@@ -12,18 +12,18 @@ public class VoronoiGen {
     private int canvasSizeX;
     private int canvasSizeY;
     private Geometry geoCollection;
-    private ArrayList<Point> points;
+    private ArrayList<Coordinate> coordinates;
 
     /**
      * Generates a voronoi diagram given Point objects (JTS)
      * @param canvasSizeX the x boundary for the canvas size
      * @param canvasSizeY the y boundary for the canvas size
-     * @param points an arraylist of points to compute polygons for
+     * @param coordinates an arraylist of coordinates to compute polygons for
      * @implNote It is recommended that both canvasSizeX and canvasSizeY are equal to or greater than the maximum position (coordinate) of a given Point object
      * @exception IllegalArgumentException if canvasSizeX or canvasSizeY are less than or equal to 0.
      * @return a VoronoiGen object containing a Geometry object (JTS) with a collection of Polygons (JTS)
      */
-    public VoronoiGen(int canvasSizeX, int canvasSizeY, ArrayList<Point> points) {
+    public VoronoiGen(int canvasSizeX, int canvasSizeY, ArrayList<Coordinate> coordinates) {
 
         // Error checking
         if (canvasSizeX <= 0) {
@@ -35,7 +35,7 @@ public class VoronoiGen {
         // Set variables
         this.canvasSizeX = canvasSizeX;
         this.canvasSizeY = canvasSizeY;
-        this.points = points;
+        this.coordinates = coordinates;
 
         // Compute diagram
         generateDiagram();
@@ -60,7 +60,7 @@ public class VoronoiGen {
             List<Polygon> polygonList = new ArrayList<>();
 
             // Reset points list
-            this.points.clear();
+            this.coordinates.clear();
 
             // Get all Polygons from Geometry collection
             for (int index = 0; index < this.geoCollection.getNumGeometries(); index++) {
@@ -71,7 +71,7 @@ public class VoronoiGen {
             for (Polygon currentPolygon : polygonList) {
 
                 // Then add the centroid to the points Arraylist
-                this.points.add(currentPolygon.getCentroid());
+                this.coordinates.add(currentPolygon.getCentroid().getCoordinate());
 
             }
 
@@ -89,7 +89,7 @@ public class VoronoiGen {
         GeometryFactory geoFactory = new GeometryFactory();
 
         // Set the coordinates to develop polygons around
-        voronoi.setSites(this.points);
+        voronoi.setSites(this.coordinates);
 
         // Set space in which the diagram will be computed on (i.e. the canvas size)
         voronoi.setClipEnvelope(new Envelope(new Coordinate(0,0),new Coordinate(this.canvasSizeX,this.canvasSizeY)));
