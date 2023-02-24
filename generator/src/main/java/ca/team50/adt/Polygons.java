@@ -15,7 +15,8 @@ public class Polygons implements Serializable {
 
 
     /**
-     * Returns a Polygon object that describes an abstract shape based on the amount of vertices in a list
+     * Returns a Polygon object that describes an abstract shape based on the amount of vertices in a list.
+     * Calculates centroid automatically
      * @param vertexList the list of all vertices in the shape, in-order
      * @exception IllegalStateException if list passed is empty
      * @return the abstract shape as a Polygon object
@@ -56,6 +57,54 @@ public class Polygons implements Serializable {
         }
 
         this.centroid = calculateCentroid();
+    }
+
+    /**
+     * Returns a Polygon object that describes an abstract shape based on the amount of vertices in a list.
+     * Does not perform centroid calculation automatically, user must specify the location of the centroid
+     * @param vertexList the list of all vertices in the shape, in-order
+     * @param centroidOverride provide a centroid position as a Vertex object
+     * @exception IllegalStateException if list passed is empty
+     * @return the abstract shape as a Polygon object
+     */
+    public Polygons(List<Vertex> vertexList, Vertex centroidOverride) throws IllegalStateException {
+
+        if (vertexList.isEmpty()) {
+            throw new IllegalStateException("Vertex list cannot be empty");
+        }
+
+        this.verticesList = new ArrayList<>();
+        this.verticesList.addAll(vertexList);
+
+        this.segmentsList = new ArrayList<>();
+
+        for (int index = 0; index < vertexList.size(); index++) {
+
+            Vertex currentVertex = this.verticesList.get(index);
+
+            // Check if the end of the list was reached
+            if (index+1 >= verticesList.size()) {
+
+                // If so, connect the final segment from the last to the first Vertex
+                Vertex firstVertex = this.verticesList.get(0);
+
+                Segment segment = Segment.newBuilder().setV1Idx(verticesList.indexOf(currentVertex)).setV2Idx(verticesList.indexOf(firstVertex)).build();
+
+                segmentsList.add(segment);
+                break;
+
+            }
+
+            Vertex nextVertex = this.verticesList.get(index+1);
+
+            Segment segment = Segment.newBuilder().setV1Idx(verticesList.indexOf(currentVertex)).setV2Idx(verticesList.indexOf(nextVertex)).build();
+            segmentsList.add(segment);
+
+        }
+
+        // Don't perform centroid calculation, instead copy what is given as the parameter
+        this.centroid = centroidOverride;
+
     }
 
     private Vertex calculateCentroid() {

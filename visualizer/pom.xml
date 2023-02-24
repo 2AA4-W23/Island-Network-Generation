@@ -54,7 +54,7 @@
 		<artifactId>exec-maven-plugin</artifactId>
 		<version>1.6.0</version>
 		<configuration>
-		  <mainClass>Main</mainClass>
+		  <mainClass>ca.visMain.Main</mainClass>
 		</configuration>
 	  </plugin>
 	  <plugin>
@@ -70,7 +70,7 @@
 			  <finalName>${project.artifactId}</finalName>
 			  <archive>
 				<manifest>
-				  <mainClass>Main</mainClass>
+				  <mainClass>ca.visMain.Main</mainClass>
 				</manifest>
 			  </archive>
 			  <descriptorRefs>
