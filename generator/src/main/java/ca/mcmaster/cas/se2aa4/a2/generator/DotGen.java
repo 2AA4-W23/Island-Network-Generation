@@ -2,6 +2,7 @@ package ca.mcmaster.cas.se2aa4.a2.generator;
 
 import java.util.*;
 
+import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.team50.adt.PolyMesh;
@@ -82,7 +83,8 @@ public class DotGen {
         }
 
         // TESTING ------
-        VoronoiGen newGenTest = new VoronoiGen(500,500, RandomGen.genCoords(500,500,60));
+
+        VoronoiGen newGenTest = new VoronoiGen(500,500, RandomGen.genCoords(400,400,60));
 
         newGenTest.relax(30);
 
