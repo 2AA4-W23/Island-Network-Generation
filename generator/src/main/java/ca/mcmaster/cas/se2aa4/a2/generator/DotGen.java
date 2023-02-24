@@ -84,7 +84,7 @@ public class DotGen {
 
         // TESTING ------
 
-        VoronoiGen newGenTest = new VoronoiGen(500,500, RandomGen.genCoords(400,400,60));
+/*        VoronoiGen newGenTest = new VoronoiGen(500,500, RandomGen.genCoords(400,400,60));
 
         newGenTest.relax(30);
 
@@ -106,12 +106,12 @@ public class DotGen {
 
             testMesh.add(testPolygons);
 
-        }
+        }*/
 
         // ---------
 
         // ACTUAL RETURN polygonMesh
-        return testMesh;
+        return polygonMesh;
     
     } 
 
