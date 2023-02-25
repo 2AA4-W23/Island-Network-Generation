@@ -39,22 +39,7 @@ public class GraphicRenderer{
             System.out.println("Debug mode enabled");
 
             for (int index = 0; index < polygons.size(); index++){
-                
                 Vertex centroid = polygons.get(index).getCentroid();
-                List<Vertex> vertices = polygons.get(index).getVerticesList();
-
-                //color Vertices Black
-                for (Vertex v: vertices){
-                    double centre_x1 = v.getX() - (THICKNESS/2.0d);
-                    double centre_y1 = v.getY() - (THICKNESS/2.0d);
-                    Color old = canvas.getColor();
-                    canvas.setColor(Color.BLACK);
-                    Ellipse2D point = new Ellipse2D.Double(centre_x1, centre_y1, THICKNESS, THICKNESS);
-                    canvas.fill(point);
-                    canvas.setColor(old);
-                }
-
-                //color Centroids RED
                 double centre_x = centroid.getX() - (THICKNESS / 2.0d);
                 double centre_y = centroid.getY() - (THICKNESS / 2.0d);
                 Color old = canvas.getColor();
@@ -62,47 +47,68 @@ public class GraphicRenderer{
                 Ellipse2D point = new Ellipse2D.Double(centre_x, centre_y, THICKNESS, THICKNESS);
                 canvas.fill(point);
                 canvas.setColor(old);
+            }
 
+            //Get neighboring relations and color Grey
+            for (int index = 0; index < polygons.size(); index++) {
+                for (int index1 = 0; index1 < polygons.size(); index1++) {
+                    if (polygons.isNeighbor(index, index1)) {
+                        System.out.println("Is neighbor:" + index + " " + index1);
+                        Point2D startPoint = new Point2D.Double(polygons.get(index).getCentroid().getX(), polygons.get(index).getCentroid().getY());
+                        Point2D endPoint = new Point2D.Double(polygons.get(index1).getCentroid().getX(), polygons.get(index1).getCentroid().getY());
 
-                for (int index1 = 0; index < polygons.size(); index++){
-
-                    Vertex centroid1 = polygons.get(index1).getCentroid();
-
-                    //color neighborhood relations grey
-                    if (polygons.isNeighbor(index, index1)){
-                        Point2D startPoint = new Point2D.Double(centroid.getX(), centroid.getY());
-                        Point2D endPoint = new Point2D.Double(centroid1.getX(), centroid1.getY());
-            
-                        Line2D line = new Line2D.Double(startPoint,endPoint);
+                        Line2D line = new Line2D.Double(startPoint, endPoint);
                         canvas.setColor(Color.GRAY);
                         canvas.draw(line);
                         canvas.fill(line);
-                    }  
+                    }
                 }
             }
-            // Color all polygons BLACK
+
+            ArrayList<Vertex> vertices = new ArrayList<Vertex>();
+
+            // Color all segments BLACK
             for (int index = 0; index < polygons.segmentSize(); index++) {
-            
                 Vertex[] segment = polygons.getSegment(index);
                 Vertex start_Point = segment[0];
                 Vertex end_Point = segment[1];
 
+                vertices.add(start_Point);
+                vertices.add(end_Point);
+
                 Point2D startPoint = new Point2D.Double(start_Point.getX(), start_Point.getY());
                 Point2D endPoint = new Point2D.Double(end_Point.getX(), end_Point.getY());
-            
+
                 Line2D line = new Line2D.Double(startPoint,endPoint);
                 canvas.setColor(Color.BLACK);
                 canvas.draw(line);
                 canvas.fill(line);
             }
 
-        }
+            //Color all vertices Black
+            ArrayList<Vertex> duplicates = new ArrayList<Vertex>(4);
 
+            for (int j = 0; j < vertices.size(); j++) {
+                for (int i = 0; i < vertices.size(); i++) {
+
+                    if (((vertices.get(j).getX() == vertices.get(i).getX())) && ((vertices.get(j).getY() == vertices.get(i).getY()))) {
+                        duplicates.add(vertices.get(i));
+                    }
+
+                    if (i == vertices.size() - 1) {
+                        Ellipse2D point = new Ellipse2D.Double(vertices.get(j).getX() - (THICKNESS / 2.0d), vertices.get(j).getY() - (THICKNESS / 2.0d), THICKNESS, THICKNESS);
+                        canvas.fill(point);
+
+                        duplicates.clear();
+                    }
+                }
+            }
+
+        }
 
         else {
             System.out.println("Normal mode enabled");
             ArrayList<Vertex> vertices = new ArrayList<Vertex>();
-
 
           //iterate through and draw each centroid with appropriate color and thickness
             for (int index = 0; index < polygons.size(); index++){
@@ -158,7 +164,6 @@ public class GraphicRenderer{
                 canvas.fill(line);
             }
 
-
             //Draw vertices with appropriate color and thickness
 
             ArrayList<Vertex> duplicates = new ArrayList<Vertex>(4);
@@ -169,7 +174,6 @@ public class GraphicRenderer{
 
                     if (((vertices.get(j).getX() == vertices.get(i).getX()) ) && ((vertices.get(j).getY() == vertices.get(i).getY())) ){
                         duplicates.add(vertices.get(i));
-                        System.out.println("number of duplicates"+ duplicates.size());
                     }
 
                     if (i == vertices.size()-1){
@@ -223,11 +227,6 @@ public class GraphicRenderer{
 
                 }
             }
-
-
-
-
-
 
         }
         
