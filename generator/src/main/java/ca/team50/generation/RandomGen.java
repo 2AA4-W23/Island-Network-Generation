@@ -1,5 +1,6 @@
 package ca.team50.generation;
 
+import ca.mcmaster.cas.se2aa4.a2.io.Structs.*;
 import org.locationtech.jts.geom.Coordinate;
 
 import java.util.*;
@@ -57,6 +58,42 @@ public class RandomGen {
         return coordArray;
     }
 
+    /**
+     * Applies thickness to a Vertex object (io) with a random thickness between 0 (inclusive) and 5 (exclusive)
+     * @param vertex the vertex to apply the thickness property to
+     * @return a Vertex object (io) with a random thickness between 0 (inclusive) and 5 (exclusive)
+     */
+    public static Vertex thicknessGen(Vertex vertex) {
 
+        // Create random thickness value
+        Random bag = new Random();
+        Float vertexWidth = bag.nextFloat(5);
+
+        // Construct thickness property and return a vertex with property applied
+        String width = String.valueOf(vertexWidth);
+        Property thickness = Property.newBuilder().setKey("thickness").setValue(width).build();
+        return vertex.toBuilder().addProperties(thickness).build();
+
+    }
+
+    /**
+     * Applies a random RGB value to a Vertex object (io)
+     * @param vertex the vertex to apply the RGB property to
+     * @return a Vertex object (io) with a random RGB value (each between 0 (inclusive) and 255 (exclusive))
+     */
+    public static Vertex colorGen(Vertex vertex) {
+
+        // Generate random RGB values
+        Random bag = new Random();
+        int red = bag.nextInt(255);
+        int green = bag.nextInt(255);
+        int blue = bag.nextInt(255);
+
+        // Create property and return Vertex with applied property
+        String colorCode = red + "," + green + "," + blue;
+        Property color = Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
+        return vertex.toBuilder().addProperties(color).build();
+
+    }
 
 }

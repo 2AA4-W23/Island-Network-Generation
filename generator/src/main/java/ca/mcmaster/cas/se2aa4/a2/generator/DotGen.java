@@ -28,42 +28,19 @@ public class DotGen {
         for(int x = 0; x < width; x += square_size) {
             for(int y = 0; y < height; y += square_size) {
 
-                vertices.add(Vertex.newBuilder().setX((double) x).setY((double) y).build()); // X:0 Y:0
-                vertices.add(Vertex.newBuilder().setX((double) x+square_size).setY((double) y).build()); // X: 20 Y:0
-                vertices.add(Vertex.newBuilder().setX((double) x+square_size).setY((double) y+square_size).build()); // X:20 Y:20
-                vertices.add(Vertex.newBuilder().setX((double) x).setY((double) y+square_size).build()); // X: 0 Y:20
+                // Create the vertex with position, then apply random property values to it (random thickness and RGB color)
+                vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x).setY((double) y).build()))); // X:0 Y:0
+                vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y).build()))); // X: 20 Y:0
+                vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y+square_size).build()))); // X:20 Y:20
+                vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x).setY((double) y+square_size).build()))); // X: 0 Y:20
             }
-        }
-
-        //Distribute thickness randomly.
-        ArrayList<Vertex> verticesWithThickness= new ArrayList<Vertex>();
-        Random bag = new Random();
-        for(Vertex v: vertices){
-            Float vertexWidth = bag.nextFloat(5);
-            String width = String.valueOf(vertexWidth);
-            Property thickness = Property.newBuilder().setKey("thickness").setValue(width).build();
-            v = v.toBuilder().addProperties(thickness).build();
-            verticesWithThickness.add(v);
-        }
-
-        // Distribute colors randomly. Vertices are immutable, need to enrich them
-        ArrayList<Vertex> verticesWithColors = new ArrayList<Vertex>();
-        Random bag1 = new Random();
-        for(Vertex v: verticesWithThickness) {
-            int red = bag1.nextInt(255);
-            int green = bag1.nextInt(255);
-            int blue = bag1.nextInt(255);
-            String colorCode = red + "," + green + "," + blue;
-            Property color = Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
-            Vertex colored = Vertex.newBuilder(v).addProperties(color).build();
-            verticesWithColors.add(colored);
         }
 
 
         List<Vertex> vertexSetOf4 = new ArrayList<>();
         List<Polygons> polygonsList = new ArrayList<>();
 
-        for (Vertex currentVertex : verticesWithColors) {
+        for (Vertex currentVertex : vertices) {
 
             if (vertexSetOf4.size() < 4) {
                 vertexSetOf4.add(currentVertex);
@@ -85,33 +62,19 @@ public class DotGen {
 
         // TESTING ------
 
-/*        VoronoiGen newGenTest = new VoronoiGen(500,500, RandomGen.genCoords(400,400,60));
+        // To generate a Voronoi diagram, instantiate it as such
+/*      VoronoiGen newGenTest = new VoronoiGen(500,500, RandomGen.genCoords(400,400,60));
+        First two arguments indicate the size of the overall canvas, third argument is a list of coordinates to draw Polygons around
+        .genCoords - First argument is maxX in which a coordinate can exist, second is maxY (same idea as maxX) and third is the number of coordinates to generate
 
+        // Once you have an instance of a diagram you can relax it X number of iterations (the higher this number, the less pointy the mesh will look)
+        // Note that once you relax, you must call getGeoCollection() again for the updated mesh if you previously used the method!
         newGenTest.relax(30);
 
-        Geometry testGeo = newGenTest.getGeoCollection();
-
-        PolyMesh<Polygons> testMesh = new PolyMesh<>();
-
-        for (int index = 0; index < testGeo.getNumGeometries(); index++) {
-
-            Polygon testPoly = (Polygon) testGeo.getGeometryN(index);
-
-            Polygons testPolygons = JtsTranslation.convertToPolygons(testPoly);
-            System.out.println("NEW POLYGON");
-            for (Vertex testVert : testPolygons.getVerticesList()) {
-                System.out.println("NEW VERTEX");
-                System.out.println("X: " + testVert.getX());
-                System.out.println("Y: " + testVert.getY());
-            }
-
-            testMesh.add(testPolygons);
-
-        }*/
-
-        // ---------
-
-        // ACTUAL RETURN polygonMesh
+        // Finally, the outputted diagram is in the form of a Geometry JTS object
+        // This object contains a group of JTS Polygons. You can translate this object into a PolyMesh via the following command
+        PolyMesh<Polygons> testMesh = JtsTranslation.convertToPolyMesh(teshMesh);
+*/
         return polygonMesh;
     
     } 

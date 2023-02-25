@@ -3,6 +3,7 @@ package ca.team50.translation;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
+import ca.team50.generation.RandomGen;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
@@ -30,6 +31,8 @@ public class JtsTranslation {
         for (Coordinate currentCoord : polygonCoords) {
 
             Vertex newVertex = Vertex.newBuilder().setX(currentCoord.getX()).setY(currentCoord.getY()).build();
+            // Apply random thickness and color properties to newly created Vertex
+            newVertex = RandomGen.colorGen(RandomGen.thicknessGen(newVertex));
             convertedCoordsList.add(newVertex);
 
         }

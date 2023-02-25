@@ -14,7 +14,6 @@ import java.io.Serializable;
  * @return A PolyMesh object in which only specified Polygon class types are allowed to be operated on
  */
 public class PolyMesh<T extends Polygons> implements Collection<T>, Serializable {
-    public boolean debugMode;
 
     // Mesh is a collection of Polygons and can operate on them
 
