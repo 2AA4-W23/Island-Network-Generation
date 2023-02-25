@@ -25,7 +25,7 @@ After installation, you'll find an application named `generator.jar` in the `gen
 To run the generator, go to the `generator` directory, and use `java -jar` to run the product.
 It takes in multiple arguments to generate a desired mesh:
 | Argument name | Command Abbreviation | Command | Description | Additional Notes |
-|:--:|--|------|-------|-----|
+|:--:|--|---------|-------|-----|
 | Help | -h |   --help   |   Prints all available commands to console | Exits the program after execution. Provides extra information such as default values for specified arguments |
 | Mesh Type | -mt |   --meshtype   |   Specify the mesh type as a string to generate (all possible strings listed in program) | |
 | Name File Name | -n |   --name   |   Specify the name of the .mesh file as a string: <input>.mesh | |
