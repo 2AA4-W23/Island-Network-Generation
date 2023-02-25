@@ -73,7 +73,7 @@ public class DotGen {
 
         // Finally, the outputted diagram is in the form of a Geometry JTS object
         // This object contains a group of JTS Polygons. You can translate this object into a PolyMesh via the following command
-        PolyMesh<Polygons> testMesh = JtsTranslation.convertToPolyMesh(teshMesh);
+        PolyMesh<Polygons> testMesh = JtsTranslation.convertToPolyMesh(newGenTest.getGeoCollection());
 */
         return polygonMesh;
     
