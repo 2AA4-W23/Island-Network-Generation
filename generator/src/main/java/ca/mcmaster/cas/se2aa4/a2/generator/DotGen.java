@@ -23,7 +23,6 @@ public class DotGen {
 
     public static PolyMesh<Polygons> polygonGenerate() {
         List<Vertex> vertices = new ArrayList<>();
-
         // Create all the vertices
         for(int x = 0; x < width; x += square_size) {
             for(int y = 0; y < height; y += square_size) {
@@ -33,6 +32,7 @@ public class DotGen {
                 vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y).build()))); // X: 20 Y:0
                 vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y+square_size).build()))); // X:20 Y:20
                 vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x).setY((double) y+square_size).build()))); // X: 0 Y:20
+
             }
         }
 
@@ -40,25 +40,33 @@ public class DotGen {
         List<Vertex> vertexSetOf4 = new ArrayList<>();
         List<Polygons> polygonsList = new ArrayList<>();
 
+        // Since each polygon in the mesh is of groups of 4...
+        // Iterate through all vertices and group them into 4's
         for (Vertex currentVertex : vertices) {
 
             if (vertexSetOf4.size() < 4) {
                 vertexSetOf4.add(currentVertex);
             } else {
 
+                // Create a polygon with the four vertices and add it to the polygon list
                 polygonsList.add(new Polygons(vertexSetOf4));
                 vertexSetOf4.clear();
                 vertexSetOf4.add(currentVertex);
 
             }
 
+            // Since loop will end once the last vertex is added, thus creating one more group of 4...
+            // Create a new polygon with the last four vertices and add to the list before exiting the for loop
+            if (vertices.get(vertices.size()-1) == currentVertex) {
+                polygonsList.add(new Polygons(vertexSetOf4));
+                vertexSetOf4.clear();
+            }
+
         }
 
+        // Create new PolyMesh and add all polygons to it
         PolyMesh<Polygons> polygonMesh = new PolyMesh<Polygons>();
-
-        for (Polygons currentPolygon : polygonsList) {
-            polygonMesh.add(currentPolygon);
-        }
+        polygonMesh.addAll(polygonsList);
 
         // TESTING ------
 
