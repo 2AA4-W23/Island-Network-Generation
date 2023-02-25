@@ -14,8 +14,10 @@ public class Main {
         // Parse args input
         CLInterface parsedInput = new CLInterface(args);
 
-        PolyMesh<Polygons> mesh = DotGen.polygonGenerate();
-        FileOutputStream fout= new FileOutputStream (args[0]);
+        // Generate corresponding mesh
+        PolyMesh<Polygons> mesh = DotGen.polygonGenerate(parsedInput.getMeshType(), parsedInput.getCanvasWidth(), parsedInput.getCanvasHeight(), parsedInput.getNumOfPolygons(), parsedInput.getRelaxLevel());
+        // Store in file named based off of input
+        FileOutputStream fout= new FileOutputStream (parsedInput.getMeshName()+".mesh");
         ObjectOutputStream oos = new ObjectOutputStream(fout);
         oos.writeObject(mesh);
         fout.close();

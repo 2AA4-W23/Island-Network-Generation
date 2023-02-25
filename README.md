@@ -22,15 +22,24 @@ After installation, you'll find an application named `generator.jar` in the `gen
 
 ### Generator
 
-To run the generator, go to the `generator` directory, and use `java -jar` to run the product. The product takes one single argument (so far), the name of the file where the generated mesh will be stored as binary.
+To run the generator, go to the `generator` directory, and use `java -jar` to run the product.
+It takes in multiple arguments to generate a desired mesh:
+| Argument name | Command Abbreviation | Command | Description | Additional Notes |
+|:--:|--|------|-------|-----|--------|--------|
+| Help | -h |   --help   |   Prints all available commands to console | Exits the program after execution. Provides extra information such as default values for specified arguments |
+| Mesh Type | -mt |   --meshtype   |   Specify the mesh type as a string to generate (all possible strings listed in program) | |
+| Name File Name | -n |   --name   |   Specify the name of the .mesh file as a string: <input>.mesh | |
+| Canvas Width | -w |   --width  | Specify the width of the canvas to generate as an integer | Affects the total area of each polygon |
+| Canvas Length (Height) | -l |   --length  | Specify the length (height) of the canvas to generate as an integer | Affects the total area of the polygon |
+| Polygon Count | -pc |   --polygoncount  |  Specify the number of polygons to generate as an integer. ||
+| Lloyd relaxation | -r |   --relax  | Specify the number of times to apply relaxation as an integer ||
 
+Example of using the arguments is shown below
 ```
 mosser@azrael A2 % cd generator 
-mosser@azrael generator % java -jar generator.jar sample.mesh
-mosser@azrael generator % ls -lh sample.mesh
--rw-r--r--  1 mosser  staff    29K 29 Jan 10:52 sample.mesh
-mosser@azrael generator % 
+mosser@azrael generator % java -jar generator.jar -mt IRREGULAR -n sample -w 1000 -l 1000 -pc 50 -r 10
 ```
+This command specifies an irregular mesh with the file name "sample.mesh", a canvas width and length of 1000, 50 total polygons and a relaxation of 10
 
 ### Visualizer
 
@@ -86,5 +95,6 @@ When you develop features and enrich the product, remember that you have first t
 | F12 |      Generate random points for each expected polygon         |  lenoverd   |   2023-02-23    |  2023-02-23  |   D    |
 | F13 |      Compute Voronoi diagram         |  lenoverd   |    2023-02-23   |   2023-02-23  |   D    |
 | F14 |      Apply Lloyd relaxation        |  lenoverd   |  2023-02-23    |  2023-02-23   |   D     |
+| F15 |      Add command line interfacing      |  lenoverd   |  2023-02-25    |  2023-02-25   |   IN-PROGRESS     |
 
 

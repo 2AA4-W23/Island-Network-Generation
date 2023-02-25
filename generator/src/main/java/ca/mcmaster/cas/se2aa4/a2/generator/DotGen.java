@@ -2,88 +2,96 @@ package ca.mcmaster.cas.se2aa4.a2.generator;
 
 import java.util.*;
 
-import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
-import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
 import ca.team50.generation.RandomGen;
 import ca.team50.generation.VoronoiGen;
+import ca.team50.specification.MeshType;
 import ca.team50.translation.JtsTranslation;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Polygon;
 
 
 public class DotGen {
 
-    private final static int width = 500;
-    private final static int height = 500;
-    private final static int square_size = 20;
+
+    public static PolyMesh<Polygons> polygonGenerate(MeshType meshType, int width, int height, int numOfPolygons, int relaxLevel) {
+
+        // Generate grid mesh
+        if (meshType == MeshType.GRID) {
+
+            // Calculate the square size of each polygon
 
 
-    public static PolyMesh<Polygons> polygonGenerate() {
-        List<Vertex> vertices = new ArrayList<>();
-        // Create all the vertices
-        for(int x = 0; x < width; x += square_size) {
-            for(int y = 0; y < height; y += square_size) {
+            // square_size^2 * numOfPolygons = width*height
+            // square_size = sqr(((width*height)/numOfPolygons))
+            // Flooring the double with always round said value down thus square_size^2 * numOfPolygons will never exceed width*height
+            int square_size = ((Double) Math.floor((Math.sqrt((width*height)/numOfPolygons)))).intValue();
 
-                // Create the vertex with position, then apply random property values to it (random thickness and RGB color)
-                vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x).setY((double) y).build()))); // X:0 Y:0
-                vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y).build()))); // X: 20 Y:0
-                vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y+square_size).build()))); // X:20 Y:20
-                vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x).setY((double) y+square_size).build()))); // X: 0 Y:20
+            List<Vertex> vertices = new ArrayList<>();
+            // Create all the vertices
+            // Iterations will limit the number of vertex sets (4 per) to the total number of polygons specified
+            int iterations = 0;
+            for(int x = 0; x < width; x += square_size) {
+                for(int y = 0; y < height && iterations < numOfPolygons; y += square_size) {
+
+                    // Create the vertex with position, then apply random property values to it (random thickness and RGB color)
+                    vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x).setY((double) y).build()))); // X:0 Y:0
+                    vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y).build()))); // X: 20 Y:0
+                    vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y+square_size).build()))); // X:20 Y:20
+                    vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x).setY((double) y+square_size).build()))); // X: 0 Y:20
+                    iterations++;
+
+                }
+            }
+
+
+            List<Vertex> vertexSetOf4 = new ArrayList<>();
+            List<Polygons> polygonsList = new ArrayList<>();
+
+            // Since each polygon in the mesh is of groups of 4...
+            // Iterate through all vertices and group them into 4's
+            for (Vertex currentVertex : vertices) {
+
+                if (vertexSetOf4.size() < 4) {
+                    vertexSetOf4.add(currentVertex);
+                } else {
+
+                    // Create a polygon with the four vertices and add it to the polygon list
+                    polygonsList.add(new Polygons(vertexSetOf4));
+                    vertexSetOf4.clear();
+                    vertexSetOf4.add(currentVertex);
+
+                }
+
+                // Since loop will end once the last vertex is added, thus creating one more group of 4...
+                // Create a new polygon with the last four vertices and add to the list before exiting the for loop
+                if (vertices.get(vertices.size()-1) == currentVertex) {
+                    polygonsList.add(new Polygons(vertexSetOf4));
+                    vertexSetOf4.clear();
+                }
 
             }
+
+            // Create new PolyMesh and add all polygons to it
+            PolyMesh<Polygons> polygonMesh = new PolyMesh<Polygons>();
+            polygonMesh.addAll(polygonsList);
+
+            return polygonMesh;
+
+            // Irregular mesh gen
+        } else {
+
+            // First, generate the voronoi diagram given the specified arguments
+            // RandomGen.genCoords generates X number of unique coordinates to draw polygons around
+            VoronoiGen vDiagram = new VoronoiGen(width,height, RandomGen.genCoords(width,height,numOfPolygons));
+
+            // Relax the diagram
+            vDiagram.relax(relaxLevel);
+
+            // Finally, the outputted diagram is in the form of a Geometry JTS object thus convert to PolyMesh and return
+            return JtsTranslation.convertToPolyMesh(vDiagram.getGeoCollection());
+
         }
-
-
-        List<Vertex> vertexSetOf4 = new ArrayList<>();
-        List<Polygons> polygonsList = new ArrayList<>();
-
-        // Since each polygon in the mesh is of groups of 4...
-        // Iterate through all vertices and group them into 4's
-        for (Vertex currentVertex : vertices) {
-
-            if (vertexSetOf4.size() < 4) {
-                vertexSetOf4.add(currentVertex);
-            } else {
-
-                // Create a polygon with the four vertices and add it to the polygon list
-                polygonsList.add(new Polygons(vertexSetOf4));
-                vertexSetOf4.clear();
-                vertexSetOf4.add(currentVertex);
-
-            }
-
-            // Since loop will end once the last vertex is added, thus creating one more group of 4...
-            // Create a new polygon with the last four vertices and add to the list before exiting the for loop
-            if (vertices.get(vertices.size()-1) == currentVertex) {
-                polygonsList.add(new Polygons(vertexSetOf4));
-                vertexSetOf4.clear();
-            }
-
-        }
-
-        // Create new PolyMesh and add all polygons to it
-        PolyMesh<Polygons> polygonMesh = new PolyMesh<Polygons>();
-        polygonMesh.addAll(polygonsList);
-
-        // TESTING ------
-
-        // To generate a Voronoi diagram, instantiate it as such
-/*      VoronoiGen newGenTest = new VoronoiGen(500,500, RandomGen.genCoords(400,400,60));
-        First two arguments indicate the size of the overall canvas, third argument is a list of coordinates to draw Polygons around
-        .genCoords - First argument is maxX in which a coordinate can exist, second is maxY (same idea as maxX) and third is the number of coordinates to generate
-
-        // Once you have an instance of a diagram you can relax it X number of iterations (the higher this number, the less pointy the mesh will look)
-        // Note that once you relax, you must call getGeoCollection() again for the updated mesh if you previously used the method!
-        newGenTest.relax(30);
-
-        // Finally, the outputted diagram is in the form of a Geometry JTS object
-        // This object contains a group of JTS Polygons. You can translate this object into a PolyMesh via the following command
-        PolyMesh<Polygons> testMesh = JtsTranslation.convertToPolyMesh(newGenTest.getGeoCollection());
-*/
-        return polygonMesh;
     
     } 
 
