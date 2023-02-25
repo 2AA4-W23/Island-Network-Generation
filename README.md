@@ -30,7 +30,7 @@ It takes in multiple arguments to generate a desired mesh:
 | Mesh Type | -mt |   --meshtype   |   Specify the mesh type as a string to generate (all possible strings listed in program) | |
 | Name File Name | -n |   --name   |   Specify the name of the .mesh file as a string: <input>.mesh | |
 | Canvas Width | -w |   --width  | Specify the width of the canvas to generate as an integer | Affects the total area of each polygon |
-| Canvas Length (Height) | -l |   --length  | Specify the length (height) of the canvas to generate as an integer | Affects the total area of the polygon |
+| Canvas Length (Height) | -l |   --length  | Specify the length (height) of the canvas to generate as an integer | Affects the total area of each polygon |
 | Polygon Count | -pc |   --polygoncount  |  Specify the number of polygons to generate as an integer. ||
 | Lloyd relaxation | -r |   --relax  | Specify the number of times to apply relaxation as an integer ||
 
