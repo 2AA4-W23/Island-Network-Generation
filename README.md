@@ -91,7 +91,7 @@ When you develop features and enrich the product, remember that you have first t
 | F08 |      Ensure Vertices and Segmentscan have thickness information          |  wangj500    |   2023-02-21    |  2023-02-21   |   D     |
 | F09 |      Ensure we are no longer use MeshFactory to generate files and use ObjectInputStream and ObjectOutputStream to read out and in files | wangj500 & baskam1 |   2023-02-19    |  2023-02-21   |   D  |
 | F10 |      Ensure we are able to trigger debug mode using -X flag in commandline |  baskam1    |   2023-02-21    |  2023-02-24   |   D     |
-| F11 |      Ensure we can compute Delaunay Triangle |  baskam1    |   2023-02-24    |     |        |
+| F11 (F11-RE) |      Ensure we can compute Delaunay Triangle |  baskam1    |   2023-02-24    |  2023-02-25 (2023-02-26 re-implemented to fit current design)   |    D    |
 | F12 |      Generate random points for each expected polygon         |  lenoverd   |   2023-02-23    |  2023-02-23  |   D    |
 | F13 |      Compute Voronoi diagram         |  lenoverd   |    2023-02-23   |   2023-02-23  |   D    |
 | F14 |      Apply Lloyd relaxation        |  lenoverd   |  2023-02-23    |  2023-02-23   |   D     |
