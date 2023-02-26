@@ -81,7 +81,7 @@ When you develop features and enrich the product, remember that you have first t
 
 | Id | Feature title | Who? | Start | End | Status |
 |:--:|---------------|------|-------|-----|--------|
-| F01 |      Create a Polygon Class         |   All   |    2023-02-11   |  2023-02-12    |    D    |
+| F01 |      Create a Polygon Class        |   All   |    2023-02-11   |  2023-02-12    |    D    |
 | F02 |      Create mesh collection         |   lenoverd   |    2023-02-14   |  2023-02-16   |     D   |
 | F03 |      Add drawable segments to mesh collection      |   lenoverd   |   2023-02-16  |   2023-02-17  |   D  |
 | F04 |     Ensure Polygon object can have color          |     |      |     | |
