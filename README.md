@@ -96,5 +96,6 @@ When you develop features and enrich the product, remember that you have first t
 | F13 |      Compute Voronoi diagram         |  lenoverd   |    2023-02-23   |   2023-02-23  |   D    |
 | F14 |      Apply Lloyd relaxation        |  lenoverd   |  2023-02-23    |  2023-02-23   |   D     |
 | F15 |      Add command line interfacing      |  lenoverd   |  2023-02-25    |  2023-02-25   |   IN-PROGRESS     |
+| F1d |      Utilized convexhull to reorder polygon segments to maintain consecutiveness invariance     |  wangj500  |  2023-02-25    |  2023-02-25   |   D    |
 
 
