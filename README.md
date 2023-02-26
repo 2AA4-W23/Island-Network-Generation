@@ -99,5 +99,6 @@ When you develop features and enrich the product, remember that you have first t
 | F15 |      Add command line interfacing      |  lenoverd   |  2023-02-25    |  2023-02-25   |   D     |
 | F16 |      Utilized convexhull to reorder polygon segments to maintain consecutiveness invariance     |  wangj500  |  2023-02-25    |  2023-02-25   |   D    |
 | F17 |      Crop method ro ensure all segments are generated on canvas  |  wangj500  |  2023-02-25    |  2023-02-25   |   D    |
+| F18 |      .obj exporting  |  lenoverd  |  2023-02-26    |  2023-02-26   |   D    |
 
 
