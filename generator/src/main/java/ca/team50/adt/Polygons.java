@@ -21,11 +21,19 @@ public class Polygons implements Serializable {
      * @exception IllegalStateException if list passed is empty
      * @return the abstract shape as a Polygon object
      */
+
+
+
     public Polygons(List<Vertex> vertexList) throws IllegalStateException {
 
         if (vertexList.isEmpty()) {
             throw new IllegalStateException("Vertex list cannot be empty");
         }
+
+
+        //Utilize convex hull to reorder the vertices such that segment consecutiveness invariance remains
+        vertexList = convexHull(vertexList);
+
 
         this.verticesList = new ArrayList<>();
         this.verticesList.addAll(vertexList);
@@ -59,6 +67,52 @@ public class Polygons implements Serializable {
         this.centroid = calculateCentroid();
     }
 
+    // methods for finding convex hull of polygons
+    private static Double orientation(Vertex p, Vertex q, Vertex r)
+    {
+        Double val = (q.getY() - p.getY()) * (r.getX() - q.getX()) - (q.getX() - p.getX()) * (r.getY() - q.getY());
+
+        if (val == 0) return 0.0;  // collinear
+        return (val > 0)? 1.0: 2.0; // clock or counterclock wise
+    }
+
+    private static List<Vertex> convexHull(List<Vertex> points) {
+        int n = points.size();
+        // There must be at least 3 points
+        if (n < 3) return points;
+
+        // Initialize Result
+        ArrayList<Vertex> hull = new ArrayList<Vertex>();
+
+        // Find the leftmost point
+        int leftmost = 0;
+        for (int i = 1; i < n; i++)
+            if (points.get(i).getX() < points.get(0).getX()) {
+                leftmost = i;
+            }
+
+        int p = leftmost, q;
+
+        do{
+            // Add current point to result
+            hull.add(points.get(p));
+
+            // Search for a point 'q' such that orientation(p, q, x) is counterclockwise for all points 'x'
+            q = (p + 1) % n;
+
+            for (int i = 0; i < n; i++) {
+                if (orientation(points.get(p), points.get(i), points.get(q)) == 2) q = i;
+            }
+
+            // Now q is the most counterclockwise
+            p = q;
+        }
+        while (p != leftmost);
+
+        return hull;
+    }
+
+
     /**
      * Returns a Polygon object that describes an abstract shape based on the amount of vertices in a list.
      * Does not perform centroid calculation automatically, user must specify the location of the centroid
@@ -72,6 +126,9 @@ public class Polygons implements Serializable {
         if (vertexList.isEmpty()) {
             throw new IllegalStateException("Vertex list cannot be empty");
         }
+
+        //Utilize convex hull to reorder the vertices such that segment consecutiveness invariance remains
+        vertexList = convexHull(vertexList);
 
         this.verticesList = new ArrayList<>();
         this.verticesList.addAll(vertexList);

@@ -55,6 +55,7 @@ public class RandomGen {
 
         }
 
+
         return coordArray;
     }
 
@@ -95,5 +96,7 @@ public class RandomGen {
         return vertex.toBuilder().addProperties(color).build();
 
     }
+
+
 
 }

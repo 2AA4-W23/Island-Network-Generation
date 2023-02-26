@@ -53,7 +53,6 @@ public class GraphicRenderer{
             for (int index = 0; index < polygons.size(); index++) {
                 for (int index1 = 0; index1 < polygons.size(); index1++) {
                     if (polygons.isNeighbor(index, index1)) {
-                        System.out.println("Is neighbor:" + index + " " + index1);
                         Point2D startPoint = new Point2D.Double(polygons.get(index).getCentroid().getX(), polygons.get(index).getCentroid().getY());
                         Point2D endPoint = new Point2D.Double(polygons.get(index1).getCentroid().getX(), polygons.get(index1).getCentroid().getY());
 
