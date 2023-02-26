@@ -104,6 +104,41 @@ public class GraphicRenderer{
 
         else {
             System.out.println("Normal mode enabled");
+
+            //iterate through and draw each polygon with appropriate color
+            for (int index = 0; index < polygons.size(); index++){
+
+                ArrayList<Integer> x_vertices = new ArrayList<Integer>();
+                ArrayList<Integer> y_vertices = new ArrayList<Integer>();
+                int n = 0;
+                float thickness = 0.0f;
+                Color color = (new Color(0, 0, 0));
+                int R = 0;
+                int G = 0;
+                int B = 0;
+
+                for (Vertex v: polygons.get(index).getVerticesList()) {
+                    x_vertices.add((int)v.getX());
+                    y_vertices.add((int)v.getY());
+                    n++;
+
+                    color = extractColor(v.getPropertiesList());
+                    R = R + color.getRed();
+                    G = G + color.getGreen();
+                    B = B + color.getBlue();
+                    }
+
+                int[] x = x_vertices.stream().mapToInt(Integer::intValue).toArray();
+                int[] y = y_vertices.stream().mapToInt(Integer::intValue).toArray();
+
+                R = R/n;
+                G = G/n;
+                B = B/n;
+
+                canvas.setColor(new Color(R, G, B));
+                canvas.fillPolygon(x, y, n);
+            }
+
             ArrayList<Vertex> vertices = new ArrayList<Vertex>();
 
           //iterate through and draw each centroid with appropriate color and thickness
@@ -172,62 +207,43 @@ public class GraphicRenderer{
             //Draw vertices with appropriate color and thickness
 
             ArrayList<Vertex> duplicates = new ArrayList<Vertex>(4);
-            Float vertexThickness = 1.5f;
 
             for (int j = 0; j < vertices.size(); j++){
-                for (int i = 0; i < vertices.size(); i++) {
+                float thickness = 0.0f;
+                Color color = (new Color(0, 0, 0));
+                int R = 0;
+                int G = 0;
+                int B = 0;
+                int n = 0;
 
+
+                for (int i = 0; i < vertices.size(); i++) {
                     if (((vertices.get(j).getX() == vertices.get(i).getX()) ) && ((vertices.get(j).getY() == vertices.get(i).getY())) ){
                         duplicates.add(vertices.get(i));
                     }
 
                     if (i == vertices.size()-1){
-                            Float thicknessV1 = extractThickness(duplicates.get(0).getPropertiesList());
-                            Float thicknessV2 = extractThickness(duplicates.get(1).getPropertiesList());
+                        for (Vertex v: duplicates) {
+                            thickness += extractThickness(v.getPropertiesList());
+                            color = extractColor(v.getPropertiesList());
 
-                            Color colorV1 = extractColor(duplicates.get(0).getPropertiesList());
-                            Color colorV2 = extractColor(duplicates.get(1).getPropertiesList());
-
-                            Color old = canvas.getColor();
-
-                            if (duplicates.size() == 4){
-                                Float thicknessV3 = extractThickness(duplicates.get(2).getPropertiesList());
-                                Color colorV3 = extractColor(duplicates.get(2).getPropertiesList());
-                                Float thicknessV4 = extractThickness(duplicates.get(3).getPropertiesList());
-                                Color colorV4 = extractColor(duplicates.get(3).getPropertiesList());
-                                int R = (colorV1.getRed() + colorV2.getRed() + colorV3.getRed() + colorV4.getRed())/4;
-                                int G = (colorV1.getGreen() + colorV2.getGreen() + colorV3.getGreen() + colorV4.getGreen())/4;
-                                int B = (colorV1.getBlue() + colorV2.getBlue() + colorV3.getBlue() + colorV4.getBlue())/4;
-                                canvas.setColor(new Color(R, G, B));
-
-                                vertexThickness = (thicknessV1 + thicknessV2 + thicknessV3 + thicknessV4)/4;
+                            R = R + color.getRed();
+                            G = G + color.getGreen();
+                            B = B + color.getBlue();
+                            n++;
                             }
 
-                             else if (duplicates.size() == 3){
-                                 Float thicknessV3 = extractThickness(duplicates.get(2).getPropertiesList());
-                                 Color colorV3 = extractColor(duplicates.get(2).getPropertiesList());
-                                 int R = (colorV1.getRed() + colorV2.getRed() + colorV3.getRed() )/3;
-                                 int G = (colorV1.getGreen() + colorV2.getGreen() + colorV3.getGreen())/3;
-                                 int B = (colorV1.getBlue() + colorV2.getBlue() + colorV3.getBlue() )/3;
-                                 canvas.setColor(new Color(R, G, B));
+                        R = R/n;
+                        G = G/n;
+                        B = B/n;
 
-                                vertexThickness = (thicknessV1 + thicknessV2 + thicknessV3)/3;
-                             }
+                        canvas.setColor(new Color(R, G, B));
+                        thickness = thickness/(duplicates.size());
 
-                            else {
-                                int R = (colorV1.getRed() + colorV2.getRed()) / 2;
-                                int G = (colorV1.getGreen() + colorV2.getGreen() ) / 2;
-                                int B = (colorV1.getBlue() + colorV2.getBlue() ) / 2;
-                                canvas.setColor(new Color(R, G, B));
+                        Ellipse2D point = new Ellipse2D.Double(vertices.get(j).getX() - (thickness / 2.0d), vertices.get(j).getY()- (thickness / 2.0d), thickness, thickness);
+                        canvas.fill(point);
 
-                                vertexThickness = (thicknessV1 + thicknessV2) / 2;
-                            }
-
-                            Ellipse2D point = new Ellipse2D.Double(vertices.get(j).getX() - (vertexThickness / 2.0d), vertices.get(j).getY()- (vertexThickness / 2.0d), vertexThickness, vertexThickness);
-                            canvas.fill(point);
-                            canvas.setColor(old);
-
-                            duplicates.clear();
+                        duplicates.clear();
                     }
 
                 }
