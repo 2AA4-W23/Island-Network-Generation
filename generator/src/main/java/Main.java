@@ -21,6 +21,8 @@ public class Main {
         ObjectOutputStream oos = new ObjectOutputStream(fout);
         oos.writeObject(mesh);
         fout.close();
+
+        System.out.println("Mesh has been generated! Please use visualizer.jar to convert to svg and view it!");
         
     }
 

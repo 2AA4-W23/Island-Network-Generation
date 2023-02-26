@@ -116,17 +116,20 @@ public class GraphicRenderer{
                 int R = 0;
                 int G = 0;
                 int B = 0;
+                float alpha = 0;
 
                 for (Vertex v: polygons.get(index).getVerticesList()) {
                     x_vertices.add((int)v.getX());
                     y_vertices.add((int)v.getY());
                     n++;
 
+                    alpha = alpha + extractAlpha(v.getPropertiesList());
+
                     color = extractColor(v.getPropertiesList());
                     R = R + color.getRed();
                     G = G + color.getGreen();
                     B = B + color.getBlue();
-                    }
+                }
 
                 int[] x = x_vertices.stream().mapToInt(Integer::intValue).toArray();
                 int[] y = y_vertices.stream().mapToInt(Integer::intValue).toArray();
@@ -134,8 +137,11 @@ public class GraphicRenderer{
                 R = R/n;
                 G = G/n;
                 B = B/n;
+                alpha = alpha/n;
 
                 canvas.setColor(new Color(R, G, B));
+                // Set alpha using Porter-Duff blend mode
+                canvas.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
                 canvas.fillPolygon(x, y, n);
             }
 

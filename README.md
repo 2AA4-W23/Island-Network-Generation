@@ -28,7 +28,7 @@ It takes in multiple arguments to generate a desired mesh:
 |:--:|--|---------|-------|-----|
 | Help | -h |   --help   |   Prints all available commands to console | Exits the program after execution. Provides extra information such as default values for specified arguments |
 | Mesh Type | -mt |   --meshtype   |   Specify the mesh type as a string to generate (all possible strings listed in program) | |
-| Name File Name | -n |   --name   |   Specify the name of the .mesh file as a string: <input>.mesh | |
+| Name File Name | -n |   --name   |   Specify the name of the .mesh file as a string: input-here.mesh | |
 | Canvas Width | -w |   --width  | Specify the width of the canvas to generate as an integer | Affects the total area of each polygon |
 | Canvas Length (Height) | -l |   --length  | Specify the length (height) of the canvas to generate as an integer | Affects the total area of each polygon |
 | Polygon Count | -pc |   --polygoncount  |  Specify the number of polygons to generate as an integer. ||

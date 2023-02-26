@@ -16,8 +16,14 @@ public class DotGen {
 
     public static PolyMesh<Polygons> polygonGenerate(MeshType meshType, int width, int height, int numOfPolygons, int relaxLevel) {
 
+        System.out.println("Generating mesh type: " + meshType.name());
+        System.out.println("Canvas Width: " + width + ", Height: " + height);
+        System.out.println("Number of Polygons: " + numOfPolygons);
+        System.out.println("Relax Level: " + relaxLevel);
+
         // Generate grid mesh
         if (meshType == MeshType.GRID) {
+            System.out.println("Since mesh is GRID type, relax level will be ignored!");
 
             // Calculate the square size of each polygon
 
