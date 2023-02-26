@@ -37,8 +37,11 @@ public class VoronoiGen {
         this.canvasSizeY = canvasSizeY;
         this.coordinates = coordinates;
 
+
         // Compute diagram
         generateDiagram();
+        crop();
+
 
     }
 
@@ -77,6 +80,8 @@ public class VoronoiGen {
 
             // Recompute diagram
             generateDiagram();
+            crop();
+
         }
 
     }
@@ -117,4 +122,27 @@ public class VoronoiGen {
         return this.geoCollection;
     }
 
+    private void crop(){
+        List<Polygon> polygonList = new ArrayList<>();
+
+        // Get all Polygons from Geometry collection
+        for (int index = 0; index < this.geoCollection.getNumGeometries(); index++) {
+            polygonList.add((Polygon) geoCollection.getGeometryN(index));
+        }
+
+        // Loop through each Polygon and modify coordinates
+        for (Polygon currentPolygon : polygonList) {
+
+            for (Coordinate c: currentPolygon.getCoordinates()){
+                if (c.getX() > this.canvasSizeX) {
+                c.setX(this.canvasSizeX);
+            }
+                if (c.getY() > this.canvasSizeY) {
+                    c.setY(this.canvasSizeY);
+                }
+            }
+
+        }
+
+    }
 }
