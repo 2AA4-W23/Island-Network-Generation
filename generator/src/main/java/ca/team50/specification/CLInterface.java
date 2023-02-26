@@ -1,6 +1,5 @@
 package ca.team50.specification;
 
-import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import org.apache.commons.cli.*;
 
 public class CLInterface {

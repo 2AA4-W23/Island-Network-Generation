@@ -1,13 +1,12 @@
 package ca.team50.translation;
 
+import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
+import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
 import ca.team50.generation.RandomGen;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +30,8 @@ public class JtsTranslation {
         for (Coordinate currentCoord : polygonCoords) {
 
             Vertex newVertex = Vertex.newBuilder().setX(currentCoord.getX()).setY(currentCoord.getY()).build();
-            // Apply random thickness and color properties to newly created Vertex
-            newVertex = RandomGen.colorGen(RandomGen.thicknessGen(newVertex));
+            // Apply random alpha, thickness and color properties to newly created Vertex
+            newVertex = RandomGen.alphaGen(RandomGen.colorGen(RandomGen.thicknessGen(newVertex)));
             convertedCoordsList.add(newVertex);
 
         }
@@ -79,6 +78,33 @@ public class JtsTranslation {
 
         return returnMesh;
 
+
+    }
+
+    /**
+     * Translates a Polygons object into Polygon object (JTS)
+     * @param polygon the instance of Polygons
+     * @return a Polygon object (JTS)
+     */
+    public static Polygon convertToPolygon(Polygons polygon) {
+
+        // First extract data from Polygons instance
+        List<Coordinate> extractedCoordinateList = new ArrayList<>();
+
+        for (Vertex currentVertex : polygon.getVerticesList()) {
+
+            extractedCoordinateList.add(new Coordinate(currentVertex.getX(),currentVertex.getY()));
+
+        }
+
+        // Create a new geo builder
+        GeometryFactory builder = new GeometryFactory();
+
+        // Creates outer ring of the polygon
+        LinearRing outerPolygon = builder.createLinearRing((CoordinateSequence) extractedCoordinateList);
+
+        // Build a whole Polygon from the outer ring
+        return new Polygon(outerPolygon, null, builder);
 
     }
 

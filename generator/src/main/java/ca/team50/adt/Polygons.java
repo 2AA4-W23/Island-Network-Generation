@@ -1,8 +1,8 @@
 package ca.team50.adt;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
-import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
+import ca.team50.generation.RandomGen;
 
 import java.io.Serializable;
 import java.util.*;
@@ -182,24 +182,8 @@ public class Polygons implements Serializable {
         yAverage = yAverage/listSize;
         xAverage = xAverage/listSize;
 
-        Vertex centroid = Vertex.newBuilder().setX(xAverage).setY(yAverage).build();
-
-        //add color to centroid
-        Random bag1 = new Random();
-        int red = bag1.nextInt(255);
-        int green = bag1.nextInt(255);
-        int blue = bag1.nextInt(255);
-        String colorCode = red + "," + green + "," + blue;
-        Property color = Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
-        centroid = centroid.toBuilder().addProperties(color).build();
-
-        //add thickness to centroid
-        Random bag = new Random();
-        Float vertexWidth = bag.nextFloat(5);
-        String width = String.valueOf(vertexWidth);
-        Property thickness = Property.newBuilder().setKey("thickness").setValue(width).build();
-        centroid = centroid.toBuilder().addProperties(thickness).build();
-
+        // Create centoid with random alpha, thickness and color
+        Vertex centroid = RandomGen.thicknessGen(RandomGen.colorGen(RandomGen.alphaGen(Vertex.newBuilder().setX(xAverage).setY(yAverage).build())));
 
         return centroid;
     }

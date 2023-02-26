@@ -1,9 +1,14 @@
 package ca.team50.generation;
 
+import ca.mcmaster.cas.se2aa4.a2.io.Structs;
+import org.locationtech.jts.algorithm.LineIntersector;
 import org.locationtech.jts.geom.*;
+import org.locationtech.jts.triangulate.DelaunayTriangulationBuilder;
 import org.locationtech.jts.triangulate.VoronoiDiagramBuilder;
 
+import javax.sound.sampled.Line;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class VoronoiGen {
@@ -12,6 +17,7 @@ public class VoronoiGen {
     private int canvasSizeX;
     private int canvasSizeY;
     private Geometry geoCollection;
+    private Geometry triCollection;
     private ArrayList<Coordinate> coordinates;
 
     /**
@@ -41,6 +47,7 @@ public class VoronoiGen {
         // Compute diagram
         generateDiagram();
         crop();
+        computeTriangulation();
 
 
     }
@@ -60,15 +67,11 @@ public class VoronoiGen {
         // Relax X amount of times
         for (int currentIteration = 1; currentIteration <= iterations; currentIteration++) {
 
-            List<Polygon> polygonList = new ArrayList<>();
+            // Get all polygons
+            List<Polygon> polygonList = getPolygons();
 
             // Reset points list
             this.coordinates.clear();
-
-            // Get all Polygons from Geometry collection
-            for (int index = 0; index < this.geoCollection.getNumGeometries(); index++) {
-                polygonList.add((Polygon) geoCollection.getGeometryN(index));
-            }
 
             // Loop through each Polygon and get the centroid
             for (Polygon currentPolygon : polygonList) {
@@ -81,6 +84,7 @@ public class VoronoiGen {
             // Recompute diagram
             generateDiagram();
             crop();
+            computeTriangulation();
 
         }
 
@@ -102,16 +106,6 @@ public class VoronoiGen {
         // Compute the diagram, returns as a collection of polygons
         Geometry polygonsCollection = voronoi.getDiagram(geoFactory);
 
-        // UNUSED
-        // Since diagram returns a collection of geometry, need to parse through it all and get all Polygons it made
-        // Create a new array list to return
-        //ArrayList<Polygon> returnList = new ArrayList<>();
-
-        // Add all polygons
-        //for (int index = 0; index < polygonsCollection.getNumGeometries(); index++) {
-        //returnList.add((Polygon) polygonsCollection.getGeometryN(index));
-        //}
-
         this.geoCollection = polygonsCollection;
     }
 
@@ -122,13 +116,17 @@ public class VoronoiGen {
         return this.geoCollection;
     }
 
-    private void crop(){
-        List<Polygon> polygonList = new ArrayList<>();
+    /**
+     * Gets the current Voronoi diagram triangulated geometry collection of polygons (JTS)
+     */
+    public Geometry getTriCollection() {
+        return this.triCollection;
+    }
 
-        // Get all Polygons from Geometry collection
-        for (int index = 0; index < this.geoCollection.getNumGeometries(); index++) {
-            polygonList.add((Polygon) geoCollection.getGeometryN(index));
-        }
+    private void crop(){
+
+        // Get all Polygons from geo collection
+        List<Polygon> polygonList = getPolygons();
 
         // Loop through each Polygon and modify coordinates
         for (Polygon currentPolygon : polygonList) {
@@ -145,4 +143,51 @@ public class VoronoiGen {
         }
 
     }
+
+    // Method to get neighbourhood relationships of irregular mesh
+    private void computeTriangulation() {
+
+        List<Polygon> polygonList = getPolygons();
+
+        List<Coordinate> centroidList = new ArrayList<>();
+
+        // Loop through every Polygon, get their centroid and add it to list as a coordinate
+        for (Polygon currentPolygon : polygonList) {
+
+            Point centroid = currentPolygon.getCentroid();
+
+            centroidList.add(new Coordinate(centroid.getX(),centroid.getY()));
+
+        }
+
+        // Create a new triangulation builder
+        DelaunayTriangulationBuilder triBuilder = new DelaunayTriangulationBuilder();
+
+        // Create the geometry factory use to create the output of .getEdges()
+        GeometryFactory geoFactory = new GeometryFactory();
+
+        // Set the coordinates in which to compute triangulations from
+        triBuilder.setSites(centroidList);
+
+        // Get computed Triangles as polygons
+        Geometry triCollectionGen = triBuilder.getTriangles(geoFactory);
+
+        this.triCollection = triCollectionGen;
+
+    }
+
+    // Method to extract polygons from geo collection
+    private List<Polygon> getPolygons() {
+
+        List<Polygon> polygonList = new ArrayList<>();
+
+        // Get all Polygons from Geometry collection
+        for (int index = 0; index < this.geoCollection.getNumGeometries(); index++) {
+            polygonList.add((Polygon) geoCollection.getGeometryN(index));
+        }
+
+        return polygonList;
+
+    }
+
 }
