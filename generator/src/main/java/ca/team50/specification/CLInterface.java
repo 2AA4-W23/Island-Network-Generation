@@ -19,6 +19,7 @@ public class CLInterface {
     private static final Option numOfPolygonsOpt = new Option("pc", "polygoncount", true, "Specify the number of polygons to generate (as an integer), default: " + defaultNumOfPolygons);
     private static final Option relaxLevelOpt = new Option("r", "relax", true, "Specify the level of relaxation (as an integer), default: " + defaultRelax);
     private static final Option helpOpt = new Option("h", "help", false, "Display input help");
+    private static final Option objExport = new Option("obj", "objexport", false, "Exports the specified mesh in .obj as well as a .mesh");
 
     // Declare information variables
     private MeshType meshType;
@@ -27,6 +28,7 @@ public class CLInterface {
     private int canvasHeight;
     private int numOfPolygons;
     private int relaxLevel;
+    private boolean willExportAsObj;
 
 
     /**
@@ -48,6 +50,7 @@ public class CLInterface {
         options.addOption(canvasHeightOpt);
         options.addOption(numOfPolygonsOpt);
         options.addOption(relaxLevelOpt);
+        options.addOption(objExport);
 
         try {
             // Parse input
@@ -82,6 +85,9 @@ public class CLInterface {
             // Get and set relax level
             this.relaxLevel = Integer.valueOf(commandLine.getOptionValue(relaxLevelOpt,String.valueOf(defaultRelax)));
 
+            // Check if mesh will be exported as .obj too
+            this.willExportAsObj = commandLine.hasOption(objExport);
+
         } catch (ParseException e) {
             InputExceptionHandler.handleInputException(new InputException(e.getMessage()));
         } catch (Exception e) {
@@ -109,6 +115,9 @@ public class CLInterface {
     public int getRelaxLevel() {
         return this.relaxLevel;
     }
+    public boolean isWillExportAsObj() {
+        return this.willExportAsObj;
+    }
 
     // Method to print generator command line input help
     public static void printHelp() {
@@ -122,6 +131,7 @@ public class CLInterface {
         options.addOption(canvasHeightOpt);
         options.addOption(numOfPolygonsOpt);
         options.addOption(relaxLevelOpt);
+        options.addOption(objExport);
 
         formatter.printHelp("-<short or -- for long command> <numerical argument if required>",options);
 

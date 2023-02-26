@@ -33,6 +33,7 @@ It takes in multiple arguments to generate a desired mesh:
 | Canvas Length (Height) | -l |   --length  | Specify the length (height) of the canvas to generate as an integer | Affects the total area of each polygon |
 | Polygon Count | -pc |   --polygoncount  |  Specify the number of polygons to generate as an integer. ||
 | Lloyd relaxation | -r |   --relax  | Specify the number of times to apply relaxation as an integer ||
+| .obj Export | -obj |   --objexport  | Export the mesh in both .mesh and .obj formats | .obj vertex positions are a direct translation thus depending on the reader, mesh inversion may occur |
 
 Example of using the arguments is shown below
 ```
