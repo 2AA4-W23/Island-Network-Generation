@@ -87,7 +87,7 @@ When you develop features and enrich the product, remember that you have first t
 | F04 |     Ensure Polygon object can have color          |     |      |     | |
 | F05 |      Ensure Vertices can have color          |   wangj500   |    2023-02-18   |   2023-02-20  |    D    |
 | F06 |      Ensure Segments can have color          |   wangj500   |    2023-02-18   |  2023-02-20   |   D     |
-| F07 |      Ensure Vertices and Segments has an alpha value to play with transparency         |      |      |    |      |
+| F07 (F07-RE) |      Ensure Vertices and Segments has an alpha value to play with transparency         |   baskam1  |   2023-02-21    |  2023-02-21 (2023-02-25 re-implemented to fit current design)  |   D   |
 | F08 |      Ensure Vertices and Segmentscan have thickness information          |  wangj500    |   2023-02-21    |  2023-02-21   |   D     |
 | F09 |      Ensure we are no longer use MeshFactory to generate files and use ObjectInputStream and ObjectOutputStream to read out and in files | wangj500 & baskam1 |   2023-02-19    |  2023-02-21   |   D  |
 | F10 |      Ensure we are able to trigger debug mode using -X flag in commandline |  baskam1    |   2023-02-21    |  2023-02-24   |   D     |
@@ -95,7 +95,7 @@ When you develop features and enrich the product, remember that you have first t
 | F12 |      Generate random points for each expected polygon         |  lenoverd   |   2023-02-23    |  2023-02-23  |   D    |
 | F13 |      Compute Voronoi diagram         |  lenoverd   |    2023-02-23   |   2023-02-23  |   D    |
 | F14 |      Apply Lloyd relaxation        |  lenoverd   |  2023-02-23    |  2023-02-23   |   D     |
-| F15 |      Add command line interfacing      |  lenoverd   |  2023-02-25    |  2023-02-25   |   IN-PROGRESS     |
+| F15 |      Add command line interfacing      |  lenoverd   |  2023-02-25    |  2023-02-25   |   D     |
 | F16 |      Utilized convexhull to reorder polygon segments to maintain consecutiveness invariance     |  wangj500  |  2023-02-25    |  2023-02-25   |   D    |
 | F17 |      Crop method ro ensure all segments are generated on canvas  |  wangj500  |  2023-02-25    |  2023-02-25   |   D    |
 
