@@ -99,4 +99,22 @@ public class RandomGen {
 
 
 
+    /**
+     * Applies a random alpha value to a Vertex object (io)
+     * @param vertex the vertex to apply the alpha property to
+     * @return a Vertex object (io) with a random alpha value (each between 0 (inclusive) and 1 (inclusive))
+     */
+    public static Vertex alphaGen(Vertex vertex) {
+
+        // Generate random alpah value
+        Random bag = new Random();
+        // Add a small number at the end since nextDouble does not include 1.0 so if we get per say 0.9999, we can add to round it up to 1.0
+        String alpha = Double.toString(bag.nextDouble() + 0.0000001);
+
+        Property alphaProp = Property.newBuilder().setKey("alpha").setValue(alpha).build();
+
+        return vertex.toBuilder().addProperties(alphaProp).build();
+
+    }
+
 }

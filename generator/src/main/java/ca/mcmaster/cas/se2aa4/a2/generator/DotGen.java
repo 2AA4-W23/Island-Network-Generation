@@ -34,11 +34,11 @@ public class DotGen {
             for(int x = 0; x < width; x += square_size) {
                 for(int y = 0; y < height && iterations < numOfPolygons; y += square_size) {
 
-                    // Create the vertex with position, then apply random property values to it (random thickness and RGB color)
-                    vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x).setY((double) y).build()))); // X:0 Y:0
-                    vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y).build()))); // X: 20 Y:0
-                    vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y+square_size).build()))); // X:20 Y:20
-                    vertices.add(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x).setY((double) y+square_size).build()))); // X: 0 Y:20
+                    // Create the vertex with position, then apply random property values to it (random alpha, thickness and RGB color)
+                    vertices.add(RandomGen.alphaGen((RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x).setY((double) y).build()))))); // X:0 Y:0
+                    vertices.add(RandomGen.alphaGen((RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y).build()))))); // X: 20 Y:0
+                    vertices.add(RandomGen.alphaGen((RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x+square_size).setY((double) y+square_size).build()))))); // X:20 Y:20
+                    vertices.add(RandomGen.alphaGen(RandomGen.colorGen(RandomGen.thicknessGen(Vertex.newBuilder().setX((double) x).setY((double) y+square_size).build())))); // X: 0 Y:20
                     iterations++;
 
                 }

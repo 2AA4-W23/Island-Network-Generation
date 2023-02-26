@@ -4,12 +4,9 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.team50.adt.PolyMesh;
 
+import java.awt.*;
 import java.util.ArrayList;
 
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.geom.Ellipse2D;
 import java.util.Iterator;
 import java.util.List;
@@ -142,6 +139,15 @@ public class GraphicRenderer{
                 Color v1Color = extractColor(start_Point.getPropertiesList());
                 Color v2Color = extractColor(end_Point.getPropertiesList());
 
+                // Get alpha
+                Float alphaV1 = extractAlpha(start_Point.getPropertiesList());
+                Float alphaV2 = extractAlpha(end_Point.getPropertiesList());
+
+                // Average alpha color
+                Float segmentAlpha = (alphaV1+alphaV2)/2;
+                // Set alpha using Porter-Duff blend mode
+                canvas.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, segmentAlpha));
+
                 //calculate average color and set as segment color
                 int R = (v1Color.getRed() + v2Color.getRed())/2;
                 int G = (v1Color.getGreen() + v2Color.getGreen())/2;
@@ -260,6 +266,21 @@ public class GraphicRenderer{
         Float thicknessVal= Float.parseFloat(val);
 
         return thicknessVal;
+    }
+
+    private Float extractAlpha(List<Property> properties) {
+        String val = null;
+        for(Property p: properties) {
+            if (p.getKey().equals("alpha")) {
+                val = p.getValue();
+            }
+        }
+        if (val == null)
+            return 1.0f;
+
+        Float alphaVal = Float.parseFloat(val);
+
+        return alphaVal;
     }
 
 }
