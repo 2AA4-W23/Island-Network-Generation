@@ -6,8 +6,6 @@
 
 ## How to run the product
 
-_This section needs to be edited to reflect how the user can interact with thefeature released in your project_
-
 ### Installation instructions
 
 This product is handled by Maven, as a multi-module project. We assume here that you have cloned the project in a directory named `A2`
@@ -31,7 +29,7 @@ It takes in multiple arguments to generate a desired mesh:
 | Name File Name | -n |   --name   |   Specify the name of the .mesh file as a string: input-here.mesh | |
 | Canvas Width | -w |   --width  | Specify the width of the canvas to generate as an integer | Affects the total area of each polygon |
 | Canvas Length (Height) | -l |   --length  | Specify the length (height) of the canvas to generate as an integer | Affects the total area of each polygon |
-| Polygon Count | -pc |   --polygoncount  |  Specify the number of polygons to generate as an integer. ||
+| Polygon Count | -pc |   --polygoncount  |  Specify the number of polygons to generate as an integer. | Affects the total area of each polygon |
 | Lloyd relaxation | -r |   --relax  | Specify the number of times to apply relaxation as an integer ||
 | .obj Export | -obj |   --objexport  | Export the mesh in both .mesh and .obj formats | .obj vertex positions are a direct translation thus depending on the reader, mesh inversion may occur |
 
