@@ -39,6 +39,7 @@ public class JtsTranslation {
         // Get centroid as a Vertex
         Point centroidCoord = jtsPolygon.getCentroid();
         Vertex centroid = Vertex.newBuilder().setX(centroidCoord.getX()).setY(centroidCoord.getY()).build();
+        centroid = RandomGen.alphaGen(RandomGen.colorGen(RandomGen.thicknessGen(centroid)));
 
         // Return new Polygons instance with all info
         return new Polygons(convertedCoordsList,centroid);

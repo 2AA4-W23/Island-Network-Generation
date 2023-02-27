@@ -38,9 +38,6 @@ public class Main {
         }
 
         boolean debugMode = cmd.hasOption("X");
-        if (debugMode) {
-            System.out.println("Debug mode is on");
-        }
 
 
         // Extracting command line parameters
@@ -72,9 +69,7 @@ public class Main {
 
             // Set up the renderer with the debug mode
             GraphicRenderer renderer = new GraphicRenderer();
-            System.out.println(debugMode);
             renderer.setDebugMode(debugMode);
-            System.out.println(debugMode);
 
             // Render the mesh onto the canvas
             renderer.render(mesh, canvas);
@@ -85,6 +80,8 @@ public class Main {
             // Dump the mesh to stdout
             MeshDump dumper = new MeshDump();
             dumper.dump(mesh);
+
+            System.out.println("Successfully written .svg to: " + outputFilePath);
 
         }
     }

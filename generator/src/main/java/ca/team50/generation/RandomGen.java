@@ -60,15 +60,15 @@ public class RandomGen {
     }
 
     /**
-     * Applies thickness to a Vertex object (io) with a random thickness between 0 (inclusive) and 5 (exclusive)
+     * Applies thickness to a Vertex object (io) with a random thickness between 0.1 (inclusive) and 5.1 (exclusive)
      * @param vertex the vertex to apply the thickness property to
-     * @return a Vertex object (io) with a random thickness between 0 (inclusive) and 5 (exclusive)
+     * @return a Vertex object (io) with a random thickness between 0.1 (inclusive) and 5.1 (exclusive)
      */
     public static Vertex thicknessGen(Vertex vertex) {
 
         // Create random thickness value
         Random bag = new Random();
-        Float vertexWidth = bag.nextFloat(5);
+        Float vertexWidth = bag.nextFloat(5) + 0.1f;
 
         // Construct thickness property and return a vertex with property applied
         String width = String.valueOf(vertexWidth);
