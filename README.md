@@ -76,9 +76,10 @@ When you develop features and enrich the product, remember that you have first t
 
 ### Definition of Done
 
--- Insert here your definition of done for your features --
+-- Feature operates as expected (as outlined in assignment) by client and is functionally sound (i.e. has been proven correct via testing by programmer) --
 
 ### Product Backlog
+Status: Pending (P), Started (S), Blocked (B), Done (D)
 
 | Id | Feature title | Who? | Start | End | Status |
 |:--:|---------------|------|-------|-----|--------|
