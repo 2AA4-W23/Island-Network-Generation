@@ -39,6 +39,7 @@ mosser@azrael A2 % cd generator
 mosser@azrael generator % java -jar generator.jar -mt IRREGULAR -n sample -w 1000 -l 1000 -pc 50 -r 10
 ```
 This command specifies an irregular mesh with the file name "sample.mesh", a canvas width and length of 1000, 50 total polygons and a relaxation of 10
+Once the mesh is generated, one can move onto utilizing visualizer
 
 ### Visualizer
 
