@@ -2,6 +2,7 @@ package ca.team50.fileIO;
 
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
+import ca.team50.exceptions.ExceptionHandler;
 import ca.team50.exceptions.FileReadException;
 
 import java.io.FileInputStream;
@@ -11,11 +12,11 @@ public class FileToPolyMesh {
 
     /**
      * Get a polymesh object from a .mesh file
-     * @param inputFilePath path to file as a string
-     * @exception FileReadException if failure to convert given inputFilePath occurs
+     * @param inputFilePath file name as a string, note the file must be in the same directory as the island.jar
+     * @exception FileReadException if failure to convert given inputFilePath occurs. Which ExceptionHandler will be invoked for this exception throw.
      * @return a polymesh object
      */
-    public PolyMesh<Polygons> getPolyMeshFromFile(String inputFilePath) throws FileReadException {
+    public static PolyMesh<Polygons> getPolyMeshFromFile(String inputFilePath) {
 
         try {
 
@@ -29,7 +30,8 @@ public class FileToPolyMesh {
 
 
         } catch (Exception e) {
-            throw new FileReadException(inputFilePath);
+            ExceptionHandler.handleException(new FileReadException(inputFilePath));
+            return null;
         }
 
     }
