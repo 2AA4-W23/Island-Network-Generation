@@ -8,8 +8,8 @@ import java.awt.*;
 
 public class Lagoon {
 
-    private static final double oceanRadius = 100;
-    private static final double lagoonRadius = 40;
+    private static final double oceanRadius = 350;
+    private static final double lagoonRadius = 200;
 
     private static final int[] oceanColor = {21,34,138};
     private static final int[] lagoonColor = {99,144,230};
@@ -20,6 +20,7 @@ public class Lagoon {
 
         // Find center of canvas, the center will act as the center of the lagoon island
         Vertex center = CanvasUtils.getCenter(mesh);
+        System.out.println("Center: " + center.getX() + ":" + center.getY());
 
         // Loop through all polygons
         // Get their centroids and apply appropriate colour based on where they are located relative to center and specified radius
@@ -29,11 +30,12 @@ public class Lagoon {
 
             // Get distance to center
             double distance = getDistanceToCenter(center,centroid);
+            System.out.println("Distance: " + distance);
 
             // Check where the polygon is located and colour it accordingly
             if (distance <= lagoonRadius) {
                 currentPolygon.unifyColor(lagoonColor);
-            } else if (distance > lagoonRadius || distance <=oceanRadius) {
+            } else if (distance > lagoonRadius && distance <=oceanRadius) {
                 currentPolygon.unifyColor(landColor);
             } else if (distance > oceanRadius) {
                 currentPolygon.unifyColor(oceanColor);

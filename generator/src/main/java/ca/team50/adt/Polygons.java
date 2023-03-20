@@ -75,10 +75,14 @@ public class Polygons implements Serializable {
         String colorCode = RGBColour[0] + "," + RGBColour[1] + "," + RGBColour[2];
         Structs.Property color = Structs.Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
 
+        ArrayList<Vertex> newList = new ArrayList<>();
+
         // Give all vertices this colour
         for (Vertex currentVertex : this.getVerticesList()) {
-                currentVertex.toBuilder().addProperties(color).build();
+                newList.add(currentVertex.toBuilder().addProperties(color).build());
         }
+
+        this.verticesList = newList;
 
     }
 
