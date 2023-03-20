@@ -77,10 +77,61 @@ public class Polygons implements Serializable {
 
         ArrayList<Vertex> newList = new ArrayList<>();
 
-        // Give all vertices this colour
+        // Give all vertices the specified colour
         for (Vertex currentVertex : this.getVerticesList()) {
-                newList.add(currentVertex.toBuilder().addProperties(color).build());
+                Vertex newVertex = Vertex.newBuilder().setX(currentVertex.getX()).setY(currentVertex.getY()).build();
+                newVertex = newVertex.toBuilder().addProperties(color).build();
+                newList.add(newVertex);
         }
+
+        this.verticesList = newList;
+
+    }
+
+    // Method to set default properties to all vertices in polygon
+    public void cleanProperties() {
+
+        ArrayList<Vertex> newList = new ArrayList<>();
+
+        // Set default color
+        String colorCode = 0 + "," + 0 + "," + 0;
+        Structs.Property color = Structs.Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
+
+        // Construct thickness property with 0.5f
+        String width = String.valueOf(0.5f);
+        Structs.Property thickness = Structs.Property.newBuilder().setKey("thickness").setValue(width).build();
+
+        // Construct default alpha (1)
+        String alpha = String.valueOf(1);
+        Structs.Property alphaProp = Structs.Property.newBuilder().setKey("alpha").setValue(alpha).build();
+
+        for (Vertex currentVertex : this.getVerticesList()) {
+
+            // Create new blank vertex with position of currentVertex
+            Vertex newReplacementVertex = Vertex.newBuilder().setX(currentVertex.getX()).setY(currentVertex.getY()).build();
+
+            // Apply properties
+            newReplacementVertex = newReplacementVertex.toBuilder().addProperties(color).build();
+
+            newReplacementVertex = newReplacementVertex.toBuilder().addProperties(thickness).build();
+
+            newReplacementVertex = newReplacementVertex.toBuilder().addProperties(alphaProp).build();
+
+            // Add to new vertex list
+            newList.add(newReplacementVertex);
+
+        }
+
+        Vertex newCentroid = Vertex.newBuilder().setX(centroid.getX()).setY(centroid.getY()).build();
+
+        // Apply properties
+        newCentroid = newCentroid.toBuilder().addProperties(color).build();
+
+        newCentroid = newCentroid.toBuilder().addProperties(thickness).build();
+
+        newCentroid = newCentroid.toBuilder().addProperties(alphaProp).build();
+
+        this.centroid = newCentroid;
 
         this.verticesList = newList;
 
