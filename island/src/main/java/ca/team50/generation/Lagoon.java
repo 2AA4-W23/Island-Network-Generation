@@ -16,7 +16,7 @@ public class Lagoon {
     private static final int[] landColor = {172,189,75};
     private static final int[] beachColor = {236,240,132};
 
-    public void generateIsland(PolyMesh<Polygons> mesh) {
+    public static void generateIsland(PolyMesh<Polygons> mesh) {
 
         // Find center of canvas, the center will act as the center of the lagoon island
         Vertex center = CanvasUtils.getCenter(mesh);
@@ -44,7 +44,7 @@ public class Lagoon {
 
     }
 
-    private double getDistanceToCenter(Vertex center, Vertex pointToCheck) {
+    private static double getDistanceToCenter(Vertex center, Vertex pointToCheck) {
         double distance = Math.sqrt(Math.pow((pointToCheck.getX()-center.getX()),2) + Math.pow((pointToCheck.getY()-center.getY()),2));
         return distance;
     }

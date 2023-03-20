@@ -26,4 +26,14 @@ public class ExceptionHandler {
 
     }
 
+    public static void handleException(FileWriteException exception) {
+
+        System.out.println("An exception occurred!");
+        System.out.println("Exception: " + exception.getClass());
+        System.out.println("Message: " + exception.getMessage());
+        System.out.println("It seems writing to storage did not work. Please verify you have ample storage and the file name is valid. Then try again.");
+        System.exit(0);
+
+    }
+
 }
