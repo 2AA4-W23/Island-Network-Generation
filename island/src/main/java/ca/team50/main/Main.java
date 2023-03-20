@@ -1,3 +1,5 @@
+package ca.team50.main;
+
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
 import ca.team50.exceptions.ExceptionHandler;
