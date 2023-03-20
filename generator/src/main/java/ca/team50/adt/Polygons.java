@@ -1,5 +1,6 @@
 package ca.team50.adt;
 
+import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
 import ca.team50.generation.RandomGen;
@@ -65,6 +66,20 @@ public class Polygons implements Serializable {
         }
 
         this.centroid = calculateCentroid();
+    }
+
+    // Method to colour all segments and vertices the same
+    public void unifyColor(int[] RGBColour) {
+
+        // Create property
+        String colorCode = RGBColour[0] + "," + RGBColour[1] + "," + RGBColour[2];
+        Structs.Property color = Structs.Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
+
+        // Give all vertices this colour
+        for (Vertex currentVertex : this.getVerticesList()) {
+                currentVertex.toBuilder().addProperties(color).build();
+        }
+
     }
 
     // methods for finding convex hull of polygons
