@@ -1,6 +1,6 @@
 package ca.team50.exceptions;
 
-import ca.team50.specification.CLInterface;
+import ca.team50.specification.CLInterfaceIsland;
 
 public class ExceptionHandler {
 
@@ -10,7 +10,7 @@ public class ExceptionHandler {
         System.out.println("An exception occurred!");
         System.out.println("Exception: " + exception.getClass());
         System.out.println("Message: " + exception.getMessage());
-        CLInterface.printHelp();
+        CLInterfaceIsland.printHelp();
         System.exit(0);
 
     }

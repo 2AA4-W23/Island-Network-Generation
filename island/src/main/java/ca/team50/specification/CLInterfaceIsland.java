@@ -5,7 +5,7 @@ import ca.team50.exceptions.InvalidCommandFormatException;
 import ca.team50.generation.ModeType;
 import org.apache.commons.cli.*;
 
-public class CLInterface {
+public class CLInterfaceIsland {
 
     private static final Option meshInput = new Option("i", "input", true, "Specify the name of the input mesh file (as a string): <input>.mesh (MUST INCLUDE .mesh in name!)");
     private static final Option meshOutput = new Option("o", "output", true, "Specify the name of the output mesh file (as a string): <output>.mesh (MUST INCLUDE .mesh in name!)");
@@ -17,7 +17,7 @@ public class CLInterface {
     private String meshOutputString;
 
 
-    public CLInterface(String[] args) {
+    public CLInterfaceIsland(String[] args) {
 
         CommandLineParser parser = new DefaultParser();
 
