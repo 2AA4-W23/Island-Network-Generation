@@ -79,9 +79,17 @@ public class Polygons implements Serializable {
 
         // Give all vertices the specified colour
         for (Vertex currentVertex : this.getVerticesList()) {
-                Vertex newVertex = Vertex.newBuilder().setX(currentVertex.getX()).setY(currentVertex.getY()).build();
-                newVertex = newVertex.toBuilder().addProperties(color).build();
-                newList.add(newVertex);
+
+            // Replace rgb_color of vertex with new color
+            for (int index = 0; index < currentVertex.getPropertiesCount(); index++){
+                Structs.Property curProperty = currentVertex.getProperties(index);
+                if (curProperty.getKey().contains("rgb_color")) {
+                    Vertex newVertex = currentVertex.toBuilder().removeProperties(index).build();
+                    newVertex = newVertex.toBuilder().addProperties(color).build();
+                    newList.add(newVertex);
+                    break;
+                }
+            }
         }
 
         this.verticesList = newList;

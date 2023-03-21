@@ -1,26 +1,27 @@
 package ca.team50.generation;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.*;
+import ca.team50.Tiles.*;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
 
 import java.awt.*;
 
-public class Lagoon {
+public class Lagoon implements IslandGenerable {
 
     private static final double oceanRadius = 350;
     private static final double lagoonRadius = 200;
 
-    private static final int[] oceanColor = {21,34,138};
-    private static final int[] lagoonColor = {99,144,230};
-    private static final int[] landColor = {172,189,75};
-    private static final int[] beachColor = {255,238,0};
-
-    public static void generateIsland(PolyMesh<Polygons> mesh) {
+    public void generateIsland(PolyMesh<Polygons> mesh) {
 
         // Find center of canvas, the center will act as the center of the lagoon island
         Vertex center = CanvasUtils.getCenter(mesh);
         System.out.println("Center: " + center.getX() + ":" + center.getY());
+
+        TileType beach = new BeachTile();
+        TileType lagoon = new LagoonTile();
+        TileType ocean = new OceanTile();
+        TileType land = new LandTile();
 
         // Loop through all polygons
         // Get their centroids and apply appropriate colour based on where they are located relative to center and specified radius
@@ -37,11 +38,11 @@ public class Lagoon {
 
             // Check where the polygon is located and colour it accordingly
             if (distance <= lagoonRadius) {
-                currentPolygon.unifyColor(lagoonColor);
+                currentPolygon.unifyColor(lagoon.getTileColour());
             } else if (distance > lagoonRadius && distance <=oceanRadius) {
-                currentPolygon.unifyColor(landColor);
+                currentPolygon.unifyColor(land.getTileColour());
             } else if (distance > oceanRadius) {
-                currentPolygon.unifyColor(oceanColor);
+                currentPolygon.unifyColor(ocean.getTileColour());
             }
 
         }
@@ -65,11 +66,11 @@ public class Lagoon {
                    // Check if polygon 1 is classified as water and polygon 2 is classified as land
                    if ((distance1 <= lagoonRadius || distance1 > oceanRadius) && (distance2 > lagoonRadius && distance2 <= oceanRadius)) {
                        // Then polygon 2 should be of beach type
-                       polygon2.unifyColor(beachColor);
+                       polygon2.unifyColor(beach.getTileColour());
 
                        // Check other way around
                    } else if ((distance2 <= lagoonRadius || distance2 > oceanRadius) && (distance1 > lagoonRadius && distance1 <= oceanRadius)) {
-                       polygon1.unifyColor(beachColor);
+                       polygon1.unifyColor(beach.getTileColour());
                    }
 
 
