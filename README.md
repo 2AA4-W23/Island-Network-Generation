@@ -4,6 +4,8 @@
   - Jasmine Wang [wangj500@mcmaster.ca]
   - Michael Baskaran [baskam1@mcmaster.ca]
 
+#### If looking for A3 information, please scroll to the bottom!
+
 ## How to run the product
 
 ### Installation instructions
@@ -102,3 +104,45 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 | F18 |      .obj exporting  |  lenoverd  |  2023-02-26    |  2023-02-26   |   D    |
 
 
+
+# Assignment A3: Island Generation
+### Generation
+To generate an island:
+1) Generate a mesh using generator.jar (It is recommended that you generate an irregular mesh with at least 350 polygons)
+2) Run island.jar with command arguments below
+   It takes in multiple arguments to generate a desired mesh:
+   | Argument name | Command Abbreviation | Command | Description | Additional Notes |
+   |:--:|--|---------|-------|-----|
+   | Help | -h |   --help   |   Prints all available commands to console | Exits the program after execution. Provides extra information such as default values for specified arguments |
+   | Mesh File Input | -i |   --input   |   Specify the mesh name (including .mesh) in your file system to read | If specifying a .mesh file from the same directory as island.jar, no file path is needed|
+   | Island mesh File Output | -o |   --output   |   Specify the mesh name (including .mesh) in your file system to write an island mesh file to | If specifying a .mesh file from the same directory as island.jar, no file path is needed |
+   | Island Generation Mode | -m |   --mode   |  Specify the type of island to generate | All island modes are listed by using the -h command |
+3) Run visualizer.jar with the outputted mesh from island.jar in island generation mode
+
+Ex:
+```
+# First, generate mesh
+mosser@azrael A2 % cd generator
+mosser@azrael generator % java -jar generator.jar -mt IRREGULAR -n sample -w 1000 -l 1000 -pc 500 -r 10
+
+mosser@azrael A2 % cd ..
+mosser@azrael A2 % cd island
+# The following command specifies the generated mesh from generator.jar to convert to an island of lagoon type
+mosser@azrael generator % java -jar island.jar -i ../generator/sample.mesh -o island.mesh -m lagoon
+
+mosser@azrael A2 % cd ..
+mosser@azrael A2 % cd visualizer
+# Run visualizer on the generated island from island.jar and use the -ig command to specify island visualization
+mosser@azrael visualizer % java -jar visualizer.jar ../island/island.mesh island.svg -ig
+```
+
+### A3 Product Backlog
+Status: Pending (P), Started (S), Blocked (B), Done (D)
+
+| Id | Feature title | Who? | Start | End | Status |
+|:--:|---------------|------|-------|-----|--------|
+| F01 |      Island.jar can read PolyMeshes from file       |   lenoverd   |    2023-03-19   |  2023-03-19    |    D    |
+| F02 |      Implement basic command line interface (Apache)      |   lenoverd   |    2023-03-19   |  2023-03-19   |     D   |
+| F03 |      Generate Lagoon   |   lenoverd   |   2023-03-19  |   2023-03-20  |   D  |
+| F04 |      Introduce the notion of Tiles   |   lenoverd   |   2023-03-20  |   2023-03-21  |   D  |
+| F05 |      Implement special island renderer for visualizer.jar  |   lenoverd   |   2023-03-21  |   2023-03-21  |   D  |

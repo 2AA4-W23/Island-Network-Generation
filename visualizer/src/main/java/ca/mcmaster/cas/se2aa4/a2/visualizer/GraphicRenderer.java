@@ -2,6 +2,7 @@ package ca.mcmaster.cas.se2aa4.a2.visualizer;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.visualizer.team50.renders.DebugRender;
+import ca.mcmaster.cas.se2aa4.a2.visualizer.team50.renders.IslandRender;
 import ca.mcmaster.cas.se2aa4.a2.visualizer.team50.renders.NormalRender;
 import ca.mcmaster.cas.se2aa4.a2.visualizer.team50.renders.Renderable;
 import ca.team50.adt.PolyMesh;
@@ -22,11 +23,14 @@ public class GraphicRenderer{
 
     private static final int THICKNESS = 3;
     private boolean debugMode = false;
+    private boolean islandMode = false;
 
 
     public void setDebugMode(boolean debugMode) {
         this.debugMode = debugMode;
     }
+
+    public void setIslandMode(boolean islandMode) {this.islandMode = islandMode;}
 
 
     public void render(PolyMesh polygons , Graphics2D canvas) {
@@ -42,7 +46,10 @@ public class GraphicRenderer{
         // Check which renderer visualizer should be using
         if (this.debugMode) {
             renderToUse = new DebugRender();
-            renderToUse.render(polygons,canvas);
+            renderToUse.render(polygons, canvas);
+        } else if (this.islandMode){
+            renderToUse = new IslandRender();
+            renderToUse.render(polygons, canvas);
         } else {
             renderToUse = new NormalRender();
             renderToUse.render(polygons,canvas);

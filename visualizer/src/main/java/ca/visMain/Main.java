@@ -23,7 +23,9 @@ public class Main {
         // Creating Options
         Options options = new Options();
         Option debug = new Option("X", "debug", false, "enable debug mode");
+        Option island = new Option("ig", "island", false, "enable island generation mode");
         options.addOption(debug);
+        options.addOption(island);
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -38,6 +40,7 @@ public class Main {
         }
 
         boolean debugMode = cmd.hasOption("X");
+        boolean islandMode = cmd.hasOption(island);
 
 
         // Extracting command line parameters
@@ -70,6 +73,7 @@ public class Main {
             // Set up the renderer with the debug mode
             GraphicRenderer renderer = new GraphicRenderer();
             renderer.setDebugMode(debugMode);
+            renderer.setIslandMode(islandMode);
 
             // Render the mesh onto the canvas
             renderer.render(mesh, canvas);
