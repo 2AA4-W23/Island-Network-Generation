@@ -2,14 +2,14 @@ package ca.team50.shapes;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import org.locationtech.jts.geom.*;
+import org.locationtech.jts.util.GeometricShapeFactory;
 
 import java.util.List;
 
 public interface IslandShape {
 
-    public Polygon shape = null;
-
-    default Polygon generateShape(List<Structs.Vertex> vertexList) {
+    // Creates an abstract shape
+    default Geometry generateShape(List<Structs.Vertex> vertexList) {
         // Create the geometry factory use to create the output of .getDiagram()
         GeometryFactory geoFactory = new GeometryFactory();
 
@@ -26,14 +26,20 @@ public interface IslandShape {
         return geoFactory.createPolygon(coordinateList.toCoordinateArray());
     }
 
-    default boolean isVertexInside(Structs.Vertex vertexToCheck) {
+    // Creates a circle instead of an abstract shape
+     default Geometry generateShape(Structs.Vertex center, double radius, int precision) {
+        // Create the geometry factory use to create the output of .getDiagram()
+        GeometricShapeFactory shapeFactory = new GeometricShapeFactory();
 
-        GeometryFactory geoFactory = new GeometryFactory();
+        shapeFactory.setNumPoints(precision);
 
-        Point coordToCheck = geoFactory.createPoint(new Coordinate(vertexToCheck.getX(),vertexToCheck.getY()));
+        shapeFactory.setCentre(new Coordinate(center.getX(),center.getY()));
 
-        return (this.shape.contains(coordToCheck));
+        shapeFactory.setSize(radius*2);
 
+        return shapeFactory.createCircle();
     }
+
+    boolean isVertexInside(Structs.Vertex vertexToCheck);
 
 }

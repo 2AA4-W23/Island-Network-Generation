@@ -1,25 +1,25 @@
 package ca.team50.shapes;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 
 public class Circle implements IslandShape {
 
-    private double radius;
-    private Structs.Vertex center;
+    private Geometry circle;
 
     public Circle(Structs.Vertex centerOfMesh, double radius) {
-        this.radius = radius;
-        this.center = centerOfMesh;
+        this.circle = generateShape(centerOfMesh,radius,64);
     }
 
     public boolean isVertexInside(Structs.Vertex vertexToCheck) {
-        double distance = getDistanceToCenter(this.center,vertexToCheck);
-        return (distance<=radius);
-    }
+        GeometryFactory geoFactory = new GeometryFactory();
 
-    private static double getDistanceToCenter(Structs.Vertex center, Structs.Vertex pointToCheck) {
-        double distance = Math.sqrt(Math.pow((pointToCheck.getX()-center.getX()),2) + Math.pow((pointToCheck.getY()-center.getY()),2));
-        return distance;
+        Point coordToCheck = geoFactory.createPoint(new Coordinate(vertexToCheck.getX(),vertexToCheck.getY()));
+
+        return (this.circle.contains(coordToCheck));
     }
 
 }
