@@ -10,10 +10,23 @@ public class Elipse implements IslandShape {
 
     public Geometry elipse;
 
+    /**
+     * Generate an elipse island shape
+     * @param center center of the elipse on the canvas
+     * @param height height of the elipse
+     * @param width width of the elipse
+     * @param rotation rotate the elipse around it's center
+     * @return an elipse object
+     */
     public Elipse(Structs.Vertex center, double height, double width, double rotation) {
         this.elipse = generateShape(center,height,width,rotation,64);
     }
 
+    /**
+     * Test if any given point exists within the elipse shape
+     * @param vertexToCheck the position (as a vertex) to check
+     * @return a boolean value, true if the point exists within the shape, false otherwise
+     */
     @Override
     public boolean isVertexInside(Structs.Vertex vertexToCheck) {
         // Create a geometry factory

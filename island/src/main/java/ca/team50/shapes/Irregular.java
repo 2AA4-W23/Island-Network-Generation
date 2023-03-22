@@ -16,6 +16,14 @@ public class Irregular implements IslandShape {
     private Structs.Vertex max;
     private Structs.Vertex center;
 
+    /**
+     * Generate a random irregular shape based off of noise
+     * @param seed the seed for noise generation
+     * @param threshold the threshold in which the method isVertexInside should return true for after noise calculation of a given position
+     * @param centerOfIsland the center of the island on canvas
+     * @param max the maximum value a point can be from the center of the island
+     * @return an Irregular shape object
+     */
     public Irregular(long seed, double threshold, Structs.Vertex centerOfIsland, Structs.Vertex max) {
         this.seed = seed;
         this.threshold = threshold;
@@ -23,6 +31,13 @@ public class Irregular implements IslandShape {
         this.max = max;
     }
 
+    /**
+     * Test if any given point exists within the Irregular shape
+     * @param vertexToCheck the position (as a vertex) to check
+     * @return a boolean value, true if the point exists within the shape, false otherwise
+     * Note that within the shape means the noise level of a particular point is beyond the threshold specified
+     * This value is calculated based on the noise generated and how far the given point is from the center of the island
+     */
     @Override
     public boolean isVertexInside(Structs.Vertex vertexToCheck) {
 

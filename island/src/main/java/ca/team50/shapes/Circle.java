@@ -11,11 +11,22 @@ public class Circle implements IslandShape {
 
     private Geometry circle;
 
+    /**
+     * Generate a circle island shape
+     * @param centerOfMesh center of the circle on the canvas
+     * @param radius the radius of the circle
+     * @return a Circle object
+     */
     public Circle(Structs.Vertex centerOfMesh, double radius) {
         // Create a circle
         this.circle = generateShape(centerOfMesh,radius,64);
     }
 
+    /**
+     * Test if any given point exists within the circle shape
+     * @param vertexToCheck the position (as a vertex) to check
+     * @return a boolean value, true if the point exists within the shape, false otherwise
+     */
     public boolean isVertexInside(Structs.Vertex vertexToCheck) {
         // Create a geometry factory
         GeometryFactory geoFactory = new GeometryFactory();
