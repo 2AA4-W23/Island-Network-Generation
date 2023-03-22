@@ -4,8 +4,8 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.*;
 import ca.team50.Tiles.*;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
-
-import java.awt.*;
+import ca.team50.shapes.Circle;
+import ca.team50.shapes.IslandShape;
 
 public class Lagoon implements IslandGenerable {
 
@@ -13,6 +13,7 @@ public class Lagoon implements IslandGenerable {
     private static final double lagoonRadius = 200;
 
     public void generateIsland(PolyMesh<Polygons> mesh) {
+
 
         // Find center of canvas, the center will act as the center of the lagoon island
         Vertex center = CanvasUtils.getCenter(mesh);
@@ -22,6 +23,9 @@ public class Lagoon implements IslandGenerable {
         TileType lagoon = new LagoonTile();
         TileType ocean = new OceanTile();
         TileType land = new LandTile();
+
+        IslandShape lagoonCircle = new Circle(center,lagoonRadius);
+        IslandShape oceanCircle = new Circle(center,oceanRadius);
 
         // Loop through all polygons
         // Get their centroids and apply appropriate colour based on where they are located relative to center and specified radius
@@ -37,11 +41,11 @@ public class Lagoon implements IslandGenerable {
             System.out.println("Distance: " + distance);
 
             // Check where the polygon is located and colour it accordingly
-            if (distance <= lagoonRadius) {
+            if (lagoonCircle.isVertexInside(centroid)) {
                 currentPolygon.unifyColor(lagoon.getTileColour());
-            } else if (distance > lagoonRadius && distance <=oceanRadius) {
+            } else if (!lagoonCircle.isVertexInside(centroid) && oceanCircle.isVertexInside(centroid)) {
                 currentPolygon.unifyColor(land.getTileColour());
-            } else if (distance > oceanRadius) {
+            } else if (!lagoonCircle.isVertexInside(centroid) && !oceanCircle.isVertexInside(centroid)) {
                 currentPolygon.unifyColor(ocean.getTileColour());
             }
 
