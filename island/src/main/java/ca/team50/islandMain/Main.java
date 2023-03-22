@@ -4,10 +4,7 @@ import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
 import ca.team50.fileIO.FileToPolyMesh;
 import ca.team50.fileIO.PolyMeshToFile;
-import ca.team50.generation.IslandGenerable;
-import ca.team50.generation.Lagoon;
-import ca.team50.generation.ModeType;
-import ca.team50.generation.RandomIsland;
+import ca.team50.generation.*;
 import ca.team50.specification.CLInterfaceIsland;
 
 public class Main {
@@ -26,6 +23,8 @@ public class Main {
             island = new RandomIsland();
         } else if (cli.getIslandMode() == ModeType.lagoon) {
             island = new Lagoon();
+        } else if (cli.getIslandMode() == ModeType.test) {
+            island = new TestIsland();
         }
 
         // Generate lagoon

@@ -10,8 +10,8 @@ public class Elipse implements IslandShape {
 
     public Geometry elipse;
 
-    public Elipse(Structs.Vertex center, double height, double width) {
-        this.elipse = generateShape(center,height,width,64);
+    public Elipse(Structs.Vertex center, double height, double width, double rotation) {
+        this.elipse = generateShape(center,height,width,rotation,64);
     }
 
     @Override

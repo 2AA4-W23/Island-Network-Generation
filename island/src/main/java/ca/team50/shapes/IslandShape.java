@@ -47,7 +47,7 @@ public interface IslandShape {
     }
 
     // Create an elipse instead of an abstract shape
-    default Geometry generateShape(Structs.Vertex center, double height, double width, int precision) {
+    default Geometry generateShape(Structs.Vertex center, double height, double width, double rotation,int precision) {
 
         // Create shape factory
         GeometricShapeFactory shapeFactory = new GeometricShapeFactory();
@@ -57,6 +57,7 @@ public interface IslandShape {
 
         shapeFactory.setHeight(height);
         shapeFactory.setWidth(width);
+        shapeFactory.setRotation(rotation);
 
         // Set the location of the centre
         shapeFactory.setCentre(new Coordinate(center.getX(),center.getY()));
