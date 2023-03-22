@@ -12,7 +12,7 @@ public class Lagoon implements IslandGenerable {
     private static final double oceanRadius = 350;
     private static final double lagoonRadius = 200;
 
-    public void generateIsland(PolyMesh<Polygons> mesh) {
+    public void generateIsland(PolyMesh<Polygons> mesh, int numAquifers) {
 
 
         // Find center of canvas, the center will act as the center of the lagoon island
@@ -44,6 +44,19 @@ public class Lagoon implements IslandGenerable {
                 currentPolygon.unifyColor(land.getTileColour());
             } else if (!lagoonCircle.isVertexInside(centroid) && !oceanCircle.isVertexInside(centroid)) {
                 currentPolygon.unifyColor(ocean.getTileColour());
+            }
+
+            if ((currentPolygon.unifyColor(land.getTileColour()) && (currentPolygon.getProperty("aquifer").equals(0)))){
+                // Check if we still need to add more aquifers
+                if (numAquifers > 0) {
+                    // Generate a random number between 0 and 1 to determine if this polygon will be an aquifer
+                    Random rand = new Random();
+                    int randomNum = rand.nextInt(2);
+                    if (randomNum == 1) {
+                        currentPolygon.setProperty("aquifer", 1);
+                        numAquifers--;
+                    }
+                }
             }
 
         }

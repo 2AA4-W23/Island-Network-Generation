@@ -30,6 +30,8 @@ public class Main {
         // Generate lagoon
         island.generateIsland(polyMesh);
 
+        //
+
         // Write mesh to file
         PolyMeshToFile.writeMeshToFile(polyMesh, cli.getMeshOutput());
 

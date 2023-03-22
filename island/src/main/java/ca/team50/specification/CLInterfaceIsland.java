@@ -11,10 +11,15 @@ public class CLInterfaceIsland {
     private static final Option meshOutput = new Option("o", "output", true, "Specify the name of the output mesh file (as a string): <output>.mesh (MUST INCLUDE .mesh in name!)");
     private static final Option islandGenMode = new Option("m", "mode", true, "Specify the mode of island generation, specified values are: " + getEnumValues() + ", default: lagoon");
     private static final Option helpOpt = new Option("h", "help", false, "Display input help");
+    private static final Option aquifier = new Option("a", "aquifer", true, "Specify the number of aquifers to be generated: ");
+
+
 
     private ModeType islandMode;
     private String meshInputString;
     private String meshOutputString;
+
+    private Integer numAquifers;
 
 
     public CLInterfaceIsland(String[] args) {
@@ -27,6 +32,7 @@ public class CLInterfaceIsland {
         options.addOption(meshOutput);
         options.addOption(islandGenMode);
         options.addOption(helpOpt);
+        options.addOption(aquifier);
 
         try {
 
@@ -54,6 +60,11 @@ public class CLInterfaceIsland {
             this.meshInputString = commandLine.getOptionValue(meshInput);
             this.meshOutputString = commandLine.getOptionValue(meshOutput);
 
+            // Get number of aquifers to be generated if requested
+
+            this.numAquifers = Integer.valueOf(commandLine.getOptionValue(aquifier));
+
+
         } catch (Exception e) {
             ExceptionHandler.handleException(new InvalidCommandFormatException("Failed to parse arguments. Were commands inputted correctly?"));
         }
@@ -73,6 +84,8 @@ public class CLInterfaceIsland {
         return meshOutputString;
     }
 
+    public Integer getNumAquifers() { return  numAquifers;}
+
 
     // Method to print generator command line input help
     public static void printHelp() {
@@ -83,6 +96,7 @@ public class CLInterfaceIsland {
         options.addOption(meshOutput);
         options.addOption(islandGenMode);
         options.addOption(helpOpt);
+        options.addOption(aquifier);
 
 
         formatter.printHelp("-<short or -- for long command> <numerical or string argument if required>",options);
