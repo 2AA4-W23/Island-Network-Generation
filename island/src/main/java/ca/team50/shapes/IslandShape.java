@@ -46,6 +46,25 @@ public interface IslandShape {
         return shapeFactory.createCircle();
     }
 
+    // Create an elipse instead of an abstract shape
+    default Geometry generateShape(Structs.Vertex center, double height, double width, int precision) {
+
+        // Create shape factory
+        GeometricShapeFactory shapeFactory = new GeometricShapeFactory();
+
+        // Set number of points around the circle
+        shapeFactory.setNumPoints(precision);
+
+        shapeFactory.setHeight(height);
+        shapeFactory.setWidth(width);
+
+        // Set the location of the centre
+        shapeFactory.setCentre(new Coordinate(center.getX(),center.getY()));
+
+        // Create the elipse
+        return shapeFactory.createEllipse();
+    }
+
     // Method to detect if any given point (vertex) is inside the shape may vary
     boolean isVertexInside(Structs.Vertex vertexToCheck);
 
