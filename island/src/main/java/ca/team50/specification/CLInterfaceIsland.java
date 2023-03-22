@@ -44,6 +44,8 @@ public class CLInterfaceIsland {
 
             if (islandModeType.contains("lagoon")) {
                 islandMode = ModeType.lagoon;
+            } else if (islandModeType.contains("random")) {
+                islandMode = ModeType.random;
             }
 
             // Get input and output meshes
