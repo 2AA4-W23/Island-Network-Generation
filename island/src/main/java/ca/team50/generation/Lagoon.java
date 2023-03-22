@@ -17,13 +17,14 @@ public class Lagoon implements IslandGenerable {
 
         // Find center of canvas, the center will act as the center of the lagoon island
         Vertex center = CanvasUtils.getCenter(mesh);
-        System.out.println("Center: " + center.getX() + ":" + center.getY());
 
+        // Get all tiles needed for generation
         TileType beach = new BeachTile();
         TileType lagoon = new LagoonTile();
         TileType ocean = new OceanTile();
         TileType land = new LandTile();
 
+        // Get all island shapes needed for land (or rather borders for what makes up the island)
         IslandShape lagoonCircle = new Circle(center,lagoonRadius);
         IslandShape oceanCircle = new Circle(center,oceanRadius);
 
@@ -35,10 +36,6 @@ public class Lagoon implements IslandGenerable {
             currentPolygon.cleanProperties();
 
             Vertex centroid = currentPolygon.getCentroid();
-
-            // Get distance to center
-            double distance = getDistanceToCenter(center,centroid);
-            System.out.println("Distance: " + distance);
 
             // Check where the polygon is located and colour it accordingly
             if (lagoonCircle.isVertexInside(centroid)) {
@@ -64,16 +61,13 @@ public class Lagoon implements IslandGenerable {
                    Vertex centroid1 = polygon1.getCentroid();
                    Vertex centroid2 = polygon2.getCentroid();
 
-                   double distance1 = getDistanceToCenter(center,centroid1);
-                   double distance2 = getDistanceToCenter(center,centroid2);
-
                    // Check if polygon 1 is classified as water and polygon 2 is classified as land
-                   if ((distance1 <= lagoonRadius || distance1 > oceanRadius) && (distance2 > lagoonRadius && distance2 <= oceanRadius)) {
+                   if ((lagoonCircle.isVertexInside(centroid1) || !oceanCircle.isVertexInside(centroid1)) && (!lagoonCircle.isVertexInside(centroid2) && oceanCircle.isVertexInside(centroid2))) {
                        // Then polygon 2 should be of beach type
                        polygon2.unifyColor(beach.getTileColour());
 
                        // Check other way around
-                   } else if ((distance2 <= lagoonRadius || distance2 > oceanRadius) && (distance1 > lagoonRadius && distance1 <= oceanRadius)) {
+                   } else if ((lagoonCircle.isVertexInside(centroid2) || !oceanCircle.isVertexInside(centroid2)) && (!lagoonCircle.isVertexInside(centroid1) && oceanCircle.isVertexInside(centroid1))) {
                        polygon1.unifyColor(beach.getTileColour());
                    }
 
@@ -84,11 +78,6 @@ public class Lagoon implements IslandGenerable {
         }
 
 
-    }
-
-    private static double getDistanceToCenter(Vertex center, Vertex pointToCheck) {
-        double distance = Math.sqrt(Math.pow((pointToCheck.getX()-center.getX()),2) + Math.pow((pointToCheck.getY()-center.getY()),2));
-        return distance;
     }
 
 }
