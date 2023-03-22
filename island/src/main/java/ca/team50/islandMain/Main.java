@@ -4,8 +4,7 @@ import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
 import ca.team50.fileIO.FileToPolyMesh;
 import ca.team50.fileIO.PolyMeshToFile;
-import ca.team50.generation.IslandGenerable;
-import ca.team50.generation.Lagoon;
+import ca.team50.generation.*;
 import ca.team50.specification.CLInterfaceIsland;
 
 public class Main {
@@ -18,10 +17,18 @@ public class Main {
         // Convert corresponding input .mesh file into a PolyMesh
         PolyMesh<Polygons> polyMesh = FileToPolyMesh.getPolyMeshFromFile(cli.getMeshInput());
 
-        IslandGenerable lagoon = new Lagoon();
+        IslandGenerable island = null;
+
+        if (cli.getIslandMode() == ModeType.random) {
+            island = new RandomIsland();
+        } else if (cli.getIslandMode() == ModeType.lagoon) {
+            island = new Lagoon();
+        } else if (cli.getIslandMode() == ModeType.test) {
+            island = new TestIsland();
+        }
 
         // Generate lagoon
-        lagoon.generateIsland(polyMesh);
+        island.generateIsland(polyMesh);
 
         // Write mesh to file
         PolyMeshToFile.writeMeshToFile(polyMesh, cli.getMeshOutput());

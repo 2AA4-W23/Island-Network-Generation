@@ -6,27 +6,28 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 
-// This class describes an abstract circle
-public class Circle implements IslandShape {
+public class Elipse implements IslandShape {
 
-    private Geometry circle;
+    public Geometry elipse;
 
     /**
-     * Generate a circle island shape
-     * @param centerOfMesh center of the circle on the canvas
-     * @param radius the radius of the circle
-     * @return a Circle object
+     * Generate an elipse island shape
+     * @param center center of the elipse on the canvas
+     * @param height height of the elipse
+     * @param width width of the elipse
+     * @param rotation rotate the elipse around it's center
+     * @return an elipse object
      */
-    public Circle(Structs.Vertex centerOfMesh, double radius) {
-        // Create a circle
-        this.circle = generateShape(centerOfMesh,radius,64);
+    public Elipse(Structs.Vertex center, double height, double width, double rotation) {
+        this.elipse = generateShape(center,height,width,rotation,64);
     }
 
     /**
-     * Test if any given point exists within the circle shape
+     * Test if any given point exists within the elipse shape
      * @param vertexToCheck the position (as a vertex) to check
      * @return a boolean value, true if the point exists within the shape, false otherwise
      */
+    @Override
     public boolean isVertexInside(Structs.Vertex vertexToCheck) {
         // Create a geometry factory
         GeometryFactory geoFactory = new GeometryFactory();
@@ -35,7 +36,6 @@ public class Circle implements IslandShape {
         Point coordToCheck = geoFactory.createPoint(new Coordinate(vertexToCheck.getX(),vertexToCheck.getY()));
 
         // Check if the point is within the Geometry using a built in JTS method
-        return (this.circle.contains(coordToCheck));
+        return (this.elipse.contains(coordToCheck));
     }
-
 }

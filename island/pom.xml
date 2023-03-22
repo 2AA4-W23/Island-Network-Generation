@@ -38,6 +38,14 @@
             <artifactId>doxia-core</artifactId>
             <version>1.4</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/de.articdive/jnoise-pipeline -->
+        <dependency>
+            <groupId>de.articdive</groupId>
+            <artifactId>jnoise-pipeline</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
+
 
         <!-- Need generator adt classes to function -->
         <dependency>
