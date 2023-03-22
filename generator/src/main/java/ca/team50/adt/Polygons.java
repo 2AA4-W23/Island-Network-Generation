@@ -113,6 +113,14 @@ public class Polygons implements Serializable {
         String alpha = String.valueOf(1);
         Structs.Property alphaProp = Structs.Property.newBuilder().setKey("alpha").setValue(alpha).build();
 
+        // Construct default altitude (0)
+        String altitude = String.valueOf(0);
+        Structs.Property relativeAltitude = Structs.Property.newBuilder().setKey("altitude").setValue(altitude).build();
+
+        // Construct default humidity
+        String humidity = String.valueOf(0.5);
+        Structs.Property relativeHumidity = Structs.Property.newBuilder().setKey("humidity").setValue(humidity).build();
+
         for (Vertex currentVertex : this.getVerticesList()) {
 
             // Create new blank vertex with position of currentVertex
@@ -124,6 +132,10 @@ public class Polygons implements Serializable {
             newReplacementVertex = newReplacementVertex.toBuilder().addProperties(thickness).build();
 
             newReplacementVertex = newReplacementVertex.toBuilder().addProperties(alphaProp).build();
+
+            newReplacementVertex = newReplacementVertex.toBuilder().addProperties(relativeHumidity).build();
+
+            newReplacementVertex = newReplacementVertex.toBuilder().addProperties(relativeAltitude).build();
 
             // Add to new vertex list
             newList.add(newReplacementVertex);

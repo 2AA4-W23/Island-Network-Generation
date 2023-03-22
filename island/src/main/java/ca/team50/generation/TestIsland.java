@@ -15,11 +15,17 @@ public class TestIsland implements IslandGenerable {
     @Override
     public void generateIsland(PolyMesh<Polygons> mesh) {
 
-        // Get all tiles needed for generation
+        // Get all tiles needed for generation (Command line argument : choose specific biome)
         TileType ocean = new OceanTile();
         TileType land = new LandTile();
 
-        IslandShape elipse = new Elipse(CanvasUtils.getCenter(mesh),300,500,1.2);
+        //Commandline argument: choose shape
+        double height = 300;
+        double width = 500;
+        IslandShape elipse = new Elipse(CanvasUtils.getCenter(mesh),height,width,1.2);
+
+        //Apply altimeric profile to entire mesh
+
 
 
         // Loop through all polygons
@@ -33,6 +39,8 @@ public class TestIsland implements IslandGenerable {
 
             // Check where the polygon is located and colour it accordingly
             if (elipse.isVertexInside(centroid)) {
+
+
                 currentPolygon.unifyColor(land.getTileColour());
             } else {
                 currentPolygon.unifyColor(ocean.getTileColour());
