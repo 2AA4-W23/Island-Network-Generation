@@ -46,7 +46,6 @@ public class TestIsland implements IslandGenerable {
         for (Polygons currentPolygon : mesh) {
 
             Structs.Vertex centroid = currentPolygon.getCentroid();
-
             // Check where the polygon is located and colour it accordingly
             if (elipse.isVertexInside(centroid)) {
                 Double polygonAltitude = extractProperties(centroid.getPropertiesList(), "altitude");
