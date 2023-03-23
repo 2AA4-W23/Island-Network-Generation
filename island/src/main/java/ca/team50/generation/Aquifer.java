@@ -2,6 +2,7 @@ package ca.team50.generation;
 
 import java.util.Random;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.*;
+import ca.team50.Tiles.TileType;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
 import ca.team50.shapes.Elipse;
@@ -29,8 +30,8 @@ public class Aquifer implements IslandGenerable {
         IslandShape island = elipse;
 
         // Create LandTile and OceanTile objects for coloring the polygons
-        LandTile land = new LandTile();
-        OceanTile ocean = new OceanTile();
+        TileType land = new LandTile();
+        TileType ocean = new OceanTile();
 
         // Loop through the polygons in the PolyMesh
         for (Polygons polygon : mesh) {
