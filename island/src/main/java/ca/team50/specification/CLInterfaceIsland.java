@@ -2,6 +2,7 @@ package ca.team50.specification;
 
 import ca.team50.exceptions.ExceptionHandler;
 import ca.team50.exceptions.InvalidCommandFormatException;
+import ca.team50.generation.Aquifer;
 import ca.team50.generation.ModeType;
 import org.apache.commons.cli.*;
 
@@ -11,7 +12,7 @@ public class CLInterfaceIsland {
     private static final Option meshOutput = new Option("o", "output", true, "Specify the name of the output mesh file (as a string): <output>.mesh (MUST INCLUDE .mesh in name!)");
     private static final Option islandGenMode = new Option("m", "mode", true, "Specify the mode of island generation, specified values are: " + getEnumValues() + ", default: lagoon");
     private static final Option helpOpt = new Option("h", "help", false, "Display input help");
-    private static final Option aquifier = new Option("a", "aquifer", true, "Specify the number of aquifers to be generated: ");
+    private static final Option aquifer = new Option("a", "aquifer", true, "Specify the number of aquifers to be generated: ");
 
 
 
@@ -32,7 +33,7 @@ public class CLInterfaceIsland {
         options.addOption(meshOutput);
         options.addOption(islandGenMode);
         options.addOption(helpOpt);
-        options.addOption(aquifier);
+        options.addOption(aquifer);
 
         try {
 
@@ -61,13 +62,20 @@ public class CLInterfaceIsland {
             this.meshOutputString = commandLine.getOptionValue(meshOutput);
 
             // Get number of aquifers to be generated if requested
-
-            this.numAquifers = Integer.valueOf(commandLine.getOptionValue(aquifier));
+            String numAquifersString = commandLine.getOptionValue(aquifer);
+            if (numAquifersString != null) {
+                this.numAquifers = Integer.parseInt(numAquifersString);
+            } else {
+                this.numAquifers = 0; // default value if not specified
+            }
 
 
         } catch (Exception e) {
             ExceptionHandler.handleException(new InvalidCommandFormatException("Failed to parse arguments. Were commands inputted correctly?"));
         }
+
+        // Store numAquifers
+        Aquifer aquifers = new Aquifer(this.numAquifers);
 
 
     }
@@ -96,7 +104,7 @@ public class CLInterfaceIsland {
         options.addOption(meshOutput);
         options.addOption(islandGenMode);
         options.addOption(helpOpt);
-        options.addOption(aquifier);
+        options.addOption(aquifer);
 
 
         formatter.printHelp("-<short or -- for long command> <numerical or string argument if required>",options);

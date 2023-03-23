@@ -11,7 +11,11 @@ import ca.team50.Tiles.OceanTile;
 
 public class Aquifer implements IslandGenerable {
 
-    private int numAquifers = 5;
+    private int numAquifers;
+
+    public Aquifer(int numAquifers) {
+        this.numAquifers = numAquifers;
+    }
 
     public void generateIsland(PolyMesh<Polygons> mesh) {
 
