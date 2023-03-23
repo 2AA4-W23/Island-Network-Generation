@@ -77,7 +77,7 @@ public class Polygons implements Serializable {
 
         ArrayList<Vertex> newList = new ArrayList<>();
 
-        // Give all vertices the specified colour
+        // Give all vertices the specified colourcurrPoly.getCentroid()
         for (Vertex currentVertex : this.getVerticesList()) {
 
             // Replace rgb_color of vertex with new color
@@ -93,7 +93,78 @@ public class Polygons implements Serializable {
         }
 
         this.verticesList = newList;
+    }
 
+    //Change elevation
+    public void changeElevation(String altitude) {
+
+        // Create property
+        String relativeAltitude = altitude;
+        Structs.Property elevation = Structs.Property.newBuilder().setKey("altitude").setValue(relativeAltitude).build();
+
+        Vertex v = this.getCentroid();
+        ArrayList<Vertex> newList = new ArrayList<>();
+
+        // Replace altitude of polygon centroid vertex with new altitude
+        for (int index = 0; index < v.getPropertiesCount(); index++){
+            Structs.Property curProperty = v.getProperties(index);
+            if (curProperty.getKey().contains("altitude")) {
+                Vertex newV = v.toBuilder().removeProperties(index).build();
+                newV = newV.toBuilder().addProperties(elevation).build();
+                newList.add(newV);
+                break;
+            }
+        }
+        this.centroid = newList.get(0);
+        newList.clear();
+    }
+
+    //Changing humidity of polygon centroid vertex
+    public void changeHumidity(String humidity) {
+
+        // Create property
+        String relativeHumidity = humidity;
+        Structs.Property elevation = Structs.Property.newBuilder().setKey("altitude").setValue(relativeHumidity).build();
+
+        Vertex v = this.getCentroid();
+        ArrayList<Vertex> newList = new ArrayList<>();
+
+        // Replace altitude of vertex with new altitude
+        for (int index = 0; index < v.getPropertiesCount(); index++){
+            Structs.Property curProperty = v.getProperties(index);
+            if (curProperty.getKey().contains("humidity")) {
+                Vertex newV = v.toBuilder().removeProperties(index).build();
+                newV = newV.toBuilder().addProperties(elevation).build();
+                newList.add(newV);
+                break;
+            }
+        }
+        this.centroid = newList.get(0);
+        newList.clear();
+    }
+
+    //Aquifer Exists
+    public void aquiferExists(String TRUE) {
+        ArrayList<Vertex> newList = new ArrayList<>();
+        // Create property
+        if (TRUE == "True") {
+            Structs.Property aquiferExistence = Structs.Property.newBuilder().setKey("aquifer").setValue("True").build();
+
+            Vertex v = this.getCentroid();
+
+            // Replace altitude of vertex with new altitude
+            for (int index = 0; index < v.getPropertiesCount(); index++) {
+                Structs.Property curProperty = v.getProperties(index);
+                if (curProperty.getKey().contains("aquifer")) {
+                    Vertex newV = v.toBuilder().removeProperties(index).build();
+                    newV = newV.toBuilder().addProperties(aquiferExistence).build();
+                    newList.add(newV);
+                    break;
+                }
+            }
+        }
+        this.centroid = newList.get(0);
+        newList.clear();
     }
 
     // Method to set default properties to all vertices in polygon
@@ -121,6 +192,10 @@ public class Polygons implements Serializable {
         String humidity = String.valueOf(0.5);
         Structs.Property relativeHumidity = Structs.Property.newBuilder().setKey("humidity").setValue(humidity).build();
 
+        String aquifer = "False";
+        Structs.Property aquiferExistence = Structs.Property.newBuilder().setKey("aquifer").setValue(humidity).build();
+
+
         for (Vertex currentVertex : this.getVerticesList()) {
 
             // Create new blank vertex with position of currentVertex
@@ -137,6 +212,8 @@ public class Polygons implements Serializable {
 
             newReplacementVertex = newReplacementVertex.toBuilder().addProperties(relativeAltitude).build();
 
+            newReplacementVertex = newReplacementVertex.toBuilder().addProperties(aquiferExistence).build();
+
             // Add to new vertex list
             newList.add(newReplacementVertex);
 
@@ -150,6 +227,12 @@ public class Polygons implements Serializable {
         newCentroid = newCentroid.toBuilder().addProperties(thickness).build();
 
         newCentroid = newCentroid.toBuilder().addProperties(alphaProp).build();
+
+        newCentroid = newCentroid.toBuilder().addProperties(relativeHumidity).build();
+
+        newCentroid = newCentroid.toBuilder().addProperties(relativeAltitude).build();
+
+        newCentroid = newCentroid.toBuilder().addProperties(aquiferExistence).build();
 
         this.centroid = newCentroid;
 
