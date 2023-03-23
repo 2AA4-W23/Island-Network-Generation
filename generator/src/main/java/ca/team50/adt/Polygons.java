@@ -147,7 +147,7 @@ public class Polygons implements Serializable {
     public void aquiferExists(String TRUE) {
         ArrayList<Vertex> newList = new ArrayList<>();
         // Create property
-        if (TRUE == "True") {
+        if (TRUE.equals("True")) {
             Structs.Property aquiferExistence = Structs.Property.newBuilder().setKey("aquifer").setValue("True").build();
 
             Vertex v = this.getCentroid();

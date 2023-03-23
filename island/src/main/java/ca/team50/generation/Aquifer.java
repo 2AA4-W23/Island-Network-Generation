@@ -50,8 +50,8 @@ public class Aquifer implements IslandGenerable {
                 int randomNum = rand.nextInt(2);
 
                 // Ensure randomly selected land polygons are not aquifers and if more aquifers are necessary
-                if (randomNum == 1 && polygon.getProperty("aquifer").equals(0) && numAquifers > 0) {
-                    polygon.setProperty("aquifer", 1);
+                if (randomNum == 1 && numAquifers > 0) {
+                    polygon.aquiferExists("True");
                     numAquifers--;
                 }
             }
