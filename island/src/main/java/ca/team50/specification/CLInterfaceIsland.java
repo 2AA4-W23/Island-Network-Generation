@@ -55,7 +55,10 @@ public class CLInterfaceIsland {
                 islandMode = ModeType.random;
             } else if (islandModeType.contains("test")) {
                 islandMode = ModeType.test;
+            } else if (islandModeType.contains("aquifer")) {
+                islandMode = ModeType.aquifer;
             }
+
 
             // Get input and output meshes
             this.meshInputString = commandLine.getOptionValue(meshInput);
@@ -69,14 +72,9 @@ public class CLInterfaceIsland {
                 this.numAquifers = 0; // default value if not specified
             }
 
-
         } catch (Exception e) {
             ExceptionHandler.handleException(new InvalidCommandFormatException("Failed to parse arguments. Were commands inputted correctly?"));
         }
-
-        // Store numAquifers
-        Aquifer aquifers = new Aquifer(this.numAquifers);
-
 
     }
 

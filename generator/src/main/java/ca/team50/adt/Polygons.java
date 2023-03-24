@@ -167,6 +167,8 @@ public class Polygons implements Serializable {
         newList.clear();
     }
 
+
+
     // Method to set default properties to all vertices in polygon
     public void cleanProperties() {
 
