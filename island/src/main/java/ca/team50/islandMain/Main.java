@@ -6,6 +6,7 @@ import ca.team50.fileIO.FileToPolyMesh;
 import ca.team50.fileIO.PolyMeshToFile;
 import ca.team50.generation.*;
 import ca.team50.specification.CLInterfaceIsland;
+import ca.team50.water.AquiferGenerator;
 
 public class Main {
 
@@ -25,18 +26,13 @@ public class Main {
             island = new Lagoon();
         } else if (cli.getIslandMode() == ModeType.test) {
             island = new TestIsland();
-        } else if (cli.getIslandMode() == ModeType.aquifer) {
-            island = new Aquifer();
-            // Store the numAquifers value from the command line
-            int numAquifers = cli.getNumAquifers();
-            // Cast island to Aquifer and set numAquifers value
-            ((Aquifer) island).setNumAquifers(numAquifers);
         }
 
 
 
         // Generate lagoon
         island.generateIsland(polyMesh);
+
 
         // Write mesh to file
         PolyMeshToFile.writeMeshToFile(polyMesh, cli.getMeshOutput());

@@ -124,7 +124,7 @@ public class Polygons implements Serializable {
 
         // Create property
         String relativeHumidity = humidity;
-        Structs.Property elevation = Structs.Property.newBuilder().setKey("altitude").setValue(relativeHumidity).build();
+        Structs.Property elevation = Structs.Property.newBuilder().setKey("humidity").setValue(relativeHumidity).build();
 
         Vertex v = this.getCentroid();
         ArrayList<Vertex> newList = new ArrayList<>();

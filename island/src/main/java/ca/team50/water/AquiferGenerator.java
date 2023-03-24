@@ -1,21 +1,25 @@
-package ca.team50.generation;
+package ca.team50.water;
 
+import java.util.ArrayList;
 import java.util.Random;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.*;
 import ca.team50.Tiles.TileType;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
-import ca.team50.shapes.Elipse;
+import ca.team50.generation.IslandGenerable;
 import ca.team50.shapes.IslandShape;
 import ca.team50.Tiles.LandTile;
 import ca.team50.Tiles.OceanTile;
 
-public class Aquifer implements IslandGenerable {
+public class AquiferGenerator {
 
     private int numAquifers;
 
-    public Aquifer() {
-        this.numAquifers = 1;
+    private ArrayList<Polygons> aquifers;
+
+    public AquiferGenerator() {
+        this.numAquifers = 0;
+        this.aquifers = new ArrayList<Polygons>();
     }
 
     // Setter method for numAquifers
@@ -23,16 +27,11 @@ public class Aquifer implements IslandGenerable {
         this.numAquifers = numAquifers;
     }
 
-    public void generateIsland(PolyMesh<Polygons> mesh) {
+    public void generateAquifers(PolyMesh<Polygons> mesh, IslandShape islandShape) {
 
-        // Find center of canvas, the center will act as the center of elipse
-        Vertex center = CanvasUtils.getCenter(mesh);
+        ArrayList<Polygons> aquifers = new ArrayList<>();
 
-        // Initialize the elipse shape with the center vertex, height, width, and rotation
-        Elipse elipse = new Elipse(center, 10, 20, 0);
-
-        // Create an elipse shape for the island
-        IslandShape elpiseIsland = elipse;
+        IslandShape island = islandShape;
 
         // Create LandTile and OceanTile objects for coloring the polygons
         TileType land = new LandTile();
@@ -45,7 +44,7 @@ public class Aquifer implements IslandGenerable {
             Vertex centroid = polygon.getCentroid();
 
             // Check if the polygon is inside the island
-            if (elpiseIsland.isVertexInside(centroid)) {
+            if (island.isVertexInside(centroid)) {
 
                 // Color the polygon with the land tile color
                 polygon.unifyColor(land.getTileColour());
@@ -54,9 +53,10 @@ public class Aquifer implements IslandGenerable {
                 Random rand = new Random();
                 int randomNum = rand.nextInt(2);
 
-                // Ensure randomly selected land polygons are not aquifers and if more aquifers are necessary
+                // Ensure randomly selected land polygons are created only if more aquifers are necessary
                 if (randomNum == 1 && numAquifers > 0) {
                     polygon.aquiferExists("True");
+                    aquifers.add(polygon);
                     numAquifers--;
                 }
             }
@@ -67,5 +67,9 @@ public class Aquifer implements IslandGenerable {
             }
 
         }
+    }
+
+    public ArrayList<Polygons> getAquifers() {
+        return this.aquifers;
     }
 }

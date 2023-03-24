@@ -2,7 +2,6 @@ package ca.team50.specification;
 
 import ca.team50.exceptions.ExceptionHandler;
 import ca.team50.exceptions.InvalidCommandFormatException;
-import ca.team50.generation.Aquifer;
 import ca.team50.generation.ModeType;
 import org.apache.commons.cli.*;
 
@@ -55,8 +54,6 @@ public class CLInterfaceIsland {
                 islandMode = ModeType.random;
             } else if (islandModeType.contains("test")) {
                 islandMode = ModeType.test;
-            } else if (islandModeType.contains("aquifer")) {
-                islandMode = ModeType.aquifer;
             }
 
 

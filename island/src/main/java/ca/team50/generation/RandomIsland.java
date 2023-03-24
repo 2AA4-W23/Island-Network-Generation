@@ -5,8 +5,8 @@ import ca.team50.Tiles.*;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
 import ca.team50.shapes.Elipse;
-import ca.team50.shapes.Irregular;
 import ca.team50.shapes.IslandShape;
+import ca.team50.water.AquiferGenerator;
 import ca.team50.water.LakeGenerator;
 
 import java.util.ArrayList;
@@ -29,6 +29,11 @@ public class RandomIsland implements IslandGenerable {
 
         // This same elipse shape is then used is the lake generator
         LakeGenerator lakeGen = new LakeGenerator(mesh,irreg,3,250,0.6,1928);
+
+        // Create an instance of Aquifer
+        AquiferGenerator aquiferGenerator = new AquiferGenerator();
+
+        aquiferGenerator.generateAquifers(mesh,irreg);
 
         // Loop through all polygons
         // Get their centroids and apply appropriate colour based on where they are located relative to center and specified radius
