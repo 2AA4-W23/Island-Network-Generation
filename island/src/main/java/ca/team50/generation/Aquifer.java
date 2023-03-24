@@ -14,7 +14,12 @@ public class Aquifer implements IslandGenerable {
 
     private int numAquifers;
 
-    public Aquifer(int numAquifers) {
+    public Aquifer() {
+        this.numAquifers = 1;
+    }
+
+    // Setter method for numAquifers
+    public void setNumAquifers(int numAquifers) {
         this.numAquifers = numAquifers;
     }
 
