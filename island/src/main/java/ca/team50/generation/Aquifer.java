@@ -14,20 +14,25 @@ public class Aquifer implements IslandGenerable {
 
     private int numAquifers;
 
-    public Aquifer(int numAquifers) {
+    public Aquifer() {
+        this.numAquifers = 1;
+    }
+
+    // Setter method for numAquifers
+    public void setNumAquifers(int numAquifers) {
         this.numAquifers = numAquifers;
     }
 
     public void generateIsland(PolyMesh<Polygons> mesh) {
 
-        // Find center of canvas, the center will act as the center of the lagoon island
+        // Find center of canvas, the center will act as the center of elipse
         Vertex center = CanvasUtils.getCenter(mesh);
 
         // Initialize the elipse shape with the center vertex, height, width, and rotation
         Elipse elipse = new Elipse(center, 10, 20, 0);
 
         // Create an elipse shape for the island
-        IslandShape island = elipse;
+        IslandShape elpiseIsland = elipse;
 
         // Create LandTile and OceanTile objects for coloring the polygons
         TileType land = new LandTile();
@@ -40,7 +45,7 @@ public class Aquifer implements IslandGenerable {
             Vertex centroid = polygon.getCentroid();
 
             // Check if the polygon is inside the island
-            if (island.isVertexInside(centroid)) {
+            if (elpiseIsland.isVertexInside(centroid)) {
 
                 // Color the polygon with the land tile color
                 polygon.unifyColor(land.getTileColour());

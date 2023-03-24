@@ -1,6 +1,6 @@
 package ca.team50.generation;
 
 public enum ModeType {
-    lagoon, random, test
+    lagoon, random, test, aquifer
 
 }
