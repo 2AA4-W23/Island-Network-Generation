@@ -150,3 +150,4 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 | F07-3 |     Introduce Lake Generation |   lenoverd   |   2023-03-22  |   2023-03-23  |   D  |
 | F08 |      Advanced command line specification |   lenoverd   |   2023-03-24  |   |   S  |
 | F09 |      Introduce altitude and implement altemeric profiles |   wangj500   |   2023-03-24  |  2023-03-25 |  D  |
+| F10 |      Introduce Tiles of various Biomes |   wangj500   |   2023-03-22  |  2023-03-22 |  D  |
