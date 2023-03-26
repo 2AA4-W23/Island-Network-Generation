@@ -5,7 +5,6 @@ import ca.team50.adt.Polygons;
 
 public class Clay extends SoilProfile {
     private double absorptionRate;
-
     public Clay(double clayContent, double sandContent, double loamContent, double absorptionRate) {
         super(clayContent, sandContent, loamContent);
         this.absorptionRate = absorptionRate;
@@ -13,7 +12,11 @@ public class Clay extends SoilProfile {
 
     public double computeRemainingWater(Polygons polygon, LakeGenerator lakeGen, AquiferGenerator aquiferGen) {
         double distanceToWater = calculateDistanceToWater(polygon, lakeGen, aquiferGen);
+        double min = 0;
+        double max = 1;
         double remainingWater = 1 / (1 + this.absorptionRate * Math.pow(distanceToWater,2));
+        remainingWater = (remainingWater - min) / (max - min);
+        polygon.changeHumidity(remainingWater);
         return remainingWater;
     }
 

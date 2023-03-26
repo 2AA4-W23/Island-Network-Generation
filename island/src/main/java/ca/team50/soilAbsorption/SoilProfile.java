@@ -19,29 +19,25 @@ public abstract class SoilProfile implements SoilProfileGenerable {
         this.clayContent = clayContent;
         this.sandContent = sandContent;
         this.loamContent = loamContent;
-        this.absorptionRate = calculateAbsorptionRate();
+        this.absorptionRate = calculateAbsorptionRate(clayContent,sandContent,loamContent);
     }
 
-    // Set clay content and recalculate absorptionRate
-    public void setClayContent(double clayContent) {
-        this.clayContent = clayContent;
-        this.absorptionRate = calculateAbsorptionRate();
-    }
-
-    // Set sand content and recalculate absorptionRate
-    public void setSandContent(double sandContent) {
-        this.sandContent = sandContent;
-        this.absorptionRate = calculateAbsorptionRate();
-    }
-
-    // Set loam content and recalculate absorptionRate
-    public void setLoamContent(double loamContent) {
-        this.loamContent = loamContent;
-        this.absorptionRate = calculateAbsorptionRate();
+    @Override
+    public SoilProfile generateSoilProfile(double clayContent, double sandContent, double loamContent) {
+        absorptionRate = calculateAbsorptionRate(clayContent,sandContent,loamContent);
+        if (sandContent <= 1.0 && sandContent >= 0.5 && clayContent < 0.3 && loamContent < 0.3) {
+            return new Sand(clayContent, sandContent, loamContent, absorptionRate);
+        } else if (clayContent <= 1 && clayContent >= 0.5 && sandContent < 0.3 && loamContent < 0.3) {
+            return new Clay(clayContent, sandContent, loamContent, absorptionRate);
+        } else if (loamContent <= 1 && loamContent >= 0.5 && clayContent < 0.3 && sandContent < 0.3) {
+            return new Loam(clayContent, sandContent, loamContent, absorptionRate);
+        } else {
+            return new Special(clayContent, sandContent, loamContent, absorptionRate);
+        }
     }
 
     // Calculate absorption rate based on clay, sand, and loam content
-    protected double calculateAbsorptionRate() {
+    protected double calculateAbsorptionRate(double clayContent, double sandContent, double loamContent) {
         absorptionRate = clayContent * 0.6 + sandContent * 0.4 + loamContent * 0.2;
         return absorptionRate;
     }

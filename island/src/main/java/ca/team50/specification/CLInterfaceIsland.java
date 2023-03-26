@@ -170,7 +170,6 @@ public class CLInterfaceIsland {
     public ModeType getIslandMode() {
         return islandMode;
     }
-    public double get
     public BiomeType getBiomeType() {
         return biomeType;
     }
