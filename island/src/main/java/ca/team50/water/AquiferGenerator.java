@@ -3,13 +3,12 @@ package ca.team50.water;
 import java.util.ArrayList;
 import java.util.Random;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.*;
-import ca.team50.Tiles.TileType;
+
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
-import ca.team50.generation.IslandGenerable;
+
 import ca.team50.shapes.IslandShape;
-import ca.team50.Tiles.LandTile;
-import ca.team50.Tiles.OceanTile;
+
 
 public class AquiferGenerator {
 
@@ -33,9 +32,6 @@ public class AquiferGenerator {
 
         IslandShape island = islandShape;
 
-        // Create LandTile and OceanTile objects for coloring the polygons
-        TileType land = new LandTile();
-        TileType ocean = new OceanTile();
 
         // Loop through the polygons in the PolyMesh
         for (Polygons polygon : mesh) {
@@ -45,9 +41,6 @@ public class AquiferGenerator {
 
             // Check if the polygon is inside the island
             if (island.isVertexInside(centroid)) {
-
-                // Color the polygon with the land tile color
-                polygon.unifyColor(land.getTileColour());
 
                 // Generate a random number between 0 and 1 to determine if this polygon will be an aquifer
                 Random rand = new Random();
@@ -61,10 +54,7 @@ public class AquiferGenerator {
                 }
             }
 
-            else {
-                // Color the polygon with the ocean tile color
-                polygon.unifyColor(ocean.getTileColour());
-            }
+            else {}
 
         }
     }
