@@ -4,6 +4,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.team50.Tiles.Arctic.ArcticUtils;
 import ca.team50.Tiles.BiomeType;
 import ca.team50.Tiles.Deserts.DesertsUtils;
+import ca.team50.Tiles.OceanTile;
 import ca.team50.Tiles.TileType;
 import ca.team50.Tiles.Tropical.TropicalUtils;
 import ca.team50.adt.PolyMesh;
@@ -13,17 +14,10 @@ import ca.team50.elevation.Mountains;
 import ca.team50.elevation.Plains;
 import ca.team50.elevation.Volcano;
 import ca.team50.shapes.*;
-import ca.team50.specification.CLInterface;
 import ca.team50.specification.CLInterfaceIsland;
 import ca.team50.water.LakeGenerator;
-
-import java.io.File;
-import java.io.*;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+
 
 public class NormalGenerator implements IslandGenerable {
 
@@ -103,6 +97,7 @@ public class NormalGenerator implements IslandGenerable {
 
         }
 
+        // Get list of polygons
         ArrayList<Polygons> islandPoly = new ArrayList<>();
 
         for (Polygons currentPolygon : mesh) {
@@ -114,7 +109,7 @@ public class NormalGenerator implements IslandGenerable {
 
         }
 
-        // Assign elevation
+        // Assign elevation to all polygons
         if (specification.getElevationType().equals(ElevationType.PLAINS)) {
 
             Plains.plainsAltitude(islandPoly,baseAltitude,fluctuation);
@@ -131,7 +126,50 @@ public class NormalGenerator implements IslandGenerable {
 
         // Lake generation
         LakeGenerator lakeGenerator = new LakeGenerator(mesh,islandShape,specification.getNumLakes(),maxRadius,altitude,specification.getSeed());
+        TileType lakeTile = new OceanTile();
+
+        // Assign colours to polygons
+        for (Polygons curPoly : mesh) {
+
+            Structs.Vertex centroid = curPoly.getCentroid();
+
+            // Check if polygon exists within island
+            if (islandShape.isVertexInside(centroid)) {
+
+                // Check altitude and assign tile colour accordingly
+                double polygonAltitude = extractProperties(centroid.getPropertiesList(), "altitude");
+
+                if (specification.getBiomeType().equals(BiomeType.Tropical)) {
+                    curPoly.unifyColor(TropicalUtils.getTileFormProperty(polygonAltitude).getTileColour());
+                } else if (specification.getBiomeType().equals(BiomeType.Arctic)) {
+                    curPoly.unifyColor(ArcticUtils.getTileFormProperty(polygonAltitude).getTileColour());
+                } else if (specification.getBiomeType().equals(BiomeType.Deserts)) {
+                    curPoly.unifyColor(DesertsUtils.getTileFormProperty(polygonAltitude).getTileColour());
+                }
+
+            }
+
+            // Check if the polygon existed with a lake and assign colour accordingly
+            if (lakeGenerator.isPolygonApartOfLake(curPoly)) {
+                curPoly.unifyColor(lakeTile.getTileColour());
+            }
+
+        }
 
 
     }
+
+    // Method to extract properties from vertices
+    private static double extractProperties(java.util.List<Structs.Property> properties, String property){
+
+        String val = "0";
+        for(Structs.Property p: properties) {
+            if (p.getKey().equals(property)) {
+                val = p.getValue();
+            }
+        }
+
+        return  Double.parseDouble(val);
+    }
+
 }
