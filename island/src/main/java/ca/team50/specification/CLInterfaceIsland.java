@@ -4,6 +4,7 @@ import ca.team50.exceptions.ExceptionHandler;
 import ca.team50.exceptions.InvalidCommandFormatException;
 import ca.team50.generation.ModeType;
 import org.apache.commons.cli.*;
+import ca.team50.soilAbsorption.*;
 
 public class CLInterfaceIsland {
 
@@ -12,14 +13,21 @@ public class CLInterfaceIsland {
     private static final Option islandGenMode = new Option("m", "mode", true, "Specify the mode of island generation, specified values are: " + getEnumValues() + ", default: lagoon");
     private static final Option helpOpt = new Option("h", "help", false, "Display input help");
     private static final Option aquifer = new Option("a", "aquifer", true, "Specify the number of aquifers to be generated: ");
-
-
-
+    private static final Option soilContent = Option.builder("s")
+            .longOpt("soil")
+            .hasArgs()
+            .numberOfArgs(3)
+            .valueSeparator(',')
+            .desc("Specify the clay content, sand content, and loam content of the soil (values between 0 and 1)")
+            .build();
     private ModeType islandMode;
     private String meshInputString;
     private String meshOutputString;
 
     private Integer numAquifers;
+    private double clayContent;
+    private double sandContent;
+    private double loamContent;
 
 
     public CLInterfaceIsland(String[] args) {
@@ -33,6 +41,7 @@ public class CLInterfaceIsland {
         options.addOption(islandGenMode);
         options.addOption(helpOpt);
         options.addOption(aquifer);
+        options.addOption(soilContent);
 
         try {
 
@@ -67,6 +76,29 @@ public class CLInterfaceIsland {
                 this.numAquifers = Integer.parseInt(numAquifersString);
             } else {
                 this.numAquifers = 0; // default value if not specified
+            }
+
+            // Get soil content values
+            String[] soilContentValues = commandLine.getOptionValues(soilContent);
+            if (soilContentValues != null) {
+                try{
+                    clayContent = Double.parseDouble(soilContentValues[0]);
+                    sandContent = Double.parseDouble(soilContentValues[1]);
+                    loamContent = Double.parseDouble(soilContentValues[2]);
+                    if (clayContent < 0 || clayContent > 1 || sandContent < 0 || sandContent > 1 || loamContent < 0 || loamContent > 1) {
+                        System.exit(1);
+                    }
+
+                    // Create instance of Soil Profile and set the values
+                    SoilProfile soilProfile = null;
+                    soilProfile.setClayContent(clayContent);
+                    soilProfile.setSandContent(sandContent);
+                    soilProfile.setLoamContent(loamContent);
+
+                } catch (NumberFormatException e) { System.exit(1);}
+            }
+            else{
+                System.exit(1);
             }
 
         } catch (Exception e) {
