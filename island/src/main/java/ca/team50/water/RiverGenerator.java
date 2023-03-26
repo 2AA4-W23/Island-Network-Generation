@@ -66,15 +66,20 @@ public class RiverGenerator {
         }
 
         //find said low value vertices in mesh and color blue.
-            int i = 0;
+            int i = -1;
+            boolean breakOuter = false;
         for(Polygons currentPolygon : mesh) {
+            i++;
             for (Structs.Vertex v1: currentPolygon.getVerticesList()){
                 if (v1 == low)
+                    breakOuter = true;
                     break;
             }
 
-            i++;
+            if (breakOuter) {
+                break;
             }
+        }
 
         mesh.get(i).changeRiverColor(low);
 
