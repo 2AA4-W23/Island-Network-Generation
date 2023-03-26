@@ -42,7 +42,7 @@ public class Volcano {
         for (int i = 0; i < steepness; i++){
             double r = botRadius - (slopeIntervalRadius * i);
             slopeCircle = new Circle(center, r);
-            System.out.println(r);
+            //System.out.println(r);
 
             for (Polygons currPoly: islandPoly) {
                 Structs.Vertex centroid = currPoly.getCentroid();
@@ -57,7 +57,7 @@ public class Volcano {
                 double average = extractProperties(centroid.getPropertiesList(), "altitude");
                 a = (a+average)/2;
 
-                System.out.println(a);
+                //System.out.println(a);
 
                 if (slopeCircle.isVertexInside(centroid)) {
                     currPoly.changeElevation(String.valueOf(a));

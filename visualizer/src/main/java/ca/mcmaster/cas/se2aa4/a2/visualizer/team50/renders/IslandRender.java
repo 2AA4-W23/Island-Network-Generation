@@ -99,11 +99,15 @@ public class IslandRender implements Renderable {
             // Set alpha using Porter-Duff blend mode
             canvas.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, segmentAlpha));
 
+            //set segment color
+            Color v1Color = Property.extractColor(start_Point.getPropertiesList());
+            Color v2Color = Property.extractColor(end_Point.getPropertiesList());
+
             //calculate average color and set as segment color
-            int R = 0;
-            int G = 0;
-            int B = 0;
-            canvas.setColor(new Color(0, 0, 0));
+            int R = (v1Color.getRed() + v2Color.getRed())/2;
+            int G = (v1Color.getGreen() + v2Color.getGreen())/2;
+            int B = (v1Color.getBlue() + v2Color.getBlue())/2;
+            canvas.setColor(new Color(R, G, B));
 
             //calculate average thickness and set as segment thickness
             Float segmentThickness = 0.5f;

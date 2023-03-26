@@ -13,6 +13,7 @@ import ca.team50.shapes.Elipse;
 import ca.team50.shapes.Irregular;
 import ca.team50.shapes.IslandShape;
 import ca.team50.elevation.*;
+import ca.team50.water.RiverGenerator;
 
 import java.util.ArrayList;
 
@@ -61,12 +62,12 @@ public class TestIsland implements IslandGenerable {
 
         //Volcano.volcanoAltitude(islandPoly, centreOfMesh, topAltitude, botAltitude, height, width, area);
 
-        double numOf = 6.0;
-        double slopeRadius = 200;
+        double numOf = 3.0;
+        double slopeRadius = 300;
 
         mountainAltitude(islandPoly, numOf, topAltitude, botAltitude, slopeRadius);
 
-
+        RiverGenerator rivers = new RiverGenerator(mesh, elipse, 3, 0.5);
             // Loop through all polygons (Eventually gonna be part of a biome interface)
         for (Polygons currentPolygon : mesh) {
 

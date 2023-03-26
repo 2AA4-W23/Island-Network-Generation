@@ -95,6 +95,38 @@ public class Polygons implements Serializable {
         this.verticesList = newList;
     }
 
+    public void unifyElevation( ) {
+        //find elevation of centroid:
+        double val = 0.0;
+        for (Structs.Property p : this.centroid.getPropertiesList()) {
+            if (p.getKey().equals("altitude")) {
+                val = Double.parseDouble(p.getValue());
+            }
+        }
+
+        ArrayList<Vertex> newList = new ArrayList<>();
+        // Create property
+        Structs.Property altitude = Structs.Property.newBuilder().setKey("altitude").setValue(String.valueOf(val)).build();
+
+        // Give all vertices the specified altitude
+        for (Vertex currentVertex : this.getVerticesList()) {
+            // Replace altitude of vertex with new elevation
+            for (int index = 0; index < currentVertex.getPropertiesCount(); index++){
+                Structs.Property curProperty = currentVertex.getProperties(index);
+                if (curProperty.getKey().contains("altitude")) {
+                    Vertex newVertex = currentVertex.toBuilder().removeProperties(index).build();
+                    newVertex = newVertex.toBuilder().addProperties(altitude).build();
+                    newList.add(newVertex);
+                    break;
+                }
+            }
+        }
+
+        this.verticesList = newList;
+    }
+
+
+
     //Change elevation
     public void changeElevation(String altitude) {
 
@@ -142,6 +174,38 @@ public class Polygons implements Serializable {
         this.centroid = newList.get(0);
         newList.clear();
     }
+
+    //change vertex color to blue for rivers
+    public void changeRiverColor(Structs.Vertex vertex) {
+
+        // Create property
+        String colorCode = "0,0,204";
+        Structs.Property color = Structs.Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
+
+        for (int i = 0; i < this.verticesList.size(); i++){
+
+            if (this.getVerticesList().get(i) == vertex){
+                Vertex v = this.getVerticesList().get(i);
+                ArrayList<Vertex> newList = new ArrayList<>();
+                newList.addAll(this.verticesList);
+
+                // Replace color property for one index and adding back into arraylist
+                for (int index = 0; index < v.getPropertiesCount(); index++){
+                    Structs.Property curProperty = v.getProperties(index);
+                    if (curProperty.getKey().contains("rgb_color")) {
+                        Vertex newV = v.toBuilder().removeProperties(index).build();
+                        newV = newV.toBuilder().addProperties(color).build();
+                        this.verticesList.remove(i);
+                        newList.add(i, newV);
+                        break;
+                    }
+                }
+                this.verticesList = newList;
+                newList.clear();
+            }
+        }
+    }
+
 
     //Aquifer Exists
     public void aquiferExists(String TRUE) {
