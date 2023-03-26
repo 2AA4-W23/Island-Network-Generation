@@ -4,6 +4,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.team50.Tiles.Arctic.ArcticUtils;
 import ca.team50.Tiles.BiomeType;
 import ca.team50.Tiles.Deserts.DesertsUtils;
+import ca.team50.Tiles.LakeTile;
 import ca.team50.Tiles.OceanTile;
 import ca.team50.Tiles.TileType;
 import ca.team50.Tiles.Tropical.TropicalUtils;
@@ -34,11 +35,11 @@ public class NormalGenerator implements IslandGenerable {
         // PLACEHOLDER VALUES
 
         // CIRCLE
-        double radius = 100;
+        double radius = 800;
 
         // ELIPSE
-        double width = 500;
-        double height = 800;
+        double width = 1200;
+        double height = 1000;
         double rotation = 0.3;
 
         // RECTANGLE
@@ -48,32 +49,38 @@ public class NormalGenerator implements IslandGenerable {
         Structs.Vertex vertex4 = Structs.Vertex.newBuilder().setX(300).setY(500).build();
 
         //IRREGULAR
-        double noiseThreshold = 0.2;
+        double noiseThreshold = -0.2;
 
         // LAKE GENERATION
         // MAX RADIUS
         int maxRadius = 80;
 
         // THRESHOLD ALTITUDE
-        double altitude = 0.5;
+        double altitude = 0.8;
 
         // ELEVATION
         // ALTITUDE
         double baseAltitude = 0.0;
         //FLUCTUATION
-        double fluctuation = 0.3;
+        double fluctuation = 5.0;
 
         // MOUNTAINS
-        int numOfMountains = 2;
+        int numOfMountains = 10;
         double topAltitude = 1.0;
         double botAltitude = 0.0;
-        double numOf = 6.0;
-        double slopeRadius = 200;
+        double slopeRadius = 500;
 
         // VOLCANO'S
-        double area = 25.0;
-        double width_vol = 200;
-        double height_vol = 300;
+        double area = 150.0;
+        double width_vol = CanvasUtils.getMaxPoint(mesh).getX();
+        double height_vol = CanvasUtils.getMaxPoint(mesh).getY();
+
+        // Setup
+        for (Polygons currentPolygon : mesh) {
+
+            currentPolygon.cleanProperties();
+
+        }
 
         // Temp shape
         IslandShape islandShape = new Circle(CanvasUtils.getCenter(mesh),radius);
@@ -109,6 +116,8 @@ public class NormalGenerator implements IslandGenerable {
 
         }
 
+        System.out.println(islandPoly.size());
+
         // Assign elevation to all polygons
         if (specification.getElevationType().equals(ElevationType.PLAINS)) {
 
@@ -126,7 +135,8 @@ public class NormalGenerator implements IslandGenerable {
 
         // Lake generation
         LakeGenerator lakeGenerator = new LakeGenerator(mesh,islandShape,specification.getNumLakes(),maxRadius,altitude,specification.getSeed());
-        TileType lakeTile = new OceanTile();
+        TileType lakeTile = new LakeTile();
+        TileType oceanTile = new OceanTile();
 
         // Assign colours to polygons
         for (Polygons curPoly : mesh) {
@@ -147,6 +157,8 @@ public class NormalGenerator implements IslandGenerable {
                     curPoly.unifyColor(DesertsUtils.getTileFormProperty(polygonAltitude).getTileColour());
                 }
 
+            } else {
+                curPoly.unifyColor(oceanTile.getTileColour());
             }
 
             // Check if the polygon existed with a lake and assign colour accordingly

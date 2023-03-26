@@ -16,11 +16,11 @@ public class TropicalUtils {
         if ( polygonAltitude < 0.2 && 0 <= polygonAltitude) {
             return new RainforestTile();
         } else if(polygonAltitude < 0.4 && 0.2 <= polygonAltitude) {
-            return new SavannahTile();
+            return new SwampTile();
         } else if(polygonAltitude < 0.6 && 0.4 <= polygonAltitude) {
             return new MangroveTile();
         } else if (polygonAltitude < 0.7 && 0.6 <= polygonAltitude) {
-            return new SwampTile();
+            return new SavannahTile();
         }
         else
             return new CloudforestTile();

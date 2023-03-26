@@ -19,10 +19,10 @@ public class DesertsUtils {
         } else if(polygonAltitude < 0.6 && 0.4 <= polygonAltitude) {
             return new OasisTile();
         } else if(polygonAltitude < 0.7 && 0.6 <= polygonAltitude) {
-            return new BadlandsTile();
+            return new GrasslandTile();
         }
         else
-            return new GrasslandTile();
+            return new BadlandsTile();
     }
 
 }
