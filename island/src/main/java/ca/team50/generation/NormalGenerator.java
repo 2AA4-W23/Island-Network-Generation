@@ -148,13 +148,14 @@ public class NormalGenerator implements IslandGenerable {
 
                 // Check altitude and assign tile colour accordingly
                 double polygonAltitude = extractProperties(centroid.getPropertiesList(), "altitude");
+                double polygonHumidity = extractProperties(centroid.getPropertiesList(), "humidity");
 
                 if (specification.getBiomeType().equals(BiomeType.Tropical)) {
-                    curPoly.unifyColor(TropicalUtils.getTileFormProperty(polygonAltitude).getTileColour());
+                    curPoly.unifyColor(TropicalUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
                 } else if (specification.getBiomeType().equals(BiomeType.Arctic)) {
-                    curPoly.unifyColor(ArcticUtils.getTileFormProperty(polygonAltitude).getTileColour());
+                    curPoly.unifyColor(ArcticUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
                 } else if (specification.getBiomeType().equals(BiomeType.Deserts)) {
-                    curPoly.unifyColor(DesertsUtils.getTileFormProperty(polygonAltitude).getTileColour());
+                    curPoly.unifyColor(DesertsUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
                 }
 
             } else {
