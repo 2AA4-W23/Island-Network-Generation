@@ -25,13 +25,7 @@ public class CLInterfaceIsland {
     private static final Option elevation = new Option("al", "altitude", true, "Specify the altitude type of island generation, specified values are: " + getElevationEnumValues() + ", default: " + ElevationType.values()[0].name());
     private static final Option shape = new Option("sh", "shape", true, "Specify the shape type of island generation, specified values are: " + getShapeEnumValues() + ", default: " + IslandShapeType.values()[0].name());
 
-    private static final Option soilContent = Option.builder("s")
-            .longOpt("soil")
-            .hasArgs()
-            .numberOfArgs(3)
-            .valueSeparator(',')
-            .desc("Specify the clay content, sand content, and loam content of the soil in the respective order (values between 0 and 1)")
-            .build();
+    private static final Option soilContent = new Option("s0", "soil", true, "Specify the type of Soil Profile (Clay, Loam, Sand, or Special)";
     // TODO SOIL
 
     private ModeType islandMode;
@@ -40,9 +34,7 @@ public class CLInterfaceIsland {
     private IslandShapeType shapeType;
     private String meshInputString;
     private String meshOutputString;
-    protected double clayContent;
-    protected double sandContent;
-    protected double loamContent;
+    private String soilType;
 
     private Integer numAquifers;
     private int numLakes;
@@ -96,22 +88,8 @@ public class CLInterfaceIsland {
                 }
             }
 
-            // Get Soil composition
-            if (commandLine.hasOption("s")) {
-                String[] soilValues = commandLine.getOptionValues("s");
-
-                // convert the values to doubles and validate them
-                this.clayContent = Double.parseDouble(soilValues[0]);
-                this.sandContent = Double.parseDouble(soilValues[1]);
-                this.loamContent = Double.parseDouble(soilValues[2]);
-
-                if (this.clayContent < 0 || this.clayContent > 1 ||
-                        this.sandContent < 0 || this.sandContent > 1 ||
-                        this.loamContent < 0 || this.loamContent > 1) {
-                    throw new ParseException("Soil content values must be between 0 and 1");
-                }
-
-            }
+            // Get soil type
+            this.soilType = commandLine.getOptionValue("so");
 
             // Get biome type
             String biomeModeType = commandLine.getOptionValue(biome,BiomeType.values()[0].name());
@@ -189,6 +167,8 @@ public class CLInterfaceIsland {
     public String getMeshOutput() {
         return meshOutputString;
     }
+
+    public String getSoilType() { return soilType;}
 
     public Integer getNumAquifers() { return  numAquifers;}
 

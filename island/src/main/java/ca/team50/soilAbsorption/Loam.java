@@ -10,6 +10,10 @@ public class Loam extends SoilProfile {
         super(clayContent, sandContent, loamContent);
         this.absorptionRate = absorptionRate;
     }
+    public double calculateAbsorptionRate(double clayContent, double sandContent, double loamContent) {
+        absorptionRate = clayContent * 0.1 + sandContent * 0.7 + loamContent * 0.2;
+        return absorptionRate;
+    }
 
     public double computeRemainingWater(Polygons polygon, LakeGenerator lakeGen, AquiferGenerator aquiferGen) {
         double distanceToWater = calculateDistanceToWater(polygon, lakeGen, aquiferGen);
@@ -22,6 +26,7 @@ public class Loam extends SoilProfile {
     }
     @Override
     public SoilProfile generateSoilProfile(double clayContent, double sandContent, double loamContent) {
+        absorptionRate = calculateAbsorptionRate(clayContent,sandContent,loamContent);
         if (loamContent <= 1.0 && loamContent >= 0.5 && sandContent < 0.3 && clayContent < 0.3) {
             return new Loam(clayContent, sandContent, loamContent, absorptionRate);
         } else if (sandContent <= 1 && sandContent >= 0.5 && clayContent < 0.3 && loamContent < 0.3) {

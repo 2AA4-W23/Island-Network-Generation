@@ -5,6 +5,7 @@ import ca.team50.adt.Polygons;
 import ca.team50.fileIO.FileToPolyMesh;
 import ca.team50.fileIO.PolyMeshToFile;
 import ca.team50.generation.*;
+import ca.team50.soilAbsorption.*;
 import ca.team50.specification.CLInterfaceIsland;
 import ca.team50.water.AquiferGenerator;
 
@@ -29,10 +30,7 @@ public class Main {
         }
         else if (cli.getIslandMode() == ModeType.normal) {
             island = new NormalGenerator(cli);
-
         }
-
-
 
         // Generate lagoon
         island.generateIsland(polyMesh);

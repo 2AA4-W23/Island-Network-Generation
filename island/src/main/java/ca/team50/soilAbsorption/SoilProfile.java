@@ -37,8 +37,8 @@ public abstract class SoilProfile implements SoilProfileGenerable {
     }
 
     // Calculate absorption rate based on clay, sand, and loam content
-    protected double calculateAbsorptionRate(double clayContent, double sandContent, double loamContent) {
-        absorptionRate = clayContent * 0.6 + sandContent * 0.4 + loamContent * 0.2;
+    public double calculateAbsorptionRate(double clayContent, double sandContent, double loamContent) {
+        absorptionRate = clayContent * 0.1 + sandContent * 0.7 + loamContent * 0.2;
         return absorptionRate;
     }
 
