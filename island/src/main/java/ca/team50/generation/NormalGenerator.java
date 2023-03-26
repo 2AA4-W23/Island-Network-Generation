@@ -15,9 +15,9 @@ import ca.team50.elevation.Mountains;
 import ca.team50.elevation.Plains;
 import ca.team50.elevation.Volcano;
 import ca.team50.shapes.*;
-import ca.team50.soilAbsorption.Loam;
-import ca.team50.soilAbsorption.SoilProfile;
+import ca.team50.soilAbsorption.*;
 import ca.team50.specification.CLInterfaceIsland;
+import ca.team50.water.AquiferGenerator;
 import ca.team50.water.LakeGenerator;
 import java.util.ArrayList;
 
@@ -143,6 +143,47 @@ public class NormalGenerator implements IslandGenerable {
             Volcano.volcanoAltitude(islandPoly, CanvasUtils.getCenter(mesh), topAltitude, botAltitude, height_vol, width_vol, area);
             
         }
+
+        // Get Soil Type
+        String soilType = specification.getSoilType();
+        if (soilType != null){
+            double clayContent;
+            double sandContent;
+            double loamContent;
+            double absorptionRate = 0;
+
+            switch(soilType.toLowerCase()){
+                case "clay":
+                    clayContent = Math.random() * 0.5 + 0.5;
+                    sandContent = Math.random() * 0.3;
+                    loamContent = Math.random() * 0.3;
+                    SoilProfile clayProfile = new Clay(clayContent,sandContent,loamContent,absorptionRate);
+                    break;
+                case "sand":
+                    clayContent = Math.random() * 0.3;
+                    sandContent = Math.random() * 0.5 + 0.5;
+                    loamContent = Math.random() * 0.3;
+                    SoilProfile sandProfile = new Sand(clayContent,sandContent,loamContent,absorptionRate);
+                    break;
+                case "loam":
+                    clayContent = Math.random() * 0.3;
+                    sandContent = Math.random() * 0.3;
+                    loamContent = Math.random() * 0.5 + 0.5;
+                    SoilProfile loamProfile = new Loam(clayContent,sandContent,loamContent,absorptionRate);
+                    break;
+                case "special":
+                    clayContent = Math.random() * 0.5 + 0.5;
+                    sandContent = Math.random() * 0.5 + 0.5;
+                    loamContent = Math.random() * 0.5 + 0.5;
+                    SoilProfile specialProfile = new Special(clayContent,sandContent,loamContent,absorptionRate);
+                    break;
+            }
+        }
+
+
+        // Aquifer generation
+        AquiferGenerator aquiferGenerator = new AquiferGenerator();
+        AquiferGenerator aquifer = aquiferGenerator.generateAquifers(mesh,islandShape);
 
         // Lake generation
         LakeGenerator lakeGenerator = new LakeGenerator(mesh,islandShape,specification.getNumLakes(),maxRadius,altitude,specification.getSeed());

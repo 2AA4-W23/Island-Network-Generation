@@ -26,7 +26,7 @@ public class AquiferGenerator {
         this.numAquifers = numAquifers;
     }
 
-    public void generateAquifers(PolyMesh<Polygons> mesh, IslandShape islandShape) {
+    public AquiferGenerator generateAquifers(PolyMesh<Polygons> mesh, IslandShape islandShape) {
 
         ArrayList<Polygons> aquifers = new ArrayList<>();
 
@@ -57,6 +57,7 @@ public class AquiferGenerator {
             else {}
 
         }
+        return null;
     }
 
     public ArrayList<Polygons> getAquifers() {
