@@ -11,7 +11,7 @@ public class Clay extends SoilProfile {
         this.absorptionRate = absorptionRate;
     }
 
-    public double computeRemainingWater() {
+    public double computeRemainingWater(Polygons polygon, LakeGenerator lakeGen, AquiferGenerator aquiferGen) {
         double distanceToWater = calculateDistanceToWater(polygon, lakeGen, aquiferGen);
         double remainingWater = 1 / (1 + this.absorptionRate * Math.pow(distanceToWater,2));
         return remainingWater;
