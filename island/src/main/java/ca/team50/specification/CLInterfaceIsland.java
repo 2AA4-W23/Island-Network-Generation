@@ -1,9 +1,12 @@
 package ca.team50.specification;
 
+import ca.team50.Tiles.BiomeType;
+import ca.team50.elevation.ElevationType;
 import ca.team50.exceptions.ExceptionHandler;
 import ca.team50.exceptions.InvalidCommandFormatException;
 import ca.team50.generation.Aquifer;
 import ca.team50.generation.ModeType;
+import ca.team50.shapes.IslandShapeType;
 import org.apache.commons.cli.*;
 
 public class CLInterfaceIsland {
@@ -16,9 +19,17 @@ public class CLInterfaceIsland {
     private static final Option lakes = new Option("l", "lakes", true, "Specify the maximum number of lakes to be generated (as an integer)");
     private static final Option rivers = new Option("r", "rivers", true, "Specify the maximum number of rivers to be generated (as an integer)");
     private static final Option seed = new Option("s", "seed", true, "Specify the seed of the generation (as a long value)");
-    // TODO SOIL AND BIOMES
+
+    private static final Option biome = new Option("b", "biomes", true, "Specify the biomes of island generation, specified values are: " + getBiomeEnumValues() + ", default: " + BiomeType.values()[0].name());
+    private static final Option elevation = new Option("al", "altitude", true, "Specify the altitude type of island generation, specified values are: " + getElevationEnumValues() + ", default: " + ElevationType.values()[0].name());
+    private static final Option shape = new Option("sh", "shape", true, "Specify the shape type of island generation, specified values are: " + getShapeEnumValues() + ", default: " + IslandShapeType.values()[0].name());
+
+    // TODO SOIL
 
     private ModeType islandMode;
+    private BiomeType biomeType;
+    private ElevationType elevationType;
+    private IslandShapeType shapeType;
     private String meshInputString;
     private String meshOutputString;
 
@@ -37,6 +48,9 @@ public class CLInterfaceIsland {
         options.addOption(meshInput);
         options.addOption(meshOutput);
         options.addOption(islandGenMode);
+        options.addOption(biome);
+        options.addOption(shape);
+        options.addOption(elevation);
         options.addOption(helpOpt);
         options.addOption(aquifer);
         options.addOption(lakes);
@@ -57,14 +71,41 @@ public class CLInterfaceIsland {
             // Get island generation mode
             String islandModeType = commandLine.getOptionValue(islandGenMode,"lagoon");
 
-            if (islandModeType.contains("lagoon")) {
-                islandMode = ModeType.lagoon;
-            } else if (islandModeType.contains("random")) {
-                islandMode = ModeType.random;
-            } else if (islandModeType.contains("test")) {
-                islandMode = ModeType.test;
-            } else if (islandModeType.contains("aquifer")) {
-                islandMode = ModeType.aquifer;
+            for (ModeType curType : ModeType.values()) {
+                if (islandModeType.contains(curType.name())) {
+                    this.islandMode = curType;
+                    break;
+                }
+            }
+
+            // Get biome type
+            String biomeModeType = commandLine.getOptionValue(biome,BiomeType.values()[0].name());
+
+            for (BiomeType curType : BiomeType.values()) {
+                if (biomeModeType.contains(curType.name())) {
+                    this.biomeType = curType;
+                    break;
+                }
+            }
+
+            // Get elevation type
+            String elevationModeType = commandLine.getOptionValue(elevation,ElevationType.values()[0].name());
+
+            for (ElevationType curType : ElevationType.values()) {
+                if (elevationModeType.contains(curType.name())) {
+                    this.elevationType = curType;
+                    break;
+                }
+            }
+
+            // Get shape type
+            String shapeModeType = commandLine.getOptionValue(shape,IslandShapeType.values()[0].name());
+
+            for (IslandShapeType curType : IslandShapeType.values()) {
+                if (shapeModeType.contains(curType.name())) {
+                    this.shapeType = curType;
+                    break;
+                }
             }
 
 
@@ -90,6 +131,18 @@ public class CLInterfaceIsland {
 
     public ModeType getIslandMode() {
         return islandMode;
+    }
+
+    public BiomeType getBiomeType() {
+        return biomeType;
+    }
+
+    public ElevationType getElevationType() {
+        return elevationType;
+    }
+
+    public IslandShapeType getShapeType() {
+        return shapeType;
     }
 
     public String getMeshInput() {
@@ -121,6 +174,7 @@ public class CLInterfaceIsland {
         options.addOption(meshInput);
         options.addOption(meshOutput);
         options.addOption(islandGenMode);
+        options.addOption(biome);
         options.addOption(helpOpt);
         options.addOption(aquifer);
         options.addOption(lakes);
@@ -140,6 +194,66 @@ public class CLInterfaceIsland {
         ModeType[] values = ModeType.values();
 
         for (ModeType currentType : values) {
+            returnString+= currentType.name();
+            if (currentType == values[values.length-1]) {
+                break;
+            }
+            returnString+= ", ";
+        }
+
+        returnString+="]";
+
+        return returnString;
+
+    }
+
+    private static String getBiomeEnumValues() {
+        // Method to get all values as a string for printing
+        String returnString = "[";
+
+        BiomeType[] values = BiomeType.values();
+
+        for (BiomeType currentType : values) {
+            returnString+= currentType.name();
+            if (currentType == values[values.length-1]) {
+                break;
+            }
+            returnString+= ", ";
+        }
+
+        returnString+="]";
+
+        return returnString;
+
+    }
+
+    private static String getElevationEnumValues() {
+        // Method to get all values as a string for printing
+        String returnString = "[";
+
+        ElevationType[] values = ElevationType.values();
+
+        for (ElevationType currentType : values) {
+            returnString+= currentType.name();
+            if (currentType == values[values.length-1]) {
+                break;
+            }
+            returnString+= ", ";
+        }
+
+        returnString+="]";
+
+        return returnString;
+
+    }
+
+    private static String getShapeEnumValues() {
+        // Method to get all values as a string for printing
+        String returnString = "[";
+
+        IslandShapeType[] values = IslandShapeType.values();
+
+        for (IslandShapeType currentType : values) {
             returnString+= currentType.name();
             if (currentType == values[values.length-1]) {
                 break;
