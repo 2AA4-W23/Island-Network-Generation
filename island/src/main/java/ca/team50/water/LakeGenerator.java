@@ -24,7 +24,7 @@ public class LakeGenerator {
      * @return a LakeGenerator object containing a list (ArrayList) of all lakes. This list contains sublists (ArrayList) that hold all polygons objects for a given lake
      * Note that when the term "maximum" is specified, this does NOT mean the generator will generate all lakes. Polygons that do not have an altitude property are assumed to have a value of 0.
      */
-    public LakeGenerator(PolyMesh<Polygons> mesh, IslandShape islandShape, int maxLakes, int maxRadius, double thresholdAltitude, long seed) {
+    public LakeGenerator(PolyMesh<Polygons> mesh, IslandShape islandShape, int maxLakes, double maxRadius, double thresholdAltitude, long seed) {
 
         ArrayList<Polygons> lakeCandidates = new ArrayList<>();
 

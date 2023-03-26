@@ -25,7 +25,8 @@ public class CLInterfaceIsland {
     private static final Option elevation = new Option("al", "altitude", true, "Specify the altitude type of island generation, specified values are: " + getElevationEnumValues() + ", default: " + ElevationType.values()[0].name());
     private static final Option shape = new Option("sh", "shape", true, "Specify the shape type of island generation, specified values are: " + getShapeEnumValues() + ", default: " + IslandShapeType.values()[0].name());
 
-    private static final Option soilContent = new Option("s0", "soil", true, "Specify the type of Soil Profile (Clay, Loam, Sand, or Special)";
+    private static final Option soilContent = new Option("s0", "soil", true, "Specify the type of Soil Profile (Clay, Loam, Sand, or Special)");
+
     // TODO SOIL
 
     private ModeType islandMode;
@@ -59,7 +60,7 @@ public class CLInterfaceIsland {
         options.addOption(lakes);
         options.addOption(rivers);
         options.addOption(seed);
-        options.addOption(soilContent);
+        //options.addOption(soilContent);
 
         try {
 
