@@ -8,6 +8,10 @@ import ca.team50.Tiles.TileType;
 import ca.team50.Tiles.Tropical.TropicalUtils;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
+import ca.team50.elevation.ElevationType;
+import ca.team50.elevation.Mountains;
+import ca.team50.elevation.Plains;
+import ca.team50.elevation.Volcano;
 import ca.team50.shapes.*;
 import ca.team50.specification.CLInterface;
 import ca.team50.specification.CLInterfaceIsland;
@@ -59,26 +63,26 @@ public class NormalGenerator implements IslandGenerable {
         // THRESHOLD ALTITUDE
         double altitude = 0.5;
 
+        // ELEVATION
+        // ALTITUDE
+        double baseAltitude = 0.0;
+        //FLUCTUATION
+        double fluctuation = 0.3;
 
-        // Get tiles to use
-        ArrayList<TileType> tilesList = new ArrayList<>();
+        // MOUNTAINS
+        int numOfMountains = 2;
+        double topAltitude = 1.0;
+        double botAltitude = 0.0;
+        double numOf = 6.0;
+        double slopeRadius = 200;
+
+        // VOLCANO'S
+        double area = 25.0;
+        double width_vol = 200;
+        double height_vol = 300;
 
         // Temp shape
         IslandShape islandShape = new Circle(CanvasUtils.getCenter(mesh),radius);
-
-        if (specification.getBiomeType().equals(BiomeType.Tropical)) {
-
-            tilesList.addAll(TropicalUtils.getAllTiles());
-
-        } else if (specification.getBiomeType().equals(BiomeType.Arctic)) {
-
-            tilesList.addAll(ArcticUtils.getAllTiles());
-
-        } else if (specification.getBiomeType().equals(BiomeType.Deserts)) {
-
-            tilesList.addAll(DesertsUtils.getAllTiles());
-
-        }
 
         // Get island shape
         if (specification.getShapeType().equals(IslandShapeType.CIRCLE)) {
@@ -99,12 +103,34 @@ public class NormalGenerator implements IslandGenerable {
 
         }
 
+        ArrayList<Polygons> islandPoly = new ArrayList<>();
+
+        for (Polygons currentPolygon : mesh) {
+
+            Structs.Vertex centroid = currentPolygon.getCentroid();
+
+            if (islandShape.isVertexInside(centroid))
+                islandPoly.add(currentPolygon);
+
+        }
+
+        // Assign elevation
+        if (specification.getElevationType().equals(ElevationType.PLAINS)) {
+
+            Plains.plainsAltitude(islandPoly,baseAltitude,fluctuation);
+
+        } else if (specification.getElevationType().equals(ElevationType.MOUNTAINS)) {
+
+            Mountains.mountainAltitude(islandPoly,numOfMountains,topAltitude,botAltitude,slopeRadius);
+
+        } else if (specification.getElevationType().equals(ElevationType.VOLCANO)) {
+
+            Volcano.volcanoAltitude(islandPoly, CanvasUtils.getCenter(mesh), topAltitude, botAltitude, height_vol, width_vol, area);
+            
+        }
 
         // Lake generation
         LakeGenerator lakeGenerator = new LakeGenerator(mesh,islandShape,specification.getNumLakes(),maxRadius,altitude,specification.getSeed());
-
-
-
 
 
     }

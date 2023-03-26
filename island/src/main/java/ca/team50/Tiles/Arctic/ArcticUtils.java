@@ -7,27 +7,23 @@ import java.util.ArrayList;
 
 public class ArcticUtils {
 
+
+
     /**
-     * Get all tiles within the Arctic biome
-     * @return an ArrayList containing all tiles from Arctic biome
+     * Get a specific tile within the Arctic biome given altitude
+     * @return a TileType object corresponding to parameter
      */
-    public static ArrayList<TileType> getAllTiles() {
-
-        ArrayList<TileType> tileTypeArrayList = new ArrayList<>();
-
-        TileType tile = new BorealTile();
-        tileTypeArrayList.add(tile);
-        tile = new ColddesertTile();
-        tileTypeArrayList.add(tile);
-        tile = new IcecapTile();
-        tileTypeArrayList.add(tile);
-        tile = new TaigaTile();
-        tileTypeArrayList.add(tile);
-        tile = new TundraTile();
-        tileTypeArrayList.add(tile);
-
-        return tileTypeArrayList;
-
+    public static TileType getTileFormProperty(double polygonAltitude) {
+        if ( polygonAltitude < 0.2 && 0 <= polygonAltitude)
+            return new BorealTile();
+        else if(polygonAltitude < 0.4 && 0.2 <= polygonAltitude)
+            return new TaigaTile();
+        else if(polygonAltitude < 0.6 && 0.4 <= polygonAltitude)
+            return new TundraTile();
+        else if(polygonAltitude < 0.8 && 0.6 <= polygonAltitude)
+            return new ColddesertTile();
+        else
+            return new IcecapTile();
     }
 
 }

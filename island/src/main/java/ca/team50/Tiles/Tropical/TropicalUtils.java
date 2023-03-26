@@ -1,5 +1,7 @@
 package ca.team50.Tiles.Tropical;
 
+import ca.team50.Tiles.Arctic.ColddesertTile;
+import ca.team50.Tiles.Deserts.*;
 import ca.team50.Tiles.TileType;
 
 import java.util.ArrayList;
@@ -7,26 +9,21 @@ import java.util.ArrayList;
 public class TropicalUtils {
 
     /**
-     * Get all tiles within the tropical biome
-     * @return an ArrayList containing all tiles from Tropical biome
+     * Get a specific tile within the Tropical biome given altitude
+     * @return a TileType object corresponding to parameter
      */
-    public static ArrayList<TileType> getAllTiles() {
-
-        ArrayList<TileType> tileTypeArrayList = new ArrayList<>();
-
-        TileType tile = new CloudforestTile();
-        tileTypeArrayList.add(tile);
-        tile = new MangroveTile();
-        tileTypeArrayList.add(tile);
-        tile = new RainforestTile();
-        tileTypeArrayList.add(tile);
-        tile = new SavannahTile();
-        tileTypeArrayList.add(tile);
-        tile = new SwampTile();
-        tileTypeArrayList.add(tile);
-
-        return tileTypeArrayList;
-
+    public static TileType getTileFormProperty(double polygonAltitude) {
+        if ( polygonAltitude < 0.2 && 0 <= polygonAltitude) {
+            return new RainforestTile();
+        } else if(polygonAltitude < 0.4 && 0.2 <= polygonAltitude) {
+            return new SavannahTile();
+        } else if(polygonAltitude < 0.6 && 0.4 <= polygonAltitude) {
+            return new MangroveTile();
+        } else if (polygonAltitude < 0.7 && 0.6 <= polygonAltitude) {
+            return new SwampTile();
+        }
+        else
+            return new CloudforestTile();
     }
 
 }
