@@ -19,6 +19,7 @@ public class Mountains {
        for (int i = 0; i < numOf; i++) {
 
             int index = (int)(Math.random() * islandPoly.size());
+            System.out.println(index);
 
             Structs.Vertex peak = islandPoly.get(index).getCentroid();
 
