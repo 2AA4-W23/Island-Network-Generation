@@ -135,6 +135,24 @@ public class LakeGenerator {
         return this.lakes;
     }
 
+    /**
+     * Check if a polygon is classified as apart of a lake
+     * @return an boolean value (true is yes, false otherwise)
+     */
+    public boolean isPolygonApartOfLake(Polygons polygonToTest) {
+
+        for (ArrayList<Polygons> lake : this.lakes) {
+            for (Polygons lakePolygon : lake) {
+                if (lakePolygon == polygonToTest) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+
+    }
+
 
 
     // PolyMesh provides an index based isNeighbour method, this takes in two specific polygons that were in mesh and determines if they are neighbours

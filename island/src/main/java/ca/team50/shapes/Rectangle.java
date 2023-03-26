@@ -22,7 +22,7 @@ public class Rectangle implements IslandShape {
      * @param vertex3 the next point of the square (from vertex2)
      * @return a Square object
      */
-    public Rectangle(Structs.Vertex vertex1, Structs.Vertex vertex2, Structs.Vertex vertex3) {
+    public Rectangle(Structs.Vertex vertex1, Structs.Vertex vertex2, Structs.Vertex vertex3, Structs.Vertex vertex4) {
 
         // Convert to list
         ArrayList<Structs.Vertex> list = new ArrayList<>();
