@@ -31,6 +31,9 @@ public class Main {
             int numAquifers = cli.getNumAquifers();
             // Cast island to Aquifer and set numAquifers value
             ((Aquifer) island).setNumAquifers(numAquifers);
+        } else if (cli.getIslandMode() == ModeType.normal) {
+            island = new NormalGenerator(cli);
+
         }
 
 
