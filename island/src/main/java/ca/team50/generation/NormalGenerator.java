@@ -15,6 +15,8 @@ import ca.team50.elevation.Mountains;
 import ca.team50.elevation.Plains;
 import ca.team50.elevation.Volcano;
 import ca.team50.shapes.*;
+import ca.team50.soilAbsorption.Loam;
+import ca.team50.soilAbsorption.SoilProfile;
 import ca.team50.specification.CLInterfaceIsland;
 import ca.team50.water.LakeGenerator;
 import java.util.ArrayList;
@@ -32,48 +34,57 @@ public class NormalGenerator implements IslandGenerable {
     @Override
     public void generateIsland(PolyMesh<Polygons> mesh) {
 
-        // PLACEHOLDER VALUES
+        long noiseEvaluationPosition = 1234;
+        Structs.Vertex max = CanvasUtils.getMaxPoint(mesh);
+        Structs.Vertex middle = CanvasUtils.getCenter(mesh);
 
         // CIRCLE
-        double radius = 800;
+        double maxRadiusCanvasCenter = Math.sqrt(Math.pow(max.getX()-middle.getX(),2) + Math.pow(max.getY()-middle.getY(),2));
+        double circleRadiusNoise = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.1,0,maxRadiusCanvasCenter);
+        double radius = circleRadiusNoise;
 
         // ELIPSE
-        double width = 1200;
-        double height = 1000;
-        double rotation = 0.3;
+        double maxRadiusX = max.getX() - middle.getX();
+        double maxRadiusY = max.getY() - middle.getY();
+        double width = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.2,0,maxRadiusX);
+        double height = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.3,0,maxRadiusY);;
+        double rotation = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.4,-6.28,6.28);
 
         // RECTANGLE
-        Structs.Vertex vertex1 = Structs.Vertex.newBuilder().setX(300).setY(300).build();
-        Structs.Vertex vertex2 = Structs.Vertex.newBuilder().setX(500).setY(300).build();
-        Structs.Vertex vertex3 = Structs.Vertex.newBuilder().setX(500).setY(500).build();
-        Structs.Vertex vertex4 = Structs.Vertex.newBuilder().setX(300).setY(500).build();
+        double staringPosX = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.5,0,maxRadiusX);
+        double staringPosY = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.6,0,maxRadiusY);
+        double increaseX = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.7,1,maxRadiusX);
+        double increaseY = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.8,1,maxRadiusY);
+        Structs.Vertex vertex1 = Structs.Vertex.newBuilder().setX(staringPosX).setY(staringPosY).build();
+        Structs.Vertex vertex2 = Structs.Vertex.newBuilder().setX(staringPosX+increaseX).setY(staringPosY).build();
+        Structs.Vertex vertex3 = Structs.Vertex.newBuilder().setX(staringPosX+increaseX).setY(staringPosY+increaseY).build();
+        Structs.Vertex vertex4 = Structs.Vertex.newBuilder().setX(staringPosX).setY(staringPosY+increaseY).build();
 
         //IRREGULAR
-        double noiseThreshold = -0.2;
+        double noiseThreshold = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.9,-1,1);
 
         // LAKE GENERATION
         // MAX RADIUS
-        int maxRadius = 80;
-
+        double maxRadius = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition,0,maxRadiusCanvasCenter);
         // THRESHOLD ALTITUDE
-        double altitude = 0.8;
+        double altitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.1,0,1);
 
         // ELEVATION
         // ALTITUDE
-        double baseAltitude = 0.0;
+        double baseAltitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.2,0,1);
         //FLUCTUATION
-        double fluctuation = 5.0;
+        double fluctuation = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.3,0,40);
 
         // MOUNTAINS
-        int numOfMountains = 10;
+        int numOfMountains = (int) GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.4,0,20);
         double topAltitude = 1.0;
         double botAltitude = 0.0;
-        double slopeRadius = 500;
+        double slopeRadius = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.5,0,maxRadiusCanvasCenter);
 
         // VOLCANO'S
-        double area = 150.0;
-        double width_vol = CanvasUtils.getMaxPoint(mesh).getX();
-        double height_vol = CanvasUtils.getMaxPoint(mesh).getY();
+        double area = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.6,0,maxRadiusCanvasCenter);
+        double width_vol = CanvasUtils.getMaxPoint(mesh).getX() - GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.7,0,maxRadiusCanvasCenter);
+        double height_vol = CanvasUtils.getMaxPoint(mesh).getY() - GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.8,0,maxRadiusCanvasCenter);
 
         // Setup
         for (Polygons currentPolygon : mesh) {

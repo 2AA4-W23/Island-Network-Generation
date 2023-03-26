@@ -25,13 +25,13 @@ public class CLInterfaceIsland {
     private static final Option elevation = new Option("al", "altitude", true, "Specify the altitude type of island generation, specified values are: " + getElevationEnumValues() + ", default: " + ElevationType.values()[0].name());
     private static final Option shape = new Option("sh", "shape", true, "Specify the shape type of island generation, specified values are: " + getShapeEnumValues() + ", default: " + IslandShapeType.values()[0].name());
 
-    private static final Option soilContent = Option.builder("s")
+    /*private static final Option soilContent = Option.builder("so")
             .longOpt("soil")
             .hasArgs()
             .numberOfArgs(3)
             .valueSeparator(',')
             .desc("Specify the clay content, sand content, and loam content of the soil in the respective order (values between 0 and 1)")
-            .build();
+            .build(); */
     // TODO SOIL
 
     private ModeType islandMode;
@@ -67,7 +67,7 @@ public class CLInterfaceIsland {
         options.addOption(lakes);
         options.addOption(rivers);
         options.addOption(seed);
-        options.addOption(soilContent);
+        //options.addOption(soilContent);
 
         try {
 
@@ -97,7 +97,7 @@ public class CLInterfaceIsland {
             }
 
             // Get Soil composition
-            if (commandLine.hasOption("s")) {
+            /*if (commandLine.hasOption("s")) {
                 String[] soilValues = commandLine.getOptionValues("s");
 
                 // convert the values to doubles and validate them
@@ -111,7 +111,7 @@ public class CLInterfaceIsland {
                     throw new ParseException("Soil content values must be between 0 and 1");
                 }
 
-            }
+            } */
 
             // Get biome type
             String biomeModeType = commandLine.getOptionValue(biome,BiomeType.values()[0].name());
