@@ -1,18 +1,22 @@
 package ca.team50.generation;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
-import ca.team50.Tiles.Arctic.BorealTile;
-import ca.team50.Tiles.Arctic.TaigaTile;
-import ca.team50.Tiles.Arctic.TundraTile;
+import ca.team50.Tiles.Arctic.*;
+import ca.team50.Tiles.LagoonTile;
 import ca.team50.Tiles.LandTile;
 import ca.team50.Tiles.OceanTile;
 import ca.team50.Tiles.TileType;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
+import ca.team50.shapes.Circle;
 import ca.team50.shapes.Elipse;
 import ca.team50.shapes.Irregular;
 import ca.team50.shapes.IslandShape;
 import ca.team50.elevation.*;
+
+import java.util.ArrayList;
+
+import static ca.team50.elevation.Mountains.mountainAltitude;
 
 public class TestIsland implements IslandGenerable {
 
@@ -24,37 +28,64 @@ public class TestIsland implements IslandGenerable {
             currentPolygon.cleanProperties();
         }
 
+        Structs.Vertex centreOfMesh =  CanvasUtils.getCenter(mesh);
+
         // Get all tiles needed for generation (Command line argument : choose specific biome)
         TileType ocean = new OceanTile();
-        TileType land = new LandTile();
-        TileType lAltitude = new TundraTile();
-        TileType mAltitude = new TaigaTile();
-        TileType hAltitude = new BorealTile();
+        TileType cold = new ColddesertTile();
+        TileType taiga = new TaigaTile();
+        TileType boreal = new BorealTile();
+        TileType ice = new IcecapTile();
+        TileType tundra = new TundraTile();
 
         //Commandline argument: choose shape, and island dimensions
-        double height = 300;
-        double width = 500;
+        double height = 500;
+        double width = 600;
         IslandShape elipse = new Elipse(CanvasUtils.getCenter(mesh),height,width,1.2);
 
+        ArrayList<Polygons> islandPoly = new ArrayList<>();
+
+        for (Polygons currentPolygon : mesh) {
+
+            Structs.Vertex centroid = currentPolygon.getCentroid();
+
+            if (elipse.isVertexInside(centroid))
+                islandPoly.add(currentPolygon);
+
+        }
+
         //Apply altimeric profile to entire mesh, base altitude and flutuation will come from a command line later
-        double altitude = 0.3;
-        double fluctuation = 0.2;
-        Plains.plainsAltitude(mesh, altitude, fluctuation);
+        double topAltitude = 1.0;
+        double botAltitude = 0.0;
+        double area = 25.0;
+
+        //Volcano.volcanoAltitude(islandPoly, centreOfMesh, topAltitude, botAltitude, height, width, area);
+
+        double numOf = 6.0;
+        double slopeRadius = 200;
+
+        mountainAltitude(islandPoly, numOf, topAltitude, botAltitude, slopeRadius);
 
 
-        // Loop through all polygons
+            // Loop through all polygons (Eventually gonna be part of a biome interface)
         for (Polygons currentPolygon : mesh) {
 
             Structs.Vertex centroid = currentPolygon.getCentroid();
             // Check where the polygon is located and colour it accordingly
             if (elipse.isVertexInside(centroid)) {
-                Double polygonAltitude = extractProperties(centroid.getPropertiesList(), "altitude");
-                if ( polygonAltitude < 0.23 && 0.1 < polygonAltitude)
-                    currentPolygon.unifyColor(lAltitude.getTileColour());
-                else if(polygonAltitude > 0.23 && polygonAltitude < 0.36)
-                    currentPolygon.unifyColor(hAltitude.getTileColour());
+                double polygonAltitude = extractProperties(centroid.getPropertiesList(), "altitude");
+
+                if ( polygonAltitude < 0.2 && 0 <= polygonAltitude)
+                    currentPolygon.unifyColor(boreal.getTileColour());
+                else if(polygonAltitude < 0.4 && 0.2 <= polygonAltitude)
+                    currentPolygon.unifyColor(taiga.getTileColour());
+                else if(polygonAltitude < 0.6 && 0.4 <= polygonAltitude)
+                    currentPolygon.unifyColor(tundra.getTileColour());
+                else if(polygonAltitude < 0.8 && 0.6 <= polygonAltitude)
+                    currentPolygon.unifyColor(cold.getTileColour());
                 else
-                    currentPolygon.unifyColor(mAltitude.getTileColour());
+                    currentPolygon.unifyColor(ice.getTileColour());
+
 
             } else {
                 currentPolygon.cleanProperties();
@@ -65,7 +96,7 @@ public class TestIsland implements IslandGenerable {
 
     }
 
-    public double extractProperties(java.util.List<Structs.Property> properties, String property){
+    public static double extractProperties(java.util.List<Structs.Property> properties, String property){
 
         String val = "0";
         for(Structs.Property p: properties) {

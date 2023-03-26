@@ -27,12 +27,15 @@ public class Main {
         } else if (cli.getIslandMode() == ModeType.test) {
             island = new TestIsland();
         }
+        else if (cli.getIslandMode() == ModeType.normal) {
+            island = new NormalGenerator(cli);
+
+        }
 
 
 
         // Generate lagoon
         island.generateIsland(polyMesh);
-
 
         // Write mesh to file
         PolyMeshToFile.writeMeshToFile(polyMesh, cli.getMeshOutput());
