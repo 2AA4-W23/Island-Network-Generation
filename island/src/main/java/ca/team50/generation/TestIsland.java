@@ -23,6 +23,7 @@ import static ca.team50.elevation.Mountains.mountainAltitude;
 
 public class TestIsland implements IslandGenerable {
 
+    // An island used for sandbox testing purposes
     @Override
     public void generateIsland(PolyMesh<Polygons> mesh) {
 
@@ -96,7 +97,7 @@ public class TestIsland implements IslandGenerable {
 
         }
 
-        RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(islandPoly, 3, 0.8);
+        RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(mesh, 3, 0.8);
 
     }
 
