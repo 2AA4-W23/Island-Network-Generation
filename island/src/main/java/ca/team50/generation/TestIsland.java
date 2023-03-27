@@ -13,6 +13,7 @@ import ca.team50.shapes.Elipse;
 import ca.team50.shapes.Irregular;
 import ca.team50.shapes.IslandShape;
 import ca.team50.elevation.*;
+import ca.team50.water.RiverCentroidsGenerator;
 import ca.team50.water.RiverGenerator;
 
 import java.util.ArrayList;
@@ -67,7 +68,8 @@ public class TestIsland implements IslandGenerable {
 
         mountainAltitude(islandPoly, numOf, topAltitude, botAltitude, slopeRadius);
 
-        RiverGenerator rivers = new RiverGenerator(mesh, elipse, 3, 0.5);
+        RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(mesh, 3, 0.8);
+
             // Loop through all polygons (Eventually gonna be part of a biome interface)
         for (Polygons currentPolygon : mesh) {
 

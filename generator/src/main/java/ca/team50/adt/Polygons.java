@@ -175,14 +175,7 @@ public class Polygons implements Serializable {
         newList.clear();
     }
 
-    //change vertex color to blue for rivers
-    public void changeRiverColor(Structs.Vertex vertex) {
-
-        // Create property
-        String colorCode = "0,0,204";
-        Structs.Property color = Structs.Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
-
-        for (int i = 0; i < this.verticesList.size(); i++){
+       /* for (int i = 0; i < this.verticesList.size(); i++){
 
             if (this.getVerticesList().get(i) == vertex){
                 Vertex v = this.getVerticesList().get(i);
@@ -203,8 +196,8 @@ public class Polygons implements Serializable {
                 this.verticesList = newList;
                 newList.clear();
             }
-        }
-    }
+        }*/
+
 
 
     //Aquifer Exists
@@ -226,6 +219,39 @@ public class Polygons implements Serializable {
                     break;
                 }
             }
+        }
+        this.centroid = newList.get(0);
+        newList.clear();
+    }
+
+    //River Exists
+    public void setAsRiver() {
+        // Create centroid color to blue with opaque coloring for rendering
+        String colorCode = "0,0,204";
+        Structs.Property color = Structs.Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
+
+        String alpha = String.valueOf(1);
+        Structs.Property alphaProp = Structs.Property.newBuilder().setKey("alpha").setValue(alpha).build();
+
+        Vertex v = this.getCentroid();
+        ArrayList<Vertex> newList = new ArrayList<>();
+
+        // Replace altitude of polygon centroid vertex with new altitude
+        for (int index = 0; index < v.getPropertiesCount(); index++){
+            Structs.Property curProperty = v.getProperties(index);
+            if (curProperty.getKey().contains("rgb_color")) {
+                Vertex newV = v.toBuilder().removeProperties(index).build();
+                newV = newV.toBuilder().addProperties(color).build();
+                newList.add(newV);
+                break;
+            }
+            if (curProperty.getKey().contains("alpha")) {
+                Vertex newV = v.toBuilder().removeProperties(index).build();
+                newV = newV.toBuilder().addProperties(alphaProp).build();
+                newList.add(newV);
+                break;
+            }
+
         }
         this.centroid = newList.get(0);
         newList.clear();
@@ -434,6 +460,8 @@ public class Polygons implements Serializable {
     public List<Vertex> getVerticesList() {
         return this.verticesList;
     }
+
+
 
     public List<Segment> getSegmentsList() {
         return this.segmentsList;

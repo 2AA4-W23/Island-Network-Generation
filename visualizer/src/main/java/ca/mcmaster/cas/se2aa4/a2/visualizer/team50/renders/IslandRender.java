@@ -13,17 +13,19 @@ import java.util.ArrayList;
 
 public class IslandRender implements Renderable {
     @Override
-    public void render(PolyMesh<? extends Polygons> polygons, Graphics2D canvas) {
+    public void render(PolyMesh<? extends Polygons> polygons, Graphics2D canvas){
 
         System.out.println("Island mode enabled");
 
         ArrayList<Structs.Vertex> vertices = new ArrayList<Structs.Vertex>();
+        ArrayList<Polygons> river = new ArrayList<>();
 
         // Execute methods to draw to screen
         drawPolygons(polygons,canvas);
         drawCentroids(polygons,canvas);
         drawSegments(polygons,canvas,vertices);
         drawVertices(vertices,canvas);
+        drawRiver(polygons, canvas);
     }
 
 
@@ -168,4 +170,38 @@ public class IslandRender implements Renderable {
         }
     }
 
-}
+
+    private void drawRiver(PolyMesh<? extends Polygons> polygons, Graphics2D canvas) {
+
+        for (int index = 0; index < polygons.size(); index++) {
+            for (int index1 = 0; index1 < polygons.size(); index1++) {
+
+                if (polygons.isNeighbor(index, index1)) {
+
+                    Structs.Vertex start = polygons.get(index).getCentroid();
+                    Structs.Vertex end = polygons.get(index).getCentroid();
+
+                    Color v1Color = Property.extractColor(start.getPropertiesList());
+                    Color v2Color = Property.extractColor(end.getPropertiesList());
+
+                    //calculate average color and set as segment color
+                    int R = (v1Color.getRed() + v2Color.getRed())/2;
+                    int G = (v1Color.getGreen() + v2Color.getGreen())/2;
+                    int B = (v1Color.getBlue() + v2Color.getBlue())/2;
+
+                    Point2D startPoint = new Point2D.Double(start.getX(), start.getY());
+                    Point2D endPoint = new Point2D.Double(end.getX(), end.getY());
+
+                    Line2D line = new Line2D.Double(startPoint, endPoint);
+                    canvas.setColor(new Color(R, G, B));
+                    canvas.draw(line);
+                    canvas.fill(line);
+                }
+            }
+        }
+    }
+
+    }
+
+
+
