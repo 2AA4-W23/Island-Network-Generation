@@ -73,18 +73,12 @@ public class CLInterfaceIsland {
                 System.exit(0);
             }
 
-            System.out.println(ModeType.values()[0].name());
-            System.out.println(BiomeType.values()[0].name());
-            System.out.println(ElevationType.values()[0].name());
-            System.out.println(IslandShapeType.values()[0].name());
-
             // Get island generation mode
             String islandModeType = commandLine.getOptionValue(islandGenMode,ModeType.values()[0].name());
 
             for (ModeType curType : ModeType.values()) {
                 if (islandModeType.contains(curType.name())) {
                     this.islandMode = curType;
-                    System.out.println(this.islandMode);
                     break;
                 }
             }
@@ -98,7 +92,6 @@ public class CLInterfaceIsland {
             for (BiomeType curType : BiomeType.values()) {
                 if (biomeModeType.contains(curType.name())) {
                     this.biomeType = curType;
-                    System.out.println(this.biomeType);
                     break;
                 }
             }
@@ -109,7 +102,6 @@ public class CLInterfaceIsland {
             for (ElevationType curType : ElevationType.values()) {
                 if (elevationModeType.contains(curType.name())) {
                     this.elevationType = curType;
-                    System.out.println(this.elevationType);
                     break;
                 }
             }
@@ -120,7 +112,6 @@ public class CLInterfaceIsland {
             for (IslandShapeType curType : IslandShapeType.values()) {
                 if (shapeModeType.contains(curType.name())) {
                     this.shapeType = curType;
-                    System.out.println(this.shapeType);
                     break;
                 }
             }
