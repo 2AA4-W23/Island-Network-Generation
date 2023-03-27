@@ -21,7 +21,7 @@ public class Loam extends SoilProfile {
         double max = 1;
         double remainingWater = 1 / (1 + this.absorptionRate * Math.pow(distanceToWater,2));
         remainingWater = (remainingWater - min) / (max - min);
-        polygon.changeHumidity(remainingWater);
+        polygon.changeHumidity(String.valueOf(remainingWater));
         return remainingWater;
     }
     @Override

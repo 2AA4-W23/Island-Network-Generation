@@ -1,5 +1,6 @@
 package ca.team50.testing;
 
+import ca.team50.soilAbsorption.*;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.team50.adt.Polygons;
 import ca.team50.shapes.Circle;
@@ -16,6 +17,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static junit.framework.Assert.assertEquals;
 
 public class TestUtils {
 
@@ -47,6 +50,53 @@ public class TestUtils {
                 Arguments.of(new Rectangle(Structs.Vertex.newBuilder().setX(500).setY(500).build(),Structs.Vertex.newBuilder().setX(800).setY(500).build(),Structs.Vertex.newBuilder().setX(800).setY(800).build(),Structs.Vertex.newBuilder().setX(500).setY(800).build()),validPolygons,invalidPolygons)
         );
     }
+
+
+    @Test
+    public void testCalculateClayAbsorptionRate() {
+        Clay clay = new Clay(0.6, 0.2, 0.2, 0);
+        double expectedAbsorptionRate = 0.2;
+        double actualAbsorptionRate = clay.calculateAbsorptionRate(0.6, 0.2, 0.2);
+        assertEquals(expectedAbsorptionRate, actualAbsorptionRate, 0.001);
+    }
+    @Test
+    public void testGenerateClaySoilProfile() {
+        SoilProfile clayProfile = new Clay(0.6, 0.2, 0.2, 0.2);
+        SoilProfile actualProfile = clayProfile.generateSoilProfile(0.6, 0.2, 0.2);
+        assertEquals(clayProfile.getClass(), actualProfile.getClass());
+    }
+
+    @Test
+    public void testGenerateSandSoilProfile() {
+        Sand sandProfile = new Sand(0.2, 0.7, 0.1, 0.54);
+        SoilProfile actualProfile = sandProfile.generateSoilProfile(0.2, 0.7, 0.1);
+        assertEquals(sandProfile.getClass(), actualProfile.getClass());
+    }
+
+    @Test
+    public void testCalculateSandAbsorptionRate() {
+        Sand sand = new Sand(0.2, 0.7, 0.1, 0);
+        double expectedAbsorptionRate = 0.54;
+        double actualAbsorptionRate = sand.calculateAbsorptionRate(0.2, 0.7, 0.1);
+        assertEquals(expectedAbsorptionRate, actualAbsorptionRate, 0.001);
+    }
+
+    @Test
+    public void testGenerateLoamSoilProfile() {
+        Loam loamProfile = new Loam(0.4, 0.4, 0.2, 0.4);
+        SoilProfile actualProfile = loamProfile.generateSoilProfile(0.4, 0.4, 0.2);
+        assertEquals(loamProfile.getClass(), actualProfile.getClass());
+    }
+
+    @Test
+    public void testCalculateLoamAbsorptionRate() {
+        Loam loam = new Loam(0.4, 0.4, 0.2, 0);
+        double expectedAbsorptionRate = 0.4;
+        double actualAbsorptionRate = loam.calculateAbsorptionRate(0.4, 0.4, 0.2);
+        assertEquals(expectedAbsorptionRate, actualAbsorptionRate, 0.001);
+    }
+
+
 
     // ------ END TEST ------ //
 
