@@ -72,7 +72,7 @@ public class CLInterfaceIsland {
             }
 
             // Get island generation mode
-            String islandModeType = commandLine.getOptionValue(islandGenMode,ModeType.values()[0].name());
+            String islandModeType = commandLine.getOptionValue(islandGenMode,ModeType.values()[0].name().toLowerCase());
 
             for (ModeType curType : ModeType.values()) {
                 if (islandModeType.contains(curType.name())) {

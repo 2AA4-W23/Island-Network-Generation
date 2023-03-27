@@ -49,13 +49,10 @@ public abstract class SoilProfile implements SoilProfileGenerable {
 
         double shortestDistance = Double.MAX_VALUE;
 
-        System.out.println("LAKE SIZE: " + lakeGen.getLakes().size());
-
         // Iterate through each aquifer and calculate the distance between the polygon centroid and the aquifer centroid
         for (Polygons aquifer : aquiferGen.getAquifers()) {
             Structs.Vertex aquiferCentroid = aquifer.getCentroid();
             double aquiferDistance = Math.sqrt(Math.pow((aquiferCentroid.getX() - polygonCentroid.getX()), 2) + Math.pow((aquiferCentroid.getY() - polygonCentroid.getY()), 2));
-            System.out.println("Aquifer Dist: " + aquiferDistance);
             if (aquiferDistance < shortestDistance) {
                 shortestDistance = aquiferDistance;
             }
@@ -66,7 +63,6 @@ public abstract class SoilProfile implements SoilProfileGenerable {
             for (Polygons lake : lakes) {
                 Structs.Vertex lakeCentroid = lake.getCentroid();
                 double lakeDistance = Math.sqrt(Math.pow((lakeCentroid.getX() - polygonCentroid.getX()), 2) + Math.pow((lakeCentroid.getY() - polygonCentroid.getY()), 2));
-                System.out.println("Lake Dist: " + lakeDistance);
                 if (lakeDistance < shortestDistance) {
                     shortestDistance = lakeDistance;
                 }

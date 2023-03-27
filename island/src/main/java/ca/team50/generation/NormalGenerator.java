@@ -36,6 +36,9 @@ public class NormalGenerator implements IslandGenerable {
     @Override
     public void generateIsland(PolyMesh<Polygons> mesh) {
 
+        System.out.println("Generating Island...");
+        System.out.println("Please note this may take sometime depending on the size of the canvas and the number of polygons!");
+
         long noiseEvaluationPosition = 1234;
         Structs.Vertex max = CanvasUtils.getMaxPoint(mesh);
         Structs.Vertex middle = CanvasUtils.getCenter(mesh);
