@@ -48,7 +48,6 @@ public class TestIsland implements IslandGenerable {
         ArrayList<Polygons> islandPoly = new ArrayList<>();
 
         for (Polygons currentPolygon : mesh) {
-
             Structs.Vertex centroid = currentPolygon.getCentroid();
 
             if (elipse.isVertexInside(centroid))
@@ -68,7 +67,7 @@ public class TestIsland implements IslandGenerable {
 
         mountainAltitude(islandPoly, numOf, topAltitude, botAltitude, slopeRadius);
 
-        RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(mesh, 3, 0.8);
+
 
             // Loop through all polygons (Eventually gonna be part of a biome interface)
         for (Polygons currentPolygon : mesh) {
@@ -96,6 +95,8 @@ public class TestIsland implements IslandGenerable {
             }
 
         }
+
+        RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(islandPoly, 3, 0.8);
 
     }
 

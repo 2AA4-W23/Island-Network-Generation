@@ -55,9 +55,7 @@ public class Volcano {
                     a = topAltitude;
 
                 double average = extractProperties(centroid.getPropertiesList(), "altitude");
-                a = (a+average)/2;
-
-                //System.out.println(a);
+                a = (a + average)/2;
 
                 if (slopeCircle.isVertexInside(centroid)) {
                     currPoly.changeElevation(String.valueOf(a));

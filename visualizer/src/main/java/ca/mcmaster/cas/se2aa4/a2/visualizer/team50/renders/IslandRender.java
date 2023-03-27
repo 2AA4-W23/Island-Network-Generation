@@ -18,7 +18,6 @@ public class IslandRender implements Renderable {
         System.out.println("Island mode enabled");
 
         ArrayList<Structs.Vertex> vertices = new ArrayList<Structs.Vertex>();
-        ArrayList<Polygons> river = new ArrayList<>();
 
         // Execute methods to draw to screen
         drawPolygons(polygons,canvas);
@@ -174,7 +173,7 @@ public class IslandRender implements Renderable {
     private void drawRiver(PolyMesh<? extends Polygons> polygons, Graphics2D canvas) {
 
         for (int index = 0; index < polygons.size(); index++) {
-            for (int index1 = 0; index1 < polygons.size(); index1++) {
+            for (int index1 = 1; index1 < polygons.size(); index1++) {
 
                 if (polygons.isNeighbor(index, index1)) {
 
@@ -185,17 +184,27 @@ public class IslandRender implements Renderable {
                     Color v2Color = Property.extractColor(end.getPropertiesList());
 
                     //calculate average color and set as segment color
-                    int R = (v1Color.getRed() + v2Color.getRed())/2;
-                    int G = (v1Color.getGreen() + v2Color.getGreen())/2;
-                    int B = (v1Color.getBlue() + v2Color.getBlue())/2;
+                    int R = (v1Color.getRed() + v2Color.getRed()) / 2;
+                    int G = (v1Color.getGreen() + v2Color.getGreen()) / 2;
+                    int B = (v1Color.getBlue() + v2Color.getBlue()) / 2;
 
-                    Point2D startPoint = new Point2D.Double(start.getX(), start.getY());
-                    Point2D endPoint = new Point2D.Double(end.getX(), end.getY());
+                    if (R == 0 && G == 0 && B == 204) {
 
-                    Line2D line = new Line2D.Double(startPoint, endPoint);
-                    canvas.setColor(new Color(R, G, B));
-                    canvas.draw(line);
-                    canvas.fill(line);
+                        Point2D startPoint = new Point2D.Double(polygons.get(index).getCentroid().getX(), polygons.get(index).getCentroid().getY());
+                        Point2D endPoint = new Point2D.Double(polygons.get(index1).getCentroid().getX(), polygons.get(index1).getCentroid().getY());
+
+                        Float segmentThickness = 0.5f;
+                        Stroke segmentStroke = new BasicStroke(segmentThickness);
+                        canvas.setStroke(segmentStroke);
+
+                        int alpha = 1;
+                        canvas.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+
+                        Line2D line = new Line2D.Double(startPoint, endPoint);
+                        canvas.setColor(new Color(R, G, B));
+                        canvas.draw(line);
+                        canvas.fill(line);
+                    }
                 }
             }
         }

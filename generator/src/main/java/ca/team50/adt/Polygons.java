@@ -230,9 +230,6 @@ public class Polygons implements Serializable {
         String colorCode = "0,0,204";
         Structs.Property color = Structs.Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
 
-        String alpha = String.valueOf(1);
-        Structs.Property alphaProp = Structs.Property.newBuilder().setKey("alpha").setValue(alpha).build();
-
         Vertex v = this.getCentroid();
         ArrayList<Vertex> newList = new ArrayList<>();
 
@@ -242,12 +239,6 @@ public class Polygons implements Serializable {
             if (curProperty.getKey().contains("rgb_color")) {
                 Vertex newV = v.toBuilder().removeProperties(index).build();
                 newV = newV.toBuilder().addProperties(color).build();
-                newList.add(newV);
-                break;
-            }
-            if (curProperty.getKey().contains("alpha")) {
-                Vertex newV = v.toBuilder().removeProperties(index).build();
-                newV = newV.toBuilder().addProperties(alphaProp).build();
                 newList.add(newV);
                 break;
             }
