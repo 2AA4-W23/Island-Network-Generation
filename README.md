@@ -116,19 +116,27 @@ To generate an island:
    | Help | -h |   --help   |   Prints all available commands to console | Exits the program after execution. Provides extra information such as default values for specified arguments |
    | Mesh File Input | -i |   --input   |   Specify the mesh name (including .mesh) in your file system to read | If specifying a .mesh file from the same directory as island.jar, no file path is needed|
    | Island mesh File Output | -o |   --output   |   Specify the mesh name (including .mesh) in your file system to write an island mesh file to | If specifying a .mesh file from the same directory as island.jar, no file path is needed |
-   | Island Generation Mode | -m |   --mode   |  Specify the type of island to generate | All island modes are listed by using the -h command |
+   | Island Generation Mode | -m |   --mode   |  Specify the type of island to generate | All island modes are listed by using the -h command. Normal mode is the main generation mode |
+   | Aquifer | -a |   --aquifer   | Specify the number of aquifers to be generated (as an integer) | |
+   | Lakes | -l |   --lakes   | Specify the maximum number of lakes to be generated (as an integer) | |
+   | Rivers | -r |   --rivers   | Specify the maximum number of rivers to be generated (as an integer) | |
+   | Seed | -s |   --seed   | Specify the seed to be used by the generator | Only works with generators that support it such as Normal |
+   | Biome | -b |   --biomes   | Specify the biomes of island generation | Use -h to find out all biomes available |
+   | Elevation (altitude) | -al |   --altitude  | Specify the altitude type of island generation | Use -h to find out all elevations available |
+   | Island Shape | -sh |  --shape | Specify the shape type of island generation | Use -h to find out all shapes available |
+   | soilContent | -s0 |  --soil | Specify the type of Soil Profile | Use -h to find out all soil profiles available |
 3) Run visualizer.jar with the outputted mesh from island.jar in island generation mode
 
 Ex:
 ```
 # First, generate mesh
 mosser@azrael A2 % cd generator
-mosser@azrael generator % java -jar generator.jar -mt IRREGULAR -n sample -w 1000 -l 1000 -pc 500 -r 10
+mosser@azrael generator % java -jar generator.jar -mt IRREGULAR -n sample -w 1000 -l 1000 -pc 800 -r 30
 
 mosser@azrael A2 % cd ..
 mosser@azrael A2 % cd island
-# The following command specifies the generated mesh from generator.jar to convert to an island of lagoon type
-mosser@azrael generator % java -jar island.jar -i ../generator/sample.mesh -o island.mesh -m lagoon
+# The following command specifies the generated mesh from generator.jar to convert to an island with an eight lakes, arctic biome, mountain elevation, the shape of an elipse and a seed of 1234
+mosser@azrael generator % java -jar island.jar -i ../generator/sample.mesh -o island.mesh -m normal --l 8 -b Arctic -al MOUNTAINS -sh ELIPSE -s 1234
 
 mosser@azrael A2 % cd ..
 mosser@azrael A2 % cd visualizer
@@ -148,7 +156,7 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 | F05 |      Implement special island renderer for visualizer.jar  |   lenoverd   |   2023-03-21  |   2023-03-21  |   D  |
 | F06 |      Introduce the notion of Island Shapes  |   lenoverd   |   2023-03-21  |   2023-03-22  |   D  |
 | F07-3 |     Introduce Lake Generation |   lenoverd   |   2023-03-22  |   2023-03-23  |   D  |
-| F08 |      Advanced command line specification |   lenoverd   |   2023-03-24  |   |   S  |
+| F08-3 |      Advanced command line specification |   lenoverd   |   2023-03-24  | 2023-03-26  |   D  |
 | F09 |      Introduce altitude and implement altemeric profiles |   wangj500   |   2023-03-24  |  2023-03-25 |  D  |
 | F10-3 |      Introduce Tiles of various Biomes |   wangj500   |   2023-03-22  |  2023-03-22 |  D  |
 | F11 |      Introduce River Generation |   wangj500   |   2023-03-24  |   |  S  |
