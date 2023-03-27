@@ -12,7 +12,6 @@ public class Clay extends SoilProfile {
     }
     public double calculateAbsorptionRate(double clayContent, double sandContent, double loamContent) {
         absorptionRate = clayContent * 0.1 + sandContent * 0.7 + loamContent * 0.2;
-        System.out.println("Abs-Calc: " + absorptionRate);
         return absorptionRate;
     }
 
@@ -21,13 +20,10 @@ public class Clay extends SoilProfile {
         double maxDist = 1.1;
         double minDist = 1;
         distanceToWater = (distanceToWater - 0) / (Double.MAX_VALUE - 0) * (maxDist - minDist) + maxDist;
-        System.out.println("Distance: " + distanceToWater);
-        System.out.println("Abs: " + absorptionRate);
         double min = 0;
         double max = 1;
         double remainingWater = 1 / (1 + this.absorptionRate * Math.pow(distanceToWater,2));
         remainingWater = (remainingWater - min) / (max - min);
-        System.out.println("Value of remainingWater: " + remainingWater);
         double polygonAltitude = extractProperties(polygon.getCentroid().getPropertiesList(), "altitude");
         polygon.changeHumidity(String.valueOf(polygonAltitude-((0.1)*remainingWater)));
         return remainingWater;

@@ -1,4 +1,5 @@
 package ca.team50.soilAbsorption;
+import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.team50.water.AquiferGenerator;
 import ca.team50.water.LakeGenerator;
 import ca.team50.adt.Polygons;
@@ -19,9 +20,13 @@ public class Special extends SoilProfile {
         double distanceToWater = calculateDistanceToWater(polygon, lakeGen, aquiferGen);
         double min = 0;
         double max = 1;
+        double maxDist = 1.1;
+        double minDist = 1;
+        distanceToWater = (distanceToWater - 0) / (Double.MAX_VALUE - 0) * (maxDist - minDist) + maxDist;
         double remainingWater = 1 / (1 + this.absorptionRate * Math.pow(distanceToWater,2));
         remainingWater = (remainingWater - min) / (max - min);
-        polygon.changeHumidity(String.valueOf(remainingWater));
+        double polygonAltitude = extractProperties(polygon.getCentroid().getPropertiesList(), "altitude");
+        polygon.changeHumidity(String.valueOf(polygonAltitude-((0.1)*remainingWater)));
         return remainingWater;
     }
     @Override
@@ -37,4 +42,18 @@ public class Special extends SoilProfile {
             return new Special(clayContent, sandContent, loamContent, absorptionRate);
         }
     }
+
+    // Method to extract properties from vertices
+    private static double extractProperties(java.util.List<Structs.Property> properties, String property){
+
+        String val = "0";
+        for(Structs.Property p: properties) {
+            if (p.getKey().equals(property)) {
+                val = p.getValue();
+            }
+        }
+
+        return  Double.parseDouble(val);
+    }
+
 }

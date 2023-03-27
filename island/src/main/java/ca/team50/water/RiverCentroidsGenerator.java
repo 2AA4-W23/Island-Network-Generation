@@ -12,58 +12,66 @@ public class RiverCentroidsGenerator {
 
         ArrayList<Polygons> river = new ArrayList<>();
 
-        // get beginning of river, the polygon
-        ArrayList<Structs.Vertex> beginningCandidates = new ArrayList<>();
+        int iterations = 0;
 
-        int index = 0;
-        for(int  i = 0; i < mesh.size(); i++) {
-            if (getElevation(mesh.get(i).getCentroid()) > thresholdAltitude) {
-                beginningCandidates.add(mesh.get(i).getCentroid());
-                river.add(mesh.get(i));
-                index = i;
+        while (iterations < maxRivers) {
+            // get beginning of river, the polygon
+            ArrayList<Structs.Vertex> beginningCandidates = new ArrayList<>();
+
+            int index = 0;
+            for(int  i = 0; i < mesh.size(); i++) {
+                if (getElevation(mesh.get(i).getCentroid()) > thresholdAltitude) {
+                    beginningCandidates.add(mesh.get(i).getCentroid());
+                    river.add(mesh.get(i));
+                    index = i;
+                }
             }
-        }
 
 
-        ArrayList<Polygons> neighbors = new ArrayList<>();
+            ArrayList<Polygons> neighbors = new ArrayList<>();
 
-        for (Structs.Vertex v: beginningCandidates) {
+            for (Structs.Vertex v: beginningCandidates) {
 
-            int k = 0;
+                int k = 0;
 
-            while (getElevation(mesh.get(index).getCentroid()) != 0) {
-                //find neighboring polygons
-                for (int j = 0; j < mesh.size(); j++) {
-                    if (mesh.isNeighbor(index, j)) {
-                        neighbors.add(mesh.get(j));
-                        k = j;
+                while (getElevation(mesh.get(index).getCentroid()) != 0) {
+                    //find neighboring polygons
+                    for (int j = 0; j < mesh.size(); j++) {
+                        if (mesh.isNeighbor(index, j)) {
+                            neighbors.add(mesh.get(j));
+                            k = j;
+                        }
+
                     }
 
-                }
+                    //Find neighbor with lowest elevation
+                    Polygons LowElevationNeighbor = mesh.get(0);
+                    double lowElevation = 1.0;
 
-                //Find neighbor with lowest elevation
-                Polygons LowElevationNeighbor = mesh.get(0);
-                double lowElevation = 1.0;
-
-                for (Polygons currPoly : neighbors) {
-                    if (getElevation(currPoly.getCentroid()) <= lowElevation) {
-                        lowElevation = getElevation(currPoly.getCentroid());
-                        LowElevationNeighbor = currPoly;
+                    for (Polygons currPoly : neighbors) {
+                        if (getElevation(currPoly.getCentroid()) <= lowElevation) {
+                            lowElevation = getElevation(currPoly.getCentroid());
+                            LowElevationNeighbor = currPoly;
+                        }
                     }
+
+                    //add neighbor with lowest elevation to an arraylist for rendering
+                    river.add(LowElevationNeighbor);
+
+                    //recursion
+                    index = k;
+
                 }
-
-                //add neighbor with lowest elevation to an arraylist for rendering
-                river.add(LowElevationNeighbor);
-
-                //recursion
-                index = k;
-
             }
+
+            for (Polygons currPoly: river){
+                currPoly.setAsRiver();
+                System.out.println(currPoly.getCentroid().getPropertiesList());}
+
+            iterations++;
+
         }
 
-        for (Polygons currPoly: river){
-            currPoly.setAsRiver();
-            System.out.println(currPoly.getCentroid().getPropertiesList());}
 
 
 
