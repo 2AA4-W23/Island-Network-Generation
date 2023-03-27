@@ -19,6 +19,8 @@ import ca.team50.soilAbsorption.*;
 import ca.team50.specification.CLInterfaceIsland;
 import ca.team50.water.AquiferGenerator;
 import ca.team50.water.LakeGenerator;
+import ca.team50.water.RiverCentroidsGenerator;
+
 import java.util.ArrayList;
 
 
@@ -30,7 +32,7 @@ public class NormalGenerator implements IslandGenerable {
         this.specification = islandSpecification;
     }
 
-
+    // Main island generation
     @Override
     public void generateIsland(PolyMesh<Polygons> mesh) {
 
@@ -68,6 +70,9 @@ public class NormalGenerator implements IslandGenerable {
         double maxRadius = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition,0,maxRadiusCanvasCenter);
         // THRESHOLD ALTITUDE
         double altitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.1,0,1);
+
+        //RIVER THRESHOLD
+        double rivAltitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.15,0,1);
 
         // ELEVATION
         // ALTITUDE
@@ -220,6 +225,9 @@ public class NormalGenerator implements IslandGenerable {
             }
 
         }
+
+        // Generate Rivers
+        RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(mesh, specification.getNumRivers(), rivAltitude);
 
 
     }

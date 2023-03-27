@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class RiverCentroidsGenerator {
 
-    public RiverCentroidsGenerator(ArrayList<Polygons> mesh, int maxRivers, double thresholdAltitude){
+    public RiverCentroidsGenerator(PolyMesh<Polygons> mesh, int maxRivers, double thresholdAltitude){
 
         ArrayList<Polygons> river = new ArrayList<>();
 
