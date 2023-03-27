@@ -151,36 +151,39 @@ public class NormalGenerator implements IslandGenerable {
 
         // Get Soil Type
         String soilType = specification.getSoilType();
-        if (soilType != null){
+
+        SoilProfile profile = null;
+
+       if (soilType != null){
             double clayContent;
             double sandContent;
             double loamContent;
-            double absorptionRate = 0;
+            double absorptionRate = 1;
 
             switch(soilType.toLowerCase()){
                 case "clay":
                     clayContent = Math.random() * 0.5 + 0.5;
                     sandContent = Math.random() * 0.3;
                     loamContent = Math.random() * 0.3;
-                    SoilProfile clayProfile = new Clay(clayContent,sandContent,loamContent,absorptionRate);
+                    profile = new Clay(clayContent,sandContent,loamContent,absorptionRate);
                     break;
                 case "sand":
                     clayContent = Math.random() * 0.3;
                     sandContent = Math.random() * 0.5 + 0.5;
                     loamContent = Math.random() * 0.3;
-                    SoilProfile sandProfile = new Sand(clayContent,sandContent,loamContent,absorptionRate);
+                    profile = new Sand(clayContent,sandContent,loamContent,absorptionRate);
                     break;
                 case "loam":
                     clayContent = Math.random() * 0.3;
                     sandContent = Math.random() * 0.3;
                     loamContent = Math.random() * 0.5 + 0.5;
-                    SoilProfile loamProfile = new Loam(clayContent,sandContent,loamContent,absorptionRate);
+                    profile = new Loam(clayContent,sandContent,loamContent,absorptionRate);
                     break;
                 case "special":
                     clayContent = Math.random() * 0.5 + 0.5;
                     sandContent = Math.random() * 0.5 + 0.5;
                     loamContent = Math.random() * 0.5 + 0.5;
-                    SoilProfile specialProfile = new Special(clayContent,sandContent,loamContent,absorptionRate);
+                    profile = new Special(clayContent,sandContent,loamContent,absorptionRate);
                     break;
             }
         }
@@ -192,8 +195,12 @@ public class NormalGenerator implements IslandGenerable {
 
         // Lake generation
         LakeGenerator lakeGenerator = new LakeGenerator(mesh,islandShape,specification.getNumLakes(),maxRadius,altitude,specification.getSeed());
+
         TileType lakeTile = new LakeTile();
         TileType oceanTile = new OceanTile();
+
+        // Generate Rivers
+        RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(mesh, specification.getNumRivers(), rivAltitude);
 
         // Assign colours to polygons
         for (Polygons curPoly : mesh) {
@@ -202,6 +209,9 @@ public class NormalGenerator implements IslandGenerable {
 
             // Check if polygon exists within island
             if (islandShape.isVertexInside(centroid)) {
+
+                // Compute humidity
+                profile.computeRemainingWater(curPoly,lakeGenerator,aquiferGenerator);
 
                 // Check altitude and assign tile colour accordingly
                 double polygonAltitude = extractProperties(centroid.getPropertiesList(), "altitude");
@@ -225,9 +235,6 @@ public class NormalGenerator implements IslandGenerable {
             }
 
         }
-
-        // Generate Rivers
-        RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(mesh, specification.getNumRivers(), rivAltitude);
 
 
     }
