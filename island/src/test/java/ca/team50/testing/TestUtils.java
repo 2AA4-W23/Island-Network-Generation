@@ -71,7 +71,7 @@ public class TestUtils {
 
     @Test
     public void testGenerateSandSoilProfile() {
-        Sand sandProfile = new Sand(0.2, 0.7, 0.1, 0.54);
+        SoilProfile sandProfile = new Sand(0.2, 0.7, 0.1, 0.54);
         SoilProfile actualProfile = sandProfile.generateSoilProfile(0.2, 0.7, 0.1);
         assertEquals(sandProfile.getClass(), actualProfile.getClass());
     }
@@ -86,7 +86,7 @@ public class TestUtils {
 
     @Test
     public void testGenerateLoamSoilProfile() {
-        Loam loamProfile = new Loam(0.4, 0.4, 0.2, 0.4);
+        SoilProfile loamProfile = new Loam(0.4, 0.4, 0.2, 0.4);
         SoilProfile actualProfile = loamProfile.generateSoilProfile(0.4, 0.4, 0.2);
         assertEquals(loamProfile.getClass(), actualProfile.getClass());
     }
@@ -97,6 +97,12 @@ public class TestUtils {
         double expectedAbsorptionRate = 0.4;
         double actualAbsorptionRate = loam.calculateAbsorptionRate(0.4, 0.4, 0.2);
         assertEquals(expectedAbsorptionRate, actualAbsorptionRate, 0.001);
+    }
+    @Test
+    public void testGenerateSpecialSoilProfile() {
+        SoilProfile specialProfile = new Special(0.6, 0.6, 0.5, 0.4);
+        SoilProfile actualProfile = specialProfile.generateSoilProfile(0.7, 0.6, 0.5);
+        assertEquals(specialProfile.getClass(), actualProfile.getClass());
     }
 
 
