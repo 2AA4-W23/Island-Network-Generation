@@ -13,7 +13,9 @@ import ca.team50.shapes.Elipse;
 import ca.team50.shapes.Irregular;
 import ca.team50.shapes.IslandShape;
 import ca.team50.elevation.*;
-import ca.team50.water.LakeGenerator;
+
+import ca.team50.water.RiverCentroidsGenerator;
+import ca.team50.water.RiverGenerator;
 
 import java.util.ArrayList;
 
@@ -47,7 +49,6 @@ public class TestIsland implements IslandGenerable {
         ArrayList<Polygons> islandPoly = new ArrayList<>();
 
         for (Polygons currentPolygon : mesh) {
-
             Structs.Vertex centroid = currentPolygon.getCentroid();
 
             if (elipse.isVertexInside(centroid))
@@ -61,11 +62,12 @@ public class TestIsland implements IslandGenerable {
         double area = 25.0;
 
         //Volcano.volcanoAltitude(islandPoly, centreOfMesh, topAltitude, botAltitude, height, width, area);
-        LakeGenerator lakeGen = new LakeGenerator(mesh,elipse,3,250,0.6,1928);
-        double numOf = 6.0;
-        double slopeRadius = 200;
+
+        double numOf = 3.0;
+        double slopeRadius = 300;
 
         mountainAltitude(islandPoly, numOf, topAltitude, botAltitude, slopeRadius);
+
 
             // Loop through all polygons (Eventually gonna be part of a biome interface)
         for (Polygons currentPolygon : mesh) {
@@ -93,6 +95,8 @@ public class TestIsland implements IslandGenerable {
             }
 
         }
+
+        RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(islandPoly, 3, 0.8);
 
     }
 
