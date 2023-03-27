@@ -8,11 +8,12 @@ import ca.team50.elevation.Plains;
 import ca.team50.generation.TestIsland;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Plains {
 
     //later, overall base altitude of plains can be determined through command line, and to what degree altitudes fluctuates can also be user determined
-    public static void plainsAltitude(PolyMesh<Polygons> mesh, double altitude, double fluctuation) {
+    public static void plainsAltitude(List<Polygons> mesh, double altitude, double fluctuation) {
 
 
         for (Polygons currPoly: mesh){

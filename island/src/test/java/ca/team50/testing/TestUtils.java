@@ -1,7 +1,10 @@
 package ca.team50.testing;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
+import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
+import ca.team50.generation.IslandGenerable;
+import ca.team50.generation.TestIsland;
 import ca.team50.shapes.Circle;
 import ca.team50.shapes.Elipse;
 import ca.team50.shapes.IslandShape;
@@ -48,6 +51,15 @@ public class TestUtils {
         );
     }
 
+    // ------ END TEST ------ //
+
+    // ------ TESTING ISLAND ------ //
+    /*@Test
+    public void generateIslandDummy() {
+        PolyMesh<Polygons> testMesh = new PolyMesh<>();
+        IslandGenerable island = new TestIsland();
+        island.generateIsland(testMesh);
+    }*/
     // ------ END TEST ------ //
 
 }

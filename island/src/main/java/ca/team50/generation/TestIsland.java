@@ -13,6 +13,7 @@ import ca.team50.shapes.Elipse;
 import ca.team50.shapes.Irregular;
 import ca.team50.shapes.IslandShape;
 import ca.team50.elevation.*;
+
 import ca.team50.water.RiverCentroidsGenerator;
 import ca.team50.water.RiverGenerator;
 
@@ -66,7 +67,6 @@ public class TestIsland implements IslandGenerable {
         double slopeRadius = 300;
 
         mountainAltitude(islandPoly, numOf, topAltitude, botAltitude, slopeRadius);
-
 
 
             // Loop through all polygons (Eventually gonna be part of a biome interface)

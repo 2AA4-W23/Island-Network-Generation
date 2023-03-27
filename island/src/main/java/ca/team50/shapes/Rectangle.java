@@ -29,6 +29,7 @@ public class Rectangle implements IslandShape {
         list.add(vertex1);
         list.add(vertex2);
         list.add(vertex3);
+        list.add(vertex4);
 
         this.rectangle = generateShape(list);
     }

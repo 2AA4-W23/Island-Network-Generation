@@ -8,12 +8,13 @@ import ca.team50.shapes.IslandShape;
 import org.apache.xmlgraphics.util.dijkstra.Vertex;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static ca.team50.generation.TestIsland.extractProperties;
 
 public class Volcano {
 
-    public static void volcanoAltitude(ArrayList<Polygons> islandPoly, Structs.Vertex center, double topAltitude, double botAltitude, double islandwidth, double islandlength, double area ) {
+    public static void volcanoAltitude(List<Polygons> islandPoly, Structs.Vertex center, double topAltitude, double botAltitude, double islandwidth, double islandlength, double area ) {
 
         //Determine max radius of volcano
         double maxRadius = Math.min(islandwidth, islandlength);
