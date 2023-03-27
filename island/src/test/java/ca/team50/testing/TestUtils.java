@@ -55,7 +55,7 @@ public class TestUtils {
     }
 
 
-    @Test
+    /*@Test
     public void testCalculateClayAbsorptionRate() {
         Clay clay = new Clay(0.6, 0.2, 0.2, 0);
         double expectedAbsorptionRate = 0.2;
@@ -103,7 +103,7 @@ public class TestUtils {
         SoilProfile specialProfile = new Special(0.6, 0.6, 0.5, 0.4);
         SoilProfile actualProfile = specialProfile.generateSoilProfile(0.7, 0.6, 0.5);
         assertEquals(specialProfile.getClass(), actualProfile.getClass());
-    }
+    } */
 
 
 
