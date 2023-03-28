@@ -22,6 +22,7 @@ import ca.team50.water.LakeGenerator;
 import ca.team50.water.RiverCentroidsGenerator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class NormalGenerator implements IslandGenerable {
@@ -96,32 +97,11 @@ public class NormalGenerator implements IslandGenerable {
 
         // Setup
         for (Polygons currentPolygon : mesh) {
-
             currentPolygon.cleanProperties();
-
         }
-
-        // Temp shape
-        IslandShape islandShape = new Circle(CanvasUtils.getCenter(mesh),radius);
 
         // Get island shape
-        if (specification.getShapeType().equals(IslandShapeType.CIRCLE)) {
-
-            islandShape = new Circle(CanvasUtils.getCenter(mesh),radius);
-            
-        } else if (specification.getShapeType().equals(IslandShapeType.ELIPSE)) {
-
-            islandShape = new Elipse(CanvasUtils.getCenter(mesh),height,width,0.3);
-            
-        } else if (specification.getShapeType().equals(IslandShapeType.RECTANGLE)) {
-
-            islandShape = new Rectangle(vertex1,vertex2,vertex3,vertex4);
-            
-        } else if (specification.getShapeType().equals(IslandShapeType.IRREGULAR)) {
-
-            islandShape = new Irregular(specification.getSeed(),noiseThreshold,CanvasUtils.getCenter(mesh),CanvasUtils.getMaxPoint(mesh));
-
-        }
+        IslandShape islandShape = getShape(mesh,radius,height,width,vertex1,vertex2,vertex3,vertex4,noiseThreshold);
 
         // Get list of polygons
         ArrayList<Polygons> islandPoly = new ArrayList<>();
@@ -135,62 +115,11 @@ public class NormalGenerator implements IslandGenerable {
 
         }
 
-        System.out.println(islandPoly.size());
+        // Assign altitude
+        assignAltitude(mesh,islandPoly,baseAltitude,fluctuation,numOfMountains,topAltitude,botAltitude,slopeRadius,height_vol,width_vol,area);
 
-        // Assign elevation to all polygons
-        if (specification.getElevationType().equals(ElevationType.PLAINS)) {
-
-            Plains.plainsAltitude(islandPoly,baseAltitude,fluctuation);
-
-        } else if (specification.getElevationType().equals(ElevationType.MOUNTAINS)) {
-
-            Mountains.mountainAltitude(islandPoly,numOfMountains,topAltitude,botAltitude,slopeRadius);
-
-        } else if (specification.getElevationType().equals(ElevationType.VOLCANO)) {
-
-            Volcano.volcanoAltitude(islandPoly, CanvasUtils.getCenter(mesh), topAltitude, botAltitude, height_vol, width_vol, area);
-            
-        }
-
-        // Get Soil Type
-        String soilType = specification.getSoilType();
-
-        SoilProfile profile = null;
-
-       if (soilType != null){
-            double clayContent;
-            double sandContent;
-            double loamContent;
-            double absorptionRate = 1;
-
-            switch(soilType.toLowerCase()){
-                case "clay":
-                    clayContent = Math.random() * 0.5 + 0.5;
-                    sandContent = Math.random() * 0.3;
-                    loamContent = Math.random() * 0.3;
-                    profile = new Clay(clayContent,sandContent,loamContent,absorptionRate);
-                    break;
-                case "sand":
-                    clayContent = Math.random() * 0.3;
-                    sandContent = Math.random() * 0.5 + 0.5;
-                    loamContent = Math.random() * 0.3;
-                    profile = new Sand(clayContent,sandContent,loamContent,absorptionRate);
-                    break;
-                case "loam":
-                    clayContent = Math.random() * 0.3;
-                    sandContent = Math.random() * 0.3;
-                    loamContent = Math.random() * 0.5 + 0.5;
-                    profile = new Loam(clayContent,sandContent,loamContent,absorptionRate);
-                    break;
-                case "special":
-                    clayContent = Math.random() * 0.5 + 0.5;
-                    sandContent = Math.random() * 0.5 + 0.5;
-                    loamContent = Math.random() * 0.5 + 0.5;
-                    profile = new Special(clayContent,sandContent,loamContent,absorptionRate);
-                    break;
-            }
-        }
-
+        // Get soil profile
+        SoilProfile profile = getSoilProfile(specification);
 
         // Aquifer generation
         AquiferGenerator aquiferGenerator = new AquiferGenerator();
@@ -239,6 +168,93 @@ public class NormalGenerator implements IslandGenerable {
 
         }
 
+
+    }
+
+    // Method to generate shape
+    private IslandShape getShape(PolyMesh<Polygons> mesh, double cirRadius, double elHeight, double elWidth, Structs.Vertex vertex1, Structs.Vertex vertex2, Structs.Vertex vertex3, Structs.Vertex vertex4, double irrNoiseThreshold) {
+
+        IslandShape islandShape = null;
+
+        // Get island shape
+        if (specification.getShapeType().equals(IslandShapeType.CIRCLE)) {
+
+            islandShape = new Circle(CanvasUtils.getCenter(mesh),cirRadius);
+
+        } else if (specification.getShapeType().equals(IslandShapeType.ELIPSE)) {
+
+            islandShape = new Elipse(CanvasUtils.getCenter(mesh),elHeight,elWidth,0.3);
+
+        } else if (specification.getShapeType().equals(IslandShapeType.RECTANGLE)) {
+
+            islandShape = new Rectangle(vertex1,vertex2,vertex3,vertex4);
+
+        } else if (specification.getShapeType().equals(IslandShapeType.IRREGULAR)) {
+
+            islandShape = new Irregular(specification.getSeed(),irrNoiseThreshold,CanvasUtils.getCenter(mesh),CanvasUtils.getMaxPoint(mesh));
+
+        }
+
+        return islandShape;
+
+    }
+
+    private void assignAltitude(PolyMesh<Polygons> mesh, List<Polygons> islandPoly, double plainsBaseAltitude, double plainsFluctuation, int numOfMountains, double mountTopAltitude, double mountBotAltitude, double mountSlope, double height_vol, double width_vol, double area) {
+        // Assign elevation to all polygons
+        if (specification.getElevationType().equals(ElevationType.PLAINS)) {
+
+            Plains.plainsAltitude(islandPoly,plainsBaseAltitude,plainsFluctuation);
+
+        } else if (specification.getElevationType().equals(ElevationType.MOUNTAINS)) {
+
+            Mountains.mountainAltitude(islandPoly,numOfMountains,mountTopAltitude,mountBotAltitude,mountSlope);
+
+        } else if (specification.getElevationType().equals(ElevationType.VOLCANO)) {
+
+            Volcano.volcanoAltitude(islandPoly, CanvasUtils.getCenter(mesh), mountTopAltitude, mountBotAltitude, height_vol, width_vol, area);
+
+        }
+    }
+
+    private SoilProfile getSoilProfile(CLInterfaceIsland specification) {
+
+        // Get Soil Type
+        String soilType = specification.getSoilType();
+
+        SoilProfile profile = null;
+        double clayContent;
+        double sandContent;
+        double loamContent;
+        double absorptionRate = 1;
+
+        switch(soilType.toLowerCase()){
+                case "clay":
+                    clayContent = Math.random() * 0.5 + 0.5;
+                    sandContent = Math.random() * 0.3;
+                    loamContent = Math.random() * 0.3;
+                    profile = new Clay(clayContent,sandContent,loamContent,absorptionRate);
+                    break;
+                case "sand":
+                    clayContent = Math.random() * 0.3;
+                    sandContent = Math.random() * 0.5 + 0.5;
+                    loamContent = Math.random() * 0.3;
+                    profile = new Sand(clayContent,sandContent,loamContent,absorptionRate);
+                    break;
+                case "loam":
+                    clayContent = Math.random() * 0.3;
+                    sandContent = Math.random() * 0.3;
+                    loamContent = Math.random() * 0.5 + 0.5;
+                    profile = new Loam(clayContent,sandContent,loamContent,absorptionRate);
+                    break;
+                case "special":
+                    clayContent = Math.random() * 0.5 + 0.5;
+                    sandContent = Math.random() * 0.5 + 0.5;
+                    loamContent = Math.random() * 0.5 + 0.5;
+                    profile = new Special(clayContent,sandContent,loamContent,absorptionRate);
+                    break;
+            }
+
+        return profile;
 
     }
 
