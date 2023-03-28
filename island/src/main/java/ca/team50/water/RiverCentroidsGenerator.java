@@ -66,7 +66,7 @@ public class RiverCentroidsGenerator {
 
             for (Polygons currPoly: river){
                 currPoly.setAsRiver();
-                System.out.println(currPoly.getCentroid().getPropertiesList());}
+            }
 
             iterations++;
 

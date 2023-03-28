@@ -154,8 +154,6 @@ public class Polygons implements Serializable {
     //Changing humidity of polygon centroid vertex
     public void changeHumidity(String humidity) {
 
-        System.out.println(humidity);
-
         // Create property
         String relativeHumidity = humidity;
         Structs.Property elevation = Structs.Property.newBuilder().setKey("humidity").setValue(relativeHumidity).build();

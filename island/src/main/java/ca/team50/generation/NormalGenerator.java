@@ -166,7 +166,6 @@ public class NormalGenerator implements IslandGenerable {
         } else if (specification.getShapeType().equals(IslandShapeType.RECTANGLE)) {
 
             // RECTANGLE
-            double maxRadiusCanvasCenter = Math.sqrt(Math.pow(max.getX()-middle.getX(),2) + Math.pow(max.getY()-middle.getY(),2));
             double maxRadiusX = max.getX() - middle.getX();
             double maxRadiusY = max.getY() - middle.getY();
             double staringPosX = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.5,maxRadiusX*0.5,maxRadiusX);
@@ -225,7 +224,7 @@ public class NormalGenerator implements IslandGenerable {
             int numOfMountains = (int) GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.4,0,20);
             double topAltitude = 1.0;
             double botAltitude = 0.0;
-            double slopeRadius = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.5,100,500);
+            double slopeRadius = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.5,maxRadiusCanvasCenter*0.5,maxRadiusCanvasCenter);
 
             Mountains.mountainAltitude(islandPoly,numOfMountains,topAltitude,botAltitude,slopeRadius);
 
