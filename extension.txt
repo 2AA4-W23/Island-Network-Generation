@@ -1,4 +1,4 @@
 - lenoverd - Finishing Normal Generator (Some values from other classes were modified to fit Normal Generator. The structure of these classes were NOT changed)
 - lenoverd - Finishing test cases
 - lenoverd - Updated releases to include complete normal generator
-- lenoverd - Updating sequence diagram in assignment to better reflect complete normal generator
+- lenoverd - Updating sequence diagram/text in assignment to better reflect complete normal generator
