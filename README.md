@@ -116,11 +116,11 @@ To generate an island:
    | Help | -h |   --help   |   Prints all available commands to console | Exits the program after execution. Provides extra information such as default values for specified arguments |
    | Mesh File Input | -i |   --input   |   Specify the mesh name (including .mesh) in your file system to read | If specifying a .mesh file from the same directory as island.jar, no file path is needed|
    | Island mesh File Output | -o |   --output   |   Specify the mesh name (including .mesh) in your file system to write an island mesh file to | If specifying a .mesh file from the same directory as island.jar, no file path is needed |
-   | Island Generation Mode | -m |   --mode   |  Specify the type of island to generate | All island modes are listed by using the -h command. Normal mode is the main generation mode |
+   | Island Generation Mode | -m |   --mode   |  Specify the type of island to generate | All island modes are listed by using the -h command. Normal mode is the main generation mode and lagoon will produce the MVP island |
    | Aquifer | -a |   --aquifer   | Specify the number of aquifers to be generated (as an integer) | |
-   | Lakes | -l |   --lakes   | Specify the maximum number of lakes to be generated (as an integer) | |
-   | Rivers | -r |   --rivers   | Specify the maximum number of rivers to be generated (as an integer) | |
-   | Seed | -s |   --seed   | Specify the seed to be used by the generator | Only works with generators that support it such as Normal |
+   | Lakes | -l |   --lakes   | Specify the maximum number of lakes to be generated (as an integer) | This is a MAX number and strongly depends on the altitude of the island |
+   | Rivers | -r |   --rivers   | Specify the maximum number of iterations for rivers to be generated (as an integer) | One pass will generate rivers where altitude difference is sufficient |
+   | Seed | -s |   --seed   | Specify the seed to be used by the Normal generator |  This may drastically change how the island looks (to no island at all), it is recommended to play around with this value a lot |
    | Biome | -b |   --biomes   | Specify the biomes of island generation | Use -h to find out all biomes available |
    | Elevation (altitude) | -al |   --altitude  | Specify the altitude type of island generation | Use -h to find out all elevations available |
    | Island Shape | -sh |  --shape | Specify the shape type of island generation | Use -h to find out all shapes available |
@@ -165,4 +165,4 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 | F14 |      Create SoilProfile Abstract class to help develop different SoilProfiles |  baskam1   |   2023-03-23  | 2023-03-24  |  D  |
 | F15 |      Generated specific SoilProfiles for users to select from |  baskam1   |   2023-03-24  | 2023-03-26  |  D  |
 | F16 |      Implemented capabilities to computeRemainingWater |  baskam1   |   2023-03-25  | 2023-03-26  |  D  |
-| F17-3 |      Implemented unified island generator |  lenoverd   |   2023-03-25  | 2023-03-26  |  D  |
+| F17-3 (2) |      Implemented unified island generator |  lenoverd   |   2023-03-25  | 2023-03-28  |  D  |

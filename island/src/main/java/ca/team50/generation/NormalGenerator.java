@@ -149,7 +149,7 @@ public class NormalGenerator implements IslandGenerable {
 
             // CIRCLE
             double maxRadiusCanvasCenter = Math.sqrt(Math.pow(max.getX()-middle.getX(),2) + Math.pow(max.getY()-middle.getY(),2));
-            double circleRadiusNoise = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.1,maxRadiusCanvasCenter*0.5,maxRadiusCanvasCenter);
+            double circleRadiusNoise = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.1,maxRadiusCanvasCenter*0.5,maxRadiusCanvasCenter*0.9);
 
             islandShape = new Circle(CanvasUtils.getCenter(mesh),circleRadiusNoise);
 
@@ -157,8 +157,8 @@ public class NormalGenerator implements IslandGenerable {
 
             // ELIPSE
             double maxRadiusCanvasCenter = Math.sqrt(Math.pow(max.getX()-middle.getX(),2) + Math.pow(max.getY()-middle.getY(),2));
-            double width = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.2,maxRadiusCanvasCenter*0.5,maxRadiusCanvasCenter);
-            double height = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.3,maxRadiusCanvasCenter*0.5,maxRadiusCanvasCenter);;
+            double width = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.2,maxRadiusCanvasCenter*0.5,maxRadiusCanvasCenter*0.9);
+            double height = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.3,maxRadiusCanvasCenter*0.5,maxRadiusCanvasCenter*0.9);
             double rotation = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.4,-6.28,6.28);
 
             islandShape = new Elipse(CanvasUtils.getCenter(mesh),height,width,rotation);
@@ -170,8 +170,8 @@ public class NormalGenerator implements IslandGenerable {
             double maxRadiusY = max.getY() - middle.getY();
             double staringPosX = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.5,maxRadiusX*0.5,maxRadiusX);
             double staringPosY = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.6,maxRadiusX*0.5,maxRadiusX);
-            double increaseX = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.7,maxRadiusX+1,maxRadiusX*2);
-            double increaseY = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.8,maxRadiusY+1,maxRadiusY*2);
+            double increaseX = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.7,maxRadiusX+1,(maxRadiusX*2)*0.9);
+            double increaseY = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.8,maxRadiusY+1,(maxRadiusY*2)*0.95);
             Structs.Vertex vertex1 = Structs.Vertex.newBuilder().setX(staringPosX).setY(staringPosY).build();
             Structs.Vertex vertex2 = Structs.Vertex.newBuilder().setX(staringPosX+increaseX).setY(staringPosY).build();
             Structs.Vertex vertex3 = Structs.Vertex.newBuilder().setX(staringPosX+increaseX).setY(staringPosY+increaseY).build();
