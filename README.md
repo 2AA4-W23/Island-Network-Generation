@@ -136,7 +136,7 @@ mosser@azrael generator % java -jar generator.jar -mt IRREGULAR -n sample -w 100
 mosser@azrael A2 % cd ..
 mosser@azrael A2 % cd island
 # The following command specifies the generated mesh from generator.jar to convert to an island with an eight lakes, arctic biome, mountain elevation, the shape of an elipse and a seed of 1234
-mosser@azrael generator % java -jar island.jar -i ../generator/sample.mesh -o island.mesh -m normal --l 8 -b Arctic -al MOUNTAINS -sh ELIPSE -s 1234
+mosser@azrael island % java -jar island.jar -i ../generator/sample.mesh -o island.mesh -m normal --l 8 -b Arctic -al MOUNTAINS -sh ELIPSE -s 1234
 
 mosser@azrael A2 % cd ..
 mosser@azrael A2 % cd visualizer

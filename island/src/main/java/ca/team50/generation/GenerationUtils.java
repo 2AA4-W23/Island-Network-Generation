@@ -35,7 +35,7 @@ public class GenerationUtils {
 
         double noiseVal = wolNoise.evaluateNoise(position);
 
-        double val = ((max-min) * ((noiseVal+1))/(2)) + min;
+        double val = (noiseVal-(-1))/(1-(-1))*(max-min) + min;
 
         return val;
     }

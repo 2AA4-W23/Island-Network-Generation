@@ -25,9 +25,7 @@ public class CLInterfaceIsland {
     private static final Option elevation = new Option("al", "altitude", true, "Specify the altitude type of island generation, specified values are: " + getElevationEnumValues() + ", default: " + ElevationType.values()[0].name());
     private static final Option shape = new Option("sh", "shape", true, "Specify the shape type of island generation, specified values are: " + getShapeEnumValues() + ", default: " + IslandShapeType.values()[0].name());
 
-    private static final Option soilContent = new Option("s0", "soil", true, "Specify the type of Soil Profile (Clay, Loam, Sand, or Special)");
-
-    // TODO SOIL
+    private static final Option soilContent = new Option("so", "soil", true, "Specify the type of Soil Profile (Clay, Loam, Sand, or Special)");
 
     private ModeType islandMode;
     private BiomeType biomeType;
@@ -60,7 +58,7 @@ public class CLInterfaceIsland {
         options.addOption(lakes);
         options.addOption(rivers);
         options.addOption(seed);
-        //options.addOption(soilContent);
+        options.addOption(soilContent);
 
         try {
 
@@ -74,7 +72,7 @@ public class CLInterfaceIsland {
             }
 
             // Get island generation mode
-            String islandModeType = commandLine.getOptionValue(islandGenMode,ModeType.values()[0].name());
+            String islandModeType = commandLine.getOptionValue(islandGenMode,ModeType.values()[0].name().toLowerCase());
 
             for (ModeType curType : ModeType.values()) {
                 if (islandModeType.contains(curType.name())) {
@@ -191,6 +189,7 @@ public class CLInterfaceIsland {
         options.addOption(lakes);
         options.addOption(rivers);
         options.addOption(seed);
+        options.addOption(soilContent);
 
 
         formatter.printHelp("-<short or -- for long command> <numerical or string argument if required>",options);
