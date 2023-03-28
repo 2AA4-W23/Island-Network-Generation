@@ -4,7 +4,7 @@
   - Jasmine Wang [wangj500@mcmaster.ca]
   - Michael Baskaran [baskam1@mcmaster.ca]
 
-#### If looking for A3 information, please scroll to the bottom!
+### If looking for A3 information, please scroll to the bottom!
 
 ## How to run the product
 

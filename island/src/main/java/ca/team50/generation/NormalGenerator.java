@@ -14,6 +14,8 @@ import ca.team50.elevation.ElevationType;
 import ca.team50.elevation.Mountains;
 import ca.team50.elevation.Plains;
 import ca.team50.elevation.Volcano;
+import ca.team50.exceptions.ExceptionHandler;
+import ca.team50.exceptions.GenerationException;
 import ca.team50.shapes.*;
 import ca.team50.soilAbsorption.*;
 import ca.team50.specification.CLInterfaceIsland;
@@ -40,70 +42,161 @@ public class NormalGenerator implements IslandGenerable {
         System.out.println("Generating Island...");
         System.out.println("Please note this may take sometime depending on the size of the canvas and the number of polygons!");
 
-        long noiseEvaluationPosition = 1234;
-        Structs.Vertex max = CanvasUtils.getMaxPoint(mesh);
-        Structs.Vertex middle = CanvasUtils.getCenter(mesh);
+        try {
 
-        // CIRCLE
-        double maxRadiusCanvasCenter = Math.sqrt(Math.pow(max.getX()-middle.getX(),2) + Math.pow(max.getY()-middle.getY(),2));
-        double circleRadiusNoise = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.1,0,maxRadiusCanvasCenter);
-        double radius = circleRadiusNoise;
+            // Given generator.jar gives polygons random properties, we want to default all of them specifically for island generation
+            for (Polygons currentPolygon : mesh) {
+                currentPolygon.cleanProperties();
+            }
 
-        // ELIPSE
-        double maxRadiusX = max.getX() - middle.getX();
-        double maxRadiusY = max.getY() - middle.getY();
-        double width = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.2,0,maxRadiusX);
-        double height = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.3,0,maxRadiusY);;
-        double rotation = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.4,-6.28,6.28);
+            // Determine noise evaluation position
+            long noiseEvaluationPosition = 1;
 
-        // RECTANGLE
-        double staringPosX = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.5,0,maxRadiusX);
-        double staringPosY = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.6,0,maxRadiusY);
-        double increaseX = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.7,1,maxRadiusX);
-        double increaseY = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.8,1,maxRadiusY);
-        Structs.Vertex vertex1 = Structs.Vertex.newBuilder().setX(staringPosX).setY(staringPosY).build();
-        Structs.Vertex vertex2 = Structs.Vertex.newBuilder().setX(staringPosX+increaseX).setY(staringPosY).build();
-        Structs.Vertex vertex3 = Structs.Vertex.newBuilder().setX(staringPosX+increaseX).setY(staringPosY+increaseY).build();
-        Structs.Vertex vertex4 = Structs.Vertex.newBuilder().setX(staringPosX).setY(staringPosY+increaseY).build();
+            // Define position for maximum points (i.e. so that shapes do not generate a size larger than the canvas)
+            Structs.Vertex max = CanvasUtils.getMaxPoint(mesh);
+            Structs.Vertex middle = CanvasUtils.getCenter(mesh);
 
-        //IRREGULAR
-        double noiseThreshold = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.9,-1,1);
+            // Specify extra tiles
+            TileType lakeTile = new LakeTile();
+            TileType oceanTile = new OceanTile();
 
-        // LAKE GENERATION
-        // MAX RADIUS
-        double maxRadius = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition,0,maxRadiusCanvasCenter);
-        // THRESHOLD ALTITUDE
-        double altitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.1,0,1);
+            // Get island shape
+            IslandShape islandShape = getShape(mesh,specification,max,middle,noiseEvaluationPosition);
 
-        //RIVER THRESHOLD
-        double rivAltitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.15,0,1);
+            // GENERATOR VARIABLES
+            // MAX RADIUS
+            // We use canvas center for middle of island as all islands will be based from the center of the canvas
+            double maxRadiusCanvasCenter = getMaxIslandDistance(mesh,islandShape,middle);
 
-        // ELEVATION
-        // ALTITUDE
-        double baseAltitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.2,0,1);
-        //FLUCTUATION
-        double fluctuation = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.3,0,40);
+            double maxRadius = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition,0,maxRadiusCanvasCenter);
+            // THRESHOLD ALTITUDE
+            double altitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.1,0,1);
+            //RIVER THRESHOLD
+            double rivAltitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.15,0,1);
 
-        // MOUNTAINS
-        int numOfMountains = (int) GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.4,0,20);
-        double topAltitude = 1.0;
-        double botAltitude = 0.0;
-        double slopeRadius = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.5,0,maxRadiusCanvasCenter);
 
-        // VOLCANO'S
-        double area = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.6,0,maxRadiusCanvasCenter);
-        double width_vol = CanvasUtils.getMaxPoint(mesh).getX() - GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.7,0,maxRadiusCanvasCenter);
-        double height_vol = CanvasUtils.getMaxPoint(mesh).getY() - GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.8,0,maxRadiusCanvasCenter);
+            // ------ GENERATORS ------ //
+            // Assign altitude
+            assignAltitude(mesh,specification,islandShape,noiseEvaluationPosition,max,middle);
 
-        // Setup
-        for (Polygons currentPolygon : mesh) {
-            currentPolygon.cleanProperties();
+            // Get soil profile
+            SoilProfile profile = getSoilProfile(specification);
+
+            // Aquifer generation
+            AquiferGenerator aquiferGenerator = new AquiferGenerator();
+            AquiferGenerator aquifer = aquiferGenerator.generateAquifers(mesh,islandShape);
+
+            // Lake generation
+            LakeGenerator lakeGenerator = new LakeGenerator(mesh,islandShape,specification.getNumLakes(),maxRadius,altitude,specification.getSeed());
+
+            // Generate Rivers
+            RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(mesh, specification.getNumRivers(), rivAltitude);
+
+            // ------ ASSIGN COLOURS TO POLYGONS ------ //
+
+            // Assign colours to polygons
+            for (Polygons curPoly : mesh) {
+
+                Structs.Vertex centroid = curPoly.getCentroid();
+
+                // Check if polygon exists within island
+                if (islandShape.isVertexInside(centroid)) {
+
+                    // Compute humidity
+                    profile.computeRemainingWater(curPoly,lakeGenerator,aquiferGenerator);
+
+                    // Check altitude and assign tile colour accordingly
+                    double polygonAltitude = extractProperties(centroid.getPropertiesList(), "altitude");
+                    double polygonHumidity = extractProperties(centroid.getPropertiesList(), "humidity");
+
+                    if (specification.getBiomeType().equals(BiomeType.Tropical)) {
+                        curPoly.unifyColor(TropicalUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
+                    } else if (specification.getBiomeType().equals(BiomeType.Arctic)) {
+                        curPoly.unifyColor(ArcticUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
+                    } else if (specification.getBiomeType().equals(BiomeType.Deserts)) {
+                        curPoly.unifyColor(DesertsUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
+                    }
+
+                } else {
+                    curPoly.unifyColor(oceanTile.getTileColour());
+                }
+
+                // Check if the polygon existed with a lake and assign colour accordingly
+                if (lakeGenerator.isPolygonApartOfLake(curPoly)) {
+                    curPoly.unifyColor(lakeTile.getTileColour());
+                }
+
+            }
+
+        } catch (Exception e) {
+
+            ExceptionHandler.handleException(new GenerationException("Generation failed! Please check arguments and try again"));
+
         }
 
-        // Get island shape
-        IslandShape islandShape = getShape(mesh,radius,height,width,vertex1,vertex2,vertex3,vertex4,noiseThreshold);
 
-        // Get list of polygons
+
+
+    }
+
+    // Method to generate shape
+    private IslandShape getShape(PolyMesh<Polygons> mesh, CLInterfaceIsland specification, Structs.Vertex max, Structs.Vertex middle, long noiseEvaluationPosition) {
+
+        IslandShape islandShape = null;
+
+        // Get island shape
+        if (specification.getShapeType().equals(IslandShapeType.CIRCLE)) {
+
+            // CIRCLE
+            double maxRadiusCanvasCenter = Math.sqrt(Math.pow(max.getX()-middle.getX(),2) + Math.pow(max.getY()-middle.getY(),2));
+            double circleRadiusNoise = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.1,maxRadiusCanvasCenter*0.5,maxRadiusCanvasCenter);
+
+            islandShape = new Circle(CanvasUtils.getCenter(mesh),circleRadiusNoise);
+
+        } else if (specification.getShapeType().equals(IslandShapeType.ELIPSE)) {
+
+            // ELIPSE
+            double maxRadiusCanvasCenter = Math.sqrt(Math.pow(max.getX()-middle.getX(),2) + Math.pow(max.getY()-middle.getY(),2));
+            double width = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.2,maxRadiusCanvasCenter*0.5,maxRadiusCanvasCenter);
+            double height = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.3,maxRadiusCanvasCenter*0.5,maxRadiusCanvasCenter);;
+            double rotation = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.4,-6.28,6.28);
+
+            islandShape = new Elipse(CanvasUtils.getCenter(mesh),height,width,rotation);
+
+        } else if (specification.getShapeType().equals(IslandShapeType.RECTANGLE)) {
+
+            // RECTANGLE
+            double maxRadiusCanvasCenter = Math.sqrt(Math.pow(max.getX()-middle.getX(),2) + Math.pow(max.getY()-middle.getY(),2));
+            double maxRadiusX = max.getX() - middle.getX();
+            double maxRadiusY = max.getY() - middle.getY();
+            double staringPosX = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.5,maxRadiusX*0.5,maxRadiusX);
+            double staringPosY = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.6,maxRadiusX*0.5,maxRadiusX);
+            double increaseX = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.7,maxRadiusX+1,maxRadiusX*2);
+            double increaseY = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.8,maxRadiusY+1,maxRadiusY*2);
+            Structs.Vertex vertex1 = Structs.Vertex.newBuilder().setX(staringPosX).setY(staringPosY).build();
+            Structs.Vertex vertex2 = Structs.Vertex.newBuilder().setX(staringPosX+increaseX).setY(staringPosY).build();
+            Structs.Vertex vertex3 = Structs.Vertex.newBuilder().setX(staringPosX+increaseX).setY(staringPosY+increaseY).build();
+            Structs.Vertex vertex4 = Structs.Vertex.newBuilder().setX(staringPosX).setY(staringPosY+increaseY).build();
+
+            islandShape = new Rectangle(vertex1,vertex2,vertex3,vertex4);
+
+        } else if (specification.getShapeType().equals(IslandShapeType.IRREGULAR)) {
+
+            //IRREGULAR
+            double noiseThreshold = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*0.9,0,1);
+
+            islandShape = new Irregular(specification.getSeed(), noiseThreshold,CanvasUtils.getCenter(mesh),CanvasUtils.getMaxPoint(mesh));
+
+        }
+
+        return islandShape;
+
+    }
+
+    // Method to assign altitude
+    private void assignAltitude(PolyMesh<Polygons> mesh, CLInterfaceIsland specification, IslandShape islandShape, long noiseEvaluationPosition, Structs.Vertex max, Structs.Vertex middle) {
+
+        // Get list of polygons inside island shape
         ArrayList<Polygons> islandPoly = new ArrayList<>();
 
         for (Polygons currentPolygon : mesh) {
@@ -115,103 +208,38 @@ public class NormalGenerator implements IslandGenerable {
 
         }
 
-        // Assign altitude
-        assignAltitude(mesh,islandPoly,baseAltitude,fluctuation,numOfMountains,topAltitude,botAltitude,slopeRadius,height_vol,width_vol,area);
-
-        // Get soil profile
-        SoilProfile profile = getSoilProfile(specification);
-
-        // Aquifer generation
-        AquiferGenerator aquiferGenerator = new AquiferGenerator();
-        AquiferGenerator aquifer = aquiferGenerator.generateAquifers(mesh,islandShape);
-
-        // Lake generation
-        LakeGenerator lakeGenerator = new LakeGenerator(mesh,islandShape,specification.getNumLakes(),maxRadius,altitude,specification.getSeed());
-
-        TileType lakeTile = new LakeTile();
-        TileType oceanTile = new OceanTile();
-
-        // Generate Rivers
-        RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(mesh, specification.getNumRivers(), rivAltitude);
-
-        // Assign colours to polygons
-        for (Polygons curPoly : mesh) {
-
-            Structs.Vertex centroid = curPoly.getCentroid();
-
-            // Check if polygon exists within island
-            if (islandShape.isVertexInside(centroid)) {
-
-                // Compute humidity
-                profile.computeRemainingWater(curPoly,lakeGenerator,aquiferGenerator);
-
-                // Check altitude and assign tile colour accordingly
-                double polygonAltitude = extractProperties(centroid.getPropertiesList(), "altitude");
-                double polygonHumidity = extractProperties(centroid.getPropertiesList(), "humidity");
-
-                if (specification.getBiomeType().equals(BiomeType.Tropical)) {
-                    curPoly.unifyColor(TropicalUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
-                } else if (specification.getBiomeType().equals(BiomeType.Arctic)) {
-                    curPoly.unifyColor(ArcticUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
-                } else if (specification.getBiomeType().equals(BiomeType.Deserts)) {
-                    curPoly.unifyColor(DesertsUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
-                }
-
-            } else {
-                curPoly.unifyColor(oceanTile.getTileColour());
-            }
-
-            // Check if the polygon existed with a lake and assign colour accordingly
-            if (lakeGenerator.isPolygonApartOfLake(curPoly)) {
-                curPoly.unifyColor(lakeTile.getTileColour());
-            }
-
-        }
-
-
-    }
-
-    // Method to generate shape
-    private IslandShape getShape(PolyMesh<Polygons> mesh, double cirRadius, double elHeight, double elWidth, Structs.Vertex vertex1, Structs.Vertex vertex2, Structs.Vertex vertex3, Structs.Vertex vertex4, double irrNoiseThreshold) {
-
-        IslandShape islandShape = null;
-
-        // Get island shape
-        if (specification.getShapeType().equals(IslandShapeType.CIRCLE)) {
-
-            islandShape = new Circle(CanvasUtils.getCenter(mesh),cirRadius);
-
-        } else if (specification.getShapeType().equals(IslandShapeType.ELIPSE)) {
-
-            islandShape = new Elipse(CanvasUtils.getCenter(mesh),elHeight,elWidth,0.3);
-
-        } else if (specification.getShapeType().equals(IslandShapeType.RECTANGLE)) {
-
-            islandShape = new Rectangle(vertex1,vertex2,vertex3,vertex4);
-
-        } else if (specification.getShapeType().equals(IslandShapeType.IRREGULAR)) {
-
-            islandShape = new Irregular(specification.getSeed(),irrNoiseThreshold,CanvasUtils.getCenter(mesh),CanvasUtils.getMaxPoint(mesh));
-
-        }
-
-        return islandShape;
-
-    }
-
-    private void assignAltitude(PolyMesh<Polygons> mesh, List<Polygons> islandPoly, double plainsBaseAltitude, double plainsFluctuation, int numOfMountains, double mountTopAltitude, double mountBotAltitude, double mountSlope, double height_vol, double width_vol, double area) {
         // Assign elevation to all polygons
         if (specification.getElevationType().equals(ElevationType.PLAINS)) {
 
-            Plains.plainsAltitude(islandPoly,plainsBaseAltitude,plainsFluctuation);
+            // ALTITUDE
+            double baseAltitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.2,0,1);
+            //FLUCTUATION
+            double fluctuation = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.3,0,40);
+
+            Plains.plainsAltitude(islandPoly,baseAltitude,fluctuation);
 
         } else if (specification.getElevationType().equals(ElevationType.MOUNTAINS)) {
 
-            Mountains.mountainAltitude(islandPoly,numOfMountains,mountTopAltitude,mountBotAltitude,mountSlope);
+            // MOUNTAINS
+            double maxRadiusCanvasCenter = getMaxIslandDistance(mesh,islandShape,middle);
+            int numOfMountains = (int) GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.4,0,20);
+            double topAltitude = 1.0;
+            double botAltitude = 0.0;
+            double slopeRadius = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.5,100,500);
+
+            Mountains.mountainAltitude(islandPoly,numOfMountains,topAltitude,botAltitude,slopeRadius);
 
         } else if (specification.getElevationType().equals(ElevationType.VOLCANO)) {
 
-            Volcano.volcanoAltitude(islandPoly, CanvasUtils.getCenter(mesh), mountTopAltitude, mountBotAltitude, height_vol, width_vol, area);
+            // VOLCANO'S
+            double topAltitude = 1.0;
+            double botAltitude = 0.0;
+            double maxRadiusCanvasCenter = getMaxIslandDistance(mesh,islandShape,middle);
+            double area = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.6,0,maxRadiusCanvasCenter);
+            double width_vol = CanvasUtils.getMaxPoint(mesh).getX() - GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.7,0,maxRadiusCanvasCenter);
+            double height_vol = CanvasUtils.getMaxPoint(mesh).getY() - GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.8,0,maxRadiusCanvasCenter);
+
+            Volcano.volcanoAltitude(islandPoly, CanvasUtils.getCenter(mesh),topAltitude, botAltitude, height_vol, width_vol, area);
 
         }
     }
@@ -255,6 +283,35 @@ public class NormalGenerator implements IslandGenerable {
             }
 
         return profile;
+
+    }
+
+    // Method to get radius of island
+    private double getMaxIslandDistance(PolyMesh<Polygons> mesh, IslandShape islandShape, Structs.Vertex centerOfIsland) {
+
+        double longestDistance = 0.0;
+
+        // Loop through all polygons in mesh
+        for (Polygons curPoly : mesh) {
+
+            Structs.Vertex centroid = curPoly.getCentroid();
+
+            // Check if the polygons' centroid exists within the island
+            if (islandShape.isVertexInside(centroid)) {
+
+                // Calculate the distance from the center
+                double distanceFromCenter = Math.sqrt(Math.pow(centroid.getX()-centerOfIsland.getX(),2) + Math.pow(centroid.getY()-centerOfIsland.getY(),2));
+
+                // If it's longer than what's currently stored, set new longest distance
+                if (distanceFromCenter > longestDistance) {
+                    longestDistance = distanceFromCenter;
+                }
+
+            }
+
+        }
+
+        return longestDistance;
 
     }
 

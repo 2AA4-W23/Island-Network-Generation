@@ -7,6 +7,7 @@ import ca.team50.adt.Polygons;
 import ca.team50.shapes.Circle;
 import ca.team50.shapes.IslandShape;
 
+// MVP Island
 public class Lagoon implements IslandGenerable {
 
     private static final double oceanRadius = 350;

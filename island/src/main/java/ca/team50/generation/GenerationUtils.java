@@ -10,7 +10,7 @@ public class GenerationUtils {
      * Generate a value based on a Worley noise map
      * @param seed the seed to control the noise
      * @param position the position to extract a noise value from (as a Vertex)
-     * @return a double containing a value between -1 and 1 based on the position input
+     * @return a double containing a value between 0 and 1 based on the position input
      */
     public static double worleyNoise(long seed, Structs.Vertex position) {
 
@@ -35,7 +35,7 @@ public class GenerationUtils {
 
         double noiseVal = wolNoise.evaluateNoise(position);
 
-        double val = (noiseVal-(-1))/(1-(-1))*(max-min) + min;
+        double val = (noiseVal-(0))/(1-(0))*(max-min) + min;
 
         return val;
     }

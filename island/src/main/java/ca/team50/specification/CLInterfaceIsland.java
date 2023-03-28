@@ -82,7 +82,7 @@ public class CLInterfaceIsland {
             }
 
             // Get soil type
-            this.soilType = commandLine.getOptionValue("so");
+            this.soilType = commandLine.getOptionValue("so","clay");
 
             // Get biome type
             String biomeModeType = commandLine.getOptionValue(biome,BiomeType.values()[0].name());
@@ -125,7 +125,8 @@ public class CLInterfaceIsland {
             // Lakes, Rivers and Seed
             this.numLakes = Integer.parseInt(commandLine.getOptionValue(lakes,"0"));
             this.numRivers = Integer.parseInt(commandLine.getOptionValue(rivers,"0"));
-            this.numSeed = Integer.parseInt(commandLine.getOptionValue(seed,"1234"));
+            this.numSeed = Integer.parseInt(commandLine.getOptionValue(seed,"90915"));
+
 
 
 

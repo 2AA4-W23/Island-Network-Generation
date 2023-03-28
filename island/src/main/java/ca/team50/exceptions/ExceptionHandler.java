@@ -10,6 +10,7 @@ public class ExceptionHandler {
         System.out.println("An exception occurred!");
         System.out.println("Exception: " + exception.getClass());
         System.out.println("Message: " + exception.getMessage());
+        System.out.println("This was due to invalid command input. As a reminder, the commands help list is below");
         CLInterfaceIsland.printHelp();
         System.exit(0);
 
@@ -32,6 +33,17 @@ public class ExceptionHandler {
         System.out.println("Exception: " + exception.getClass());
         System.out.println("Message: " + exception.getMessage());
         System.out.println("It seems writing to storage did not work. Please verify you have ample storage and the file name is valid. Then try again.");
+        System.exit(0);
+
+    }
+
+    public static void handleException(GenerationException exception) {
+
+        System.out.println("An exception occurred!");
+        System.out.println("Exception: " + exception.getClass());
+        System.out.println("Message: " + exception.getMessage());
+        System.out.println("This may have been caused by a few things, in particular invalid input and/or the seed does not work with the given canvas size");
+        CLInterfaceIsland.printHelp();
         System.exit(0);
 
     }

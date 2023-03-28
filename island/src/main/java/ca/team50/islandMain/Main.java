@@ -9,6 +9,9 @@ import ca.team50.soilAbsorption.*;
 import ca.team50.specification.CLInterfaceIsland;
 import ca.team50.water.AquiferGenerator;
 
+import java.awt.*;
+import java.util.Random;
+
 public class Main {
 
     public static void main(String[] args) {
