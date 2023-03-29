@@ -70,9 +70,9 @@ public class NormalGenerator implements IslandGenerable {
 
             double maxRadius = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition,0,maxRadiusCanvasCenter);
             // THRESHOLD ALTITUDE
-            double altitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.1,0,1);
+            double altitude = 1.0 - GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.1,0,1);
             //RIVER THRESHOLD
-            double rivAltitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.15,0,1);
+            double rivAltitude = 1.0 - GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.15,0.1,0.3);
 
 
             // ------ GENERATORS ------ //
