@@ -16,11 +16,16 @@ public class Clay extends SoilProfile {
     }
 
     public double computeRemainingWater(Polygons polygon, LakeGenerator lakeGen, AquiferGenerator aquiferGen,double maxDistanceFromIsland) {
+        // Get the distance to the nearest water source
         double distanceToWater = calculateDistanceToWater(polygon, lakeGen, aquiferGen);
+        // Normalize this value
         distanceToWater = (distanceToWater - 0)/(maxDistanceFromIsland-0);
+        // Calculate remaining water based on abortion rate
         double remainingWater = 1 - ((0.1*absorptionRate)*distanceToWater);
+        // Have the altitude of the given polygon affect the humidity
         double polygonAltitude = extractProperties(polygon.getCentroid().getPropertiesList(), "altitude");
         double humidity = polygonAltitude-0.5*remainingWater;
+        // Deal with special case for negative values
         if (humidity < 0) {
             humidity = 0;
         }
