@@ -73,6 +73,6 @@ public abstract class SoilProfile implements SoilProfileGenerable {
     }
 
     // Abstract method for computing the remaining water in the soil
-    public abstract double computeRemainingWater(Polygons polygon, LakeGenerator lakeGen, AquiferGenerator aquiferGen);
+    public abstract double computeRemainingWater(Polygons polygon, LakeGenerator lakeGen, AquiferGenerator aquiferGen, double maxDistanceOnIsland);
 
 }

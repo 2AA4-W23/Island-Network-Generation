@@ -16,18 +16,17 @@ public class Loam extends SoilProfile {
         return absorptionRate;
     }
 
-    public double computeRemainingWater(Polygons polygon, LakeGenerator lakeGen, AquiferGenerator aquiferGen) {
+    public double computeRemainingWater(Polygons polygon, LakeGenerator lakeGen, AquiferGenerator aquiferGen, double maxDistanceFromIsland) {
         double distanceToWater = calculateDistanceToWater(polygon, lakeGen, aquiferGen);
-        double min = 0;
-        double max = 1;
-        double maxDist = 1.1;
-        double minDist = 1;
-        distanceToWater = (distanceToWater - 0) / (Double.MAX_VALUE - 0) * (maxDist - minDist) + maxDist;
-        double remainingWater = 1 / (1 + this.absorptionRate * Math.pow(distanceToWater,2));
-        remainingWater = (remainingWater - min) / (max - min);
+        distanceToWater = (distanceToWater - 0)/(maxDistanceFromIsland-0);
+        double remainingWater = 1 - ((0.1*absorptionRate)*distanceToWater);
         double polygonAltitude = extractProperties(polygon.getCentroid().getPropertiesList(), "altitude");
-        polygon.changeHumidity(String.valueOf(polygonAltitude-((0.1)*remainingWater)));
-        return remainingWater;
+        double humidity = polygonAltitude-0.5*remainingWater;
+        if (humidity < 0) {
+            humidity = 0;
+        }
+        polygon.changeHumidity(String.valueOf(humidity));
+        return distanceToWater;
     }
     @Override
     public SoilProfile generateSoilProfile(double clayContent, double sandContent, double loamContent) {

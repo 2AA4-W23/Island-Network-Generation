@@ -74,6 +74,11 @@ public class NormalGenerator implements IslandGenerable {
             //RIVER THRESHOLD
             double rivAltitude = 1.0 - GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.15,0.1,0.3);
 
+            // Special case where elevation is plains, noise evaluation on elevation where rivers should be considered shall be much more broad
+            if (specification.getElevationType() == ElevationType.PLAINS) {
+                rivAltitude = 0 + GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.15,0.2,1);
+            }
+
 
             // ------ GENERATORS ------ //
             // Assign altitude
@@ -81,6 +86,7 @@ public class NormalGenerator implements IslandGenerable {
 
             // Get soil profile
             SoilProfile profile = getSoilProfile(specification);
+            double maxDistanceOnIsland = CanvasUtils.maxDistFromIslandCent(mesh,islandShape);
 
             // Aquifer generation
             AquiferGenerator aquiferGenerator = new AquiferGenerator();
@@ -103,7 +109,7 @@ public class NormalGenerator implements IslandGenerable {
                 if (islandShape.isVertexInside(centroid)) {
 
                     // Compute humidity
-                    profile.computeRemainingWater(curPoly,lakeGenerator,aquiferGenerator);
+                    profile.computeRemainingWater(curPoly,lakeGenerator,aquiferGenerator, maxDistanceOnIsland);
 
                     // Check altitude and assign tile colour accordingly
                     double polygonAltitude = extractProperties(centroid.getPropertiesList(), "altitude");
@@ -213,7 +219,7 @@ public class NormalGenerator implements IslandGenerable {
             // ALTITUDE
             double baseAltitude = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.2,0,1);
             //FLUCTUATION
-            double fluctuation = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.3,0,40);
+            double fluctuation = GenerationUtils.worleyNoise1DScaled(specification.getSeed(), noiseEvaluationPosition*1.3,0,0.2);
 
             Plains.plainsAltitude(islandPoly,baseAltitude,fluctuation);
 
@@ -259,24 +265,28 @@ public class NormalGenerator implements IslandGenerable {
                     clayContent = Math.random() * 0.5 + 0.5;
                     sandContent = Math.random() * 0.3;
                     loamContent = Math.random() * 0.3;
+                    absorptionRate = new Clay(clayContent,sandContent,loamContent,absorptionRate).calculateAbsorptionRate(clayContent,sandContent,loamContent);
                     profile = new Clay(clayContent,sandContent,loamContent,absorptionRate);
                     break;
                 case "sand":
                     clayContent = Math.random() * 0.3;
                     sandContent = Math.random() * 0.5 + 0.5;
                     loamContent = Math.random() * 0.3;
+                    absorptionRate = new Sand(clayContent,sandContent,loamContent,absorptionRate).calculateAbsorptionRate(clayContent,sandContent,loamContent);
                     profile = new Sand(clayContent,sandContent,loamContent,absorptionRate);
                     break;
                 case "loam":
                     clayContent = Math.random() * 0.3;
                     sandContent = Math.random() * 0.3;
                     loamContent = Math.random() * 0.5 + 0.5;
+                    absorptionRate = new Loam(clayContent,sandContent,loamContent,absorptionRate).calculateAbsorptionRate(clayContent,sandContent,loamContent);
                     profile = new Loam(clayContent,sandContent,loamContent,absorptionRate);
                     break;
                 case "special":
                     clayContent = Math.random() * 0.5 + 0.5;
                     sandContent = Math.random() * 0.5 + 0.5;
                     loamContent = Math.random() * 0.5 + 0.5;
+                    absorptionRate = new Special(clayContent,sandContent,loamContent,absorptionRate).calculateAbsorptionRate(clayContent,sandContent,loamContent);
                     profile = new Special(clayContent,sandContent,loamContent,absorptionRate);
                     break;
             }
