@@ -166,4 +166,4 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 | F14 |      Create SoilProfile Abstract class to help develop different SoilProfiles |  baskam1   |   2023-03-23  | 2023-03-24  |  D  |
 | F15 |      Generated specific SoilProfiles for users to select from |  baskam1   |   2023-03-24  | 2023-03-26  |  D  |
 | F16 |      Implemented capabilities to computeRemainingWater |  baskam1   |   2023-03-25  | 2023-03-26  |  D  |
-| F17-3 (2) |      Implemented unified island generator |  lenoverd   |   2023-03-25  | 2023-03-28  |  D  |
+| F17-3 (2) R2 |      Implemented unified island generator |  lenoverd   |   2023-03-25  | 2023-03-29  |  D  |
