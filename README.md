@@ -170,6 +170,6 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 
 # Assignment A4: Urbanism
 | Id | Feature title | Start | End | Status |
-|:--:|---------------|------|-------|-----|--------|
+|:--:|---------------|------|-------|--------|
 | 4F01 |      Implement the notion of graph node properties     | 2023-03-30   |  2023-03-30    |    D    |
 | 4F02 |      Implement the notion of a graph Node    | 2023-03-30   |    |    S    |
