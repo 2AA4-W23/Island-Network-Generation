@@ -20,7 +20,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <configuration>
-                    <mainClass>lenoverd.pathFinderMain</mainClass>
+                    <mainClass>lenoverd.PathFinderMain</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -36,7 +36,7 @@
                             <finalName>${project.artifactId}</finalName>
                             <archive>
                                 <manifest>
-                                    <mainClass>lenoverd.pathFinderMain</mainClass>
+                                    <mainClass>lenoverd.PathFinderMain</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
