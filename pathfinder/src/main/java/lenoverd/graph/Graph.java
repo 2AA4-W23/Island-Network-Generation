@@ -81,17 +81,9 @@ public class Graph {
                 // Add edge property to secondNode
                 secondNode.addProperty(new Property<Edge>(edgeDataName,curEdge));
 
-                // Find neighbours list for first node and add the second node to it
-                for (ArrayList<Node> curNeighbours : this.adjacencyList) {
-
-                    if (curNeighbours.get(0) == firstNode) {
-
-                        curNeighbours.add(secondNode);
-                        break;
-
-                    }
-
-                }
+                // Find neighbours list for first node and add second node
+                ArrayList<Node> firstNodeNeighbourList = getNodeNeighbourList(firstNode);
+                firstNodeNeighbourList.add(secondNode);
             }
 
         }
@@ -114,14 +106,22 @@ public class Graph {
 
         }
 
+
         for (Edge curEdge : edgeSet) {
 
+            // Get nodes in edge
             Node firstNode = curEdge.getFirstNode();
             Node secondNode = curEdge.getSecondNode();
 
+            // Get the neighbour list for the first node
+            ArrayList<Node> neighbourList = getNodeNeighbourList(firstNode);
 
+            // Remove the second node from said list
+            neighbourList.remove(secondNode);
 
         }
+
+        return true;
 
     }
 
@@ -154,11 +154,17 @@ public class Graph {
 
     public ArrayList<Node> getNodeNeighbourList(Node node) {
 
+        // First check if node actually exists in adj
         if (doesExistInAdj(node)) {
 
+            // Loop through adj and find the list for the given node
             for (ArrayList<Node> curNeighbourList : this.adjacencyList) {
 
+                if (curNeighbourList.get(0) == node) {
 
+                    // Return the corresponding arraylist
+                    return curNeighbourList;
+                }
 
             }
 
