@@ -66,6 +66,7 @@ public class Graph {
             Node firstNode = curEdge.getFirstNode();
             Node secondNode = curEdge.getSecondNode();
 
+            // Note a slight difference to the method isValidEdges on hasEdgeBetween
             if (!doesExistInAdj(firstNode) || !doesExistInAdj(secondNode) || hasEdgeBetween(firstNode,secondNode)) {
                 return false;
             }
@@ -101,99 +102,87 @@ public class Graph {
     public boolean removeEdges(Set<Edge> edgeSet) {
 
         // First check if there is a problem with any given edge before attempting to add it to the adj list
-        for (Edge curEdge : edgeSet) {
+        if (isValidEdges(edgeSet)) {
 
-            Node firstNode = curEdge.getFirstNode();
-            Node secondNode = curEdge.getSecondNode();
+            for (Edge curEdge : edgeSet) {
 
-            if (!doesExistInAdj(firstNode) || !doesExistInAdj(secondNode) || !hasEdgeBetween(firstNode,secondNode)) {
-                return false;
+                // Get nodes in edge
+                Node firstNode = curEdge.getFirstNode();
+                Node secondNode = curEdge.getSecondNode();
+
+                // Get the neighbour list for the first node
+                try {
+                    ArrayList<Node> neighbourList = getNodeNeighbourList(firstNode);
+                    // Remove the second node from said list
+                    neighbourList.remove(secondNode);
+                } catch (UnknownNodeException e) {
+                    return false;
+                }
+
             }
+
+            return true;
 
         }
 
-
-        for (Edge curEdge : edgeSet) {
-
-            // Get nodes in edge
-            Node firstNode = curEdge.getFirstNode();
-            Node secondNode = curEdge.getSecondNode();
-
-            // Get the neighbour list for the first node
-            try {
-                ArrayList<Node> neighbourList = getNodeNeighbourList(firstNode);
-                // Remove the second node from said list
-                neighbourList.remove(secondNode);
-            } catch (UnknownNodeException e) {
-                return false;
-            }
-
-        }
-
-        return true;
+        return false;
 
     }
 
     public boolean addNodes(Set<Node> nodeSet) {
 
         // First check if there is a problem with any given edge before attempting to add it to the adj list
-        for (Node curNode : nodeSet) {
+        if (!isValidNodes(nodeSet)) {
 
-            if (doesExistInAdj(curNode)) {
-                return false;
+            for (Node curNode : nodeSet) {
+
+                // Create a new neighbour arraylist for each node
+                ArrayList<Node> newNeighbourList = new ArrayList<>();
+                newNeighbourList.add(curNode);
+
+                // Add the new list to the adj list
+                this.adjacencyList.add(newNeighbourList);
+
             }
 
-        }
-
-        // If there is no problem, loop through nodes again
-        for (Node curNode : nodeSet) {
-
-            // Create a new neighbour arraylist for each node
-            ArrayList<Node> newNeighbourList = new ArrayList<>();
-            newNeighbourList.add(curNode);
-
-            // Add the new list to the adj list
-            this.adjacencyList.add(newNeighbourList);
+            return true;
 
         }
 
-        return true;
+        return false;
 
     }
 
     public boolean removeNodes(Set<Node> nodeSet) {
 
         // First check if there is a problem with any given edge before attempting to add it to the adj list
-        for (Node curNode : nodeSet) {
+        if (isValidNodes(nodeSet)) {
 
-            if (doesExistInAdj(curNode)) {
-                return false;
-            }
+            for (Node curNode : nodeSet) {
 
-        }
+                try {
+                    // Remove node neighbour list
+                    ArrayList<Node> removalList = getNodeNeighbourList(curNode);
 
-        for (Node curNode : nodeSet) {
+                    this.adjacencyList.remove(removalList);
 
-            try {
-                // Remove node neighbour list
-                ArrayList<Node> removalList = getNodeNeighbourList(curNode);
+                    // Removal all references in other neighbouring lists
+                    for (ArrayList<Node> curNeighbours : this.adjacencyList) {
 
-                this.adjacencyList.remove(removalList);
+                        // Calling to remove on an object for all array list does not throw an error thus it can be called for every list
+                        curNeighbours.remove(curNode);
 
-                // Removal all references in other neighbouring lists
-                for (ArrayList<Node> curNeighbours : this.adjacencyList) {
-
-                    // Calling to remove on an object for all array list does not throw an error thus it can be called for every list
-                    curNeighbours.remove(curNode);
-
+                    }
+                } catch (UnknownNodeException e) {
+                    return false;
                 }
-            } catch (UnknownNodeException e) {
-                return false;
+
             }
 
+            return true;
         }
 
-        return true;
+        return false;
 
     }
 
@@ -283,6 +272,39 @@ public class Graph {
         }
 
         return false;
+
+    }
+
+    // Method to check if the all nodes in a set exist within the adj list
+    private boolean isValidNodes(Set<Node> nodeSet) {
+
+        for (Node curNode : nodeSet) {
+
+            if (doesExistInAdj(curNode)) {
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
+
+    // Method to check if the all edge in a set exist within the adj list
+    private boolean isValidEdges(Set<Edge> edgeSet) {
+
+        for (Edge curEdge : edgeSet) {
+
+            Node firstNode = curEdge.getFirstNode();
+            Node secondNode = curEdge.getSecondNode();
+
+            if (!doesExistInAdj(firstNode) || !doesExistInAdj(secondNode) || !hasEdgeBetween(firstNode,secondNode)) {
+                return false;
+            }
+
+        }
+
+        return true;
 
     }
 
