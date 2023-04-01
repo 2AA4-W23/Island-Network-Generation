@@ -20,23 +20,24 @@ public class Node {
         return properties.add(property);
     }
 
-    public boolean removeProperty(String propertyName) {
+    public <T extends Object> boolean removeProperty(String propertyName, T propertyType) {
 
         // Create a new class with blank type and value fields
         // This is done because NodeProperty only cares about the name for equivalence which is what Set will look for
-        NodeProperty propertyToRemove = new NodeProperty(propertyName,new Object().getClass(),new Object());
+        NodeProperty<T> propertyToRemove = new NodeProperty(propertyName,propertyType);
 
         return properties.remove(propertyToRemove);
     }
 
-    public NodeProperty getProperty(String name) throws NodePropertyNotFoundException {
+    public <T extends Object> NodeProperty getProperty(String name, T propertyType) throws NodePropertyNotFoundException {
+
+        // Create a test property with the same type as property stored (as this is how property equivalence can be tested)
+        NodeProperty<T> testProperty = new NodeProperty(name,propertyType);
 
         for (NodeProperty curProperty : this.properties) {
 
-            if (curProperty.getName() == name) {
-
+            if (curProperty == testProperty) {
                 return curProperty;
-
             }
 
         }

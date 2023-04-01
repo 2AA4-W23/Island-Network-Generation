@@ -2,23 +2,17 @@ package lenoverd.graph;
 
 import lenoverd.graph.exceptions.NodePropertyValueFormatException;
 
-public class NodeProperty {
+public class NodeProperty<T> {
 
     private String propertyName;
-    private Class propertyType;
-    private Object value;
+    private T value;
 
-    public NodeProperty(String name, Class type, Object value) {
+    public NodeProperty(String name, T value) {
         this.propertyName = name;
-        this.propertyType = type;
         this.value = value;
     }
 
-    public Class getType() {
-        return this.propertyType;
-    }
-
-    public Object getValue() {
+    public T getValue() {
         return this.value;
     }
 
@@ -26,23 +20,17 @@ public class NodeProperty {
         return this.propertyName;
     }
 
-    public void changeValue(Object value) throws NodePropertyValueFormatException {
+    public void changeValue(T value) {
 
-        // Classes between value and propertyType must match
-        if (value.getClass() == this.propertyType.getClass()) {
-            this.value = value;
-            return;
-        }
-
-        throw new NodePropertyValueFormatException(this.propertyType.getClass(),value);
+        this.value = value;
 
     }
 
 
     public boolean equals(Object obj) {
 
-        // Check if the object is a NodeProperty
-        if (obj.getClass() == NodeProperty.class) {
+        // Check if the object is a NodeProperty with the same parameterized type
+        if (obj.getClass() == this.getClass()) {
 
             NodeProperty testProperty = (NodeProperty) obj;
 
