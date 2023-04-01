@@ -173,5 +173,5 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 |:--:|---------------|------|-------|--------|
 | 4F01 |      Implement the notion of a graph Node  | 2023-03-30   |  2023-03-30    |    D    |
 | 4F02 |      Implement the notion of graph node properties   | 2023-03-30   |  2022-04-01  |    D    |
-| 4F03 |      Implement the notion of a graph edge   | 2023-04-01   |    |    S   |
-| 4F04 |      Implement the notion of graph edge properties  | 2023-04-01   |    |    S   |
+| 4F03 |      Implement the notion of a graph edge   | 2023-04-01   | 2023-04-01   |    D   |
+| 4F04 |      Implement the notion of graph edge properties  | 2023-04-01   |  2023-04-01  |    D   |
