@@ -161,6 +161,42 @@ public class Graph {
 
     }
 
+    public boolean removeNodes(Set<Node> nodeSet) {
+
+        // First check if there is a problem with any given edge before attempting to add it to the adj list
+        for (Node curNode : nodeSet) {
+
+            if (doesExistInAdj(curNode)) {
+                return false;
+            }
+
+        }
+
+        for (Node curNode : nodeSet) {
+
+            try {
+                // Remove node neighbour list
+                ArrayList<Node> removalList = getNodeNeighbourList(curNode);
+
+                this.adjacencyList.remove(removalList);
+
+                // Removal all references in other neighbouring lists
+                for (ArrayList<Node> curNeighbours : this.adjacencyList) {
+
+                    // Calling to remove on an object for all array list does not throw an error thus it can be called for every list
+                    curNeighbours.remove(curNode);
+
+                }
+            } catch (UnknownNodeException e) {
+                return false;
+            }
+
+        }
+
+        return true;
+
+    }
+
     public ArrayList<Node> getNodeNeighbourList(Node node) throws UnknownNodeException {
 
         // First check if node actually exists in adj
