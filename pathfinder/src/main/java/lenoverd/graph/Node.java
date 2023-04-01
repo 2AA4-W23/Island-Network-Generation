@@ -15,7 +15,7 @@ public class Node {
         this.nodeName = name;
     }
 
-    public boolean addProperty(NodeProperty property) {
+    public <T extends Object> boolean addProperty(NodeProperty<T> property) {
         // Because properties is a set and given how NodeProperty checks for equivalence, one cannot have two properties with the same name
         return properties.add(property);
     }
@@ -36,7 +36,7 @@ public class Node {
 
         for (NodeProperty curProperty : this.properties) {
 
-            if (curProperty == testProperty) {
+            if (curProperty.equals(testProperty)) {
                 return curProperty;
             }
 
