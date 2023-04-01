@@ -1,7 +1,6 @@
 package lenoverd.graph;
 
 import lenoverd.graph.exceptions.NodePropertyNotFoundException;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
@@ -9,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NodeTest {
 
-    static NodeProperty<Double> testDouble = new NodeProperty<>("double", 1.234);
-    static NodeProperty<Integer> testInteger = new NodeProperty<>("integer",1);
-    static NodeProperty<Float> testFloat = new NodeProperty<>("float",1.2f);
-    static NodeProperty<String> testString = new NodeProperty<>("string","test!");
+    static Property<Double> testDouble = new Property<>("double", 1.234);
+    static Property<Integer> testInteger = new Property<>("integer",1);
+    static Property<Float> testFloat = new Property<>("float",1.2f);
+    static Property<String> testString = new Property<>("string","test!");
 
     @Test
     @Order(1)
@@ -49,7 +48,7 @@ class NodeTest {
         assertThrows(NodePropertyNotFoundException.class,() -> test.getProperty("integer",2));
 
         // Check if overwriting values are possible
-        NodeProperty<Double> testDouble2 = new NodeProperty<>("double", 6.789);
+        Property<Double> testDouble2 = new Property<>("double", 6.789);
         test.addProperty(testDouble2);
         assertEquals(test.getPropertiesSize(),3);
         assertEquals(test.getProperty("double",1.1).getValue(),6.789);
@@ -70,7 +69,7 @@ class NodeTest {
         assertEquals(test.getProperty("double",1.1).getValue(),1.234);
 
         // Get property from node
-        NodeProperty<Double> testDouble2 = test.getProperty("double",1.1);
+        Property<Double> testDouble2 = test.getProperty("double",1.1);
         // Change it's value
         testDouble2.changeValue(5.55);
         // Verify property is live
