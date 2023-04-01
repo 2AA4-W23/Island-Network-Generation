@@ -1,5 +1,7 @@
 package lenoverd.graph;
 
+import lenoverd.graph.exceptions.UnknownNodeException;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -82,8 +84,12 @@ public class Graph {
                 secondNode.addProperty(new Property<Edge>(edgeDataName,curEdge));
 
                 // Find neighbours list for first node and add second node
-                ArrayList<Node> firstNodeNeighbourList = getNodeNeighbourList(firstNode);
-                firstNodeNeighbourList.add(secondNode);
+                try {
+                    ArrayList<Node> firstNodeNeighbourList = getNodeNeighbourList(firstNode);
+                    firstNodeNeighbourList.add(secondNode);
+                } catch (UnknownNodeException e) {
+                    return false;
+                }
             }
 
         }
@@ -114,10 +120,13 @@ public class Graph {
             Node secondNode = curEdge.getSecondNode();
 
             // Get the neighbour list for the first node
-            ArrayList<Node> neighbourList = getNodeNeighbourList(firstNode);
-
-            // Remove the second node from said list
-            neighbourList.remove(secondNode);
+            try {
+                ArrayList<Node> neighbourList = getNodeNeighbourList(firstNode);
+                // Remove the second node from said list
+                neighbourList.remove(secondNode);
+            } catch (UnknownNodeException e) {
+                return false;
+            }
 
         }
 
@@ -152,7 +161,7 @@ public class Graph {
 
     }
 
-    public ArrayList<Node> getNodeNeighbourList(Node node) {
+    public ArrayList<Node> getNodeNeighbourList(Node node) throws UnknownNodeException {
 
         // First check if node actually exists in adj
         if (doesExistInAdj(node)) {
@@ -169,6 +178,8 @@ public class Graph {
             }
 
         }
+
+        throw new UnknownNodeException(node.getNodeName());
 
     }
 
