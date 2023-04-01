@@ -2,6 +2,7 @@ package lenoverd.graph;
 
 import lenoverd.graph.exceptions.NodePropertyNotFoundException;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +74,14 @@ public abstract class PropertiesHolder {
      */
     public int getPropertiesSize() {
         return this.properties.size();
+    }
+
+    /**
+     * Get all properties
+     * @return a list containing all properties
+     */
+    public List<Property> getAllProperties() {
+        return this.properties;
     }
 
 }
