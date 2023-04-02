@@ -241,6 +241,29 @@ public class Graph {
     }
 
     /**
+     * Iterate through all parent nodes
+     * @return a Node object
+     */
+    public Iterator<Node> getParentNodeIterator() {
+        return new Iterator<Node>() {
+            Iterator<Node> parentNodeIterator = adjacencyMap.keySet().iterator();
+
+            @Override
+            public boolean hasNext() {
+                return (parentNodeIterator.hasNext());
+            }
+
+            @Override
+            public Node next() {
+
+                return parentNodeIterator.next();
+
+
+            }
+        };
+    }
+
+    /**
      * Iterate through all neighbour node lists
      * @return an ArrayList (Node) object containing all child node's for the given iteration
      */

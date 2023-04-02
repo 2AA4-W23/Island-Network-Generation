@@ -176,3 +176,4 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 | 4F03 |      Implement the notion of a graph edge   | 2023-04-01   | 2023-04-01   |    D   |
 | 4F04 |      Implement the notion of graph edge properties  | 2023-04-01   |  2023-04-01  |    D   |
 | 4F05 |      Implement Graph ADT | 2023-04-01   |  2023-04-02  |    D   |
+| 4F06 |      Implement Pathfinder ADT and sample algorithm | 2023-04-02   |   |    S   |
