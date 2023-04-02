@@ -54,15 +54,12 @@ public abstract class PropertiesHolder {
         // Create a test property with the same type as property stored (as this is how property equivalence can be tested)
         Property<T> testProperty = new Property(propertyName,propertyType);
 
-        if (this.properties.contains(testProperty)) {
-
-            for (Property curProperty : this.properties) {
-                if (curProperty.equals(testProperty)) {
-                    return curProperty;
-                }
+        for (Property curProperty : this.properties) {
+            if (curProperty.equals(testProperty)) {
+                return curProperty;
             }
-
         }
+
 
         throw new NodePropertyNotFoundException(propertyName);
 

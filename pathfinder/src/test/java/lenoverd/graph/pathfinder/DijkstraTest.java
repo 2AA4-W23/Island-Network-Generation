@@ -4,6 +4,7 @@ import lenoverd.graph.Edge;
 import lenoverd.graph.Graph;
 import lenoverd.graph.Node;
 import lenoverd.graph.Property;
+import lenoverd.graph.exceptions.NodePropertyNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DijkstraTest {
 
     @Test
-    void findPath() {
+    void findPath() throws NodePropertyNotFoundException {
 
         // All nodes
         Node node1 = new Node("1");
@@ -112,16 +113,14 @@ class DijkstraTest {
 
         Graph testGraph = new Graph(nodes,edges);
 
-        System.out.println(testGraph.hasEdgeBetween("4","3"));
-        System.out.println(testGraph.hasEdgeBetween("3","4"));
-
         List<Node> path = new Dijkstra(testGraph,"EdgeData","weightValue").findPath(node1,node5);
 
-        for (Node curNode : path) {
-
-            System.out.println(curNode.getNodeName());
-
-        }
+        // The minimal weighted shortest path for this is 1-2-4-3-5
+        assertEquals(path.get(0).getNodeName(),"1");
+        assertEquals(path.get(1).getNodeName(),"2");
+        assertEquals(path.get(2).getNodeName(),"4");
+        assertEquals(path.get(3).getNodeName(),"3");
+        assertEquals(path.get(4).getNodeName(),"5");
 
 
     }

@@ -1,5 +1,6 @@
 package lenoverd.graph;
 
+import lenoverd.graph.exceptions.NodePropertyNotFoundException;
 import lenoverd.graph.exceptions.UnknownNodeException;
 
 import java.util.*;
@@ -43,13 +44,15 @@ public class Graph {
                         // Get the second node
                         Node neighbourNode = curEdge.getSecondNode();
 
-                        // Construct a new property that contains the edge object
-                        Property<Edge> edgeData = new Property<>(edgeDataName,curEdge);
+                        // Construct a new property that contains the edge object (along with the names of the two nodes together)
+                        // Note that nodes are live, meaning if we add a property with the same name, that property is overwritten in all references of this node object
+                        Property<Edge> edgeData = new Property<>(edgeDataName+curNode.getNodeName()+neighbourNode.getNodeName(),curEdge);
+
                         // Apply this property to the node (this way we can reference the weightings later)
                         neighbourNode.addProperty(edgeData);
 
                         // Add the adjacent node to the list
-                        adjacentNodes.add(curEdge.getSecondNode());
+                        adjacentNodes.add(neighbourNode);
 
                     }
 
