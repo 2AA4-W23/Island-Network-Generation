@@ -8,14 +8,17 @@ public class Graph {
 
     private static final String edgeDataName = "EdgeData";
 
-    // 2D Array list where the inner list holds all nodes that share edges with the first indexed node
-    //private ArrayList<ArrayList<Node>> adjacencyList = new ArrayList<>();
-
     // A using a map as a substitute for an adjacency list makes knowing the parent node a lot easier
     // After all, for a 2D array list, a lot of people would probably not read that the first node in the arraylist corresponds to the parent node
     // It makes more sense to use the key as a parent node here
     private HashMap<Node,ArrayList<Node>> adjacencyMap = new HashMap<>();
 
+    /**
+     * Create a graph
+     * @param nodeSet the set of nodes (Node objects) in the graph
+     * @param edgeSet the set of edges (Edge objects) in the graph. Edges that do not specify any Node objects in nodeSet are unused.
+     * @return a Graph object
+     */
     public Graph(Set<Node> nodeSet, Set<Edge> edgeSet) {
 
         constructAdjList(nodeSet,edgeSet);
@@ -60,6 +63,13 @@ public class Graph {
         }
     }
 
+    /**
+     * Adds edges to a graph
+     * @param edgeSet the set of edges (Edge objects) to add to the graph
+     * @return true if all edges were added, false is one or more edges were not added
+     * If any edges contain unspecified nodes in the graph, the method will return false and no edge will be added regardless whether some edges contained valid nodes.
+     * A valid node is a node that exists within the Graph object
+     */
     public boolean addEdges(Set<Edge> edgeSet) {
 
         // First check if there is a problem with any given edge before attempting to add it to the adj list
@@ -93,6 +103,13 @@ public class Graph {
 
     }
 
+    /**
+     * Remove edges from a graph
+     * @param edgeSet the set of edges (Edge objects) to remove from the graph
+     * @return true if all edges were removed, false is one or more edges were not valid
+     * If any edges contain unspecified nodes in the graph, the method will return false and no edge will be removed regardless whether some edges were valid.
+     * A valid edge is an edge where the edge exists within the graph
+     */
     public boolean removeEdges(Set<Edge> edgeSet) {
 
         // First check if there is a problem with any given edge before attempting to add it to the adj list
@@ -119,6 +136,13 @@ public class Graph {
 
     }
 
+    /**
+     * Adds nodes to a graph
+     * @param nodeSet the set of nodes (Node objects) to add to the graph
+     * @return true if all nodes were added, false is one or more nodes were not added
+     * Nodes to add must be invalid, otherwise false is returned and no node is added from the set
+     * A invalid node is a node that does not exist within the Graph object
+     */
     public boolean addNodes(Set<Node> nodeSet) {
 
         // First check if there is a problem with any given edge before attempting to add it to the adj list
@@ -139,6 +163,14 @@ public class Graph {
 
     }
 
+    /**
+     * Removes nodes from a graph and the neighbour reference list for the given node.
+     * This consequently removes edges where the first node within the edge is the node to be removed.
+     * @param nodeSet the set of nodes (Node objects) to remove from the graph
+     * @return true if all nodes were removed, false is one or more nodes were not removed
+     * Nodes to remove must be valid, otherwise false is returned and no node is removed from the set.
+     * A valid node is a node that does exist within the Graph object
+     */
     public boolean removeNodes(Set<Node> nodeSet) {
 
         // First check if there is a problem with any given edge before attempting to add it to the adj list
@@ -158,6 +190,12 @@ public class Graph {
 
     }
 
+    /**
+     * Gets the neighbour reference list for the given node (i.e., all child nodes of this parent node)
+     * @param node the Node object to get the list from
+     * @return an ArrayList (Node) object containing all child node's. Null if the specified parent node is invalid.
+     * A invalid node is a node that does not exist within the Graph object
+     */
     public ArrayList<Node> getNodeNeighbourList(Node node) {
 
         // First check if node actually exists in adj
@@ -180,6 +218,32 @@ public class Graph {
 
     }
 
+    /**
+     * Gets the neighbour reference list for the given node (i.e., all child nodes of this parent node)
+     * @param nodeName the node name as a String to get the list from
+     * @return an ArrayList (Node) object containing all child node's. Null if the specified parent node is invalid.
+     * A invalid node is a node that does not exist within the Graph object
+     */
+    public ArrayList<Node> getNodeNeighbourList(String nodeName) {
+
+        for (Node curNode : this.adjacencyMap.keySet()) {
+
+            if (curNode.getNodeName() == nodeName) {
+
+                return this.adjacencyMap.get(curNode);
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+    /**
+     * Iterate through all neighbour node lists
+     * @return an ArrayList (Node) object containing all child node's for the given iteration
+     */
     public Iterator<ArrayList<Node>> iterator() {
         return new Iterator<ArrayList<Node>>() {
             Iterator<Node> parentNodeIterator = adjacencyMap.keySet().iterator();
@@ -197,22 +261,6 @@ public class Graph {
 
             }
         };
-    }
-
-    public ArrayList<Node> getNodeNeighbourList(String nodeName) {
-
-        for (Node curNode : this.adjacencyMap.keySet()) {
-
-            if (curNode.getNodeName() == nodeName) {
-
-                return this.adjacencyMap.get(curNode);
-
-            }
-
-        }
-
-        return null;
-
     }
 
     // Method to check if a given node exists within the adj map
