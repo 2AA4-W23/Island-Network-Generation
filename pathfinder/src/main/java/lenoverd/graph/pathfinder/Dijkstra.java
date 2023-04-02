@@ -22,47 +22,64 @@ public class Dijkstra implements PathFinder {
         this.weightValueName = weightValueName;
     }
 
-
     @Override
     public List<Node> findPath(Node source, Node target) {
 
-        init(source);
-        PriorityQueue<Node> pQueue = new PriorityQueue<>(getComparator());
-        List<Node> visitedNodes = new ArrayList<>();
+        try {
 
-        pQueue.add(source);
+            init(source);
+            PriorityQueue<Node> pQueue = new PriorityQueue<>(getComparator());
+            List<Node> visitedNodes = new ArrayList<>();
 
-        while (!pQueue.isEmpty()) {
+            pQueue.add(source);
 
-            Node examineNode = pQueue.remove();
+            while (!pQueue.isEmpty()) {
 
-            // Examine every edge that has not been visited by current node
-            for (Node neighbourNode : this.referenceGraph.getNodeNeighbourList(examineNode)) {
+                Node examineNode = pQueue.remove();
 
-                if (!visitedNodes.contains(neighbourNode)) {
+                // Get current smallest weight value
+                double currentSmallestWeight = this.shortestDistances.get(examineNode);
 
-                    try {
+                // Examine every edge that has not been visited by current node
+                for (Node neighbourNode : this.referenceGraph.getNodeNeighbourList(examineNode)) {
+
+                    if (!visitedNodes.contains(neighbourNode)) {
 
                         // Get the edge holding the weight value
-                        Edge edge = (Edge) neighbourNode.getProperty(weightPropertyName,new Edge(null,null)).getValue();
+                        Edge edge = (Edge) neighbourNode.getProperty(weightPropertyName, new Edge(null, null)).getValue();
 
                         // Get weight value
-                        double weightValue = (Double) edge.getProperty(weightValueName,0.0).getValue();
+                        double weightValue = (Double) edge.getProperty(weightValueName, 0.0).getValue();
 
-                    } catch (NodePropertyNotFoundException e) {
+                        // Add the weights of the examining node and the neighbour node as if we get to the neighbour node through the examining node
+                        double weightValuePassingThroughNeighbour = weightValue + currentSmallestWeight;
 
+                        if (weightValuePassingThroughNeighbour < this.shortestDistances.get(neighbourNode)) {
+
+                            // If the weights are smaller than what is already present in the neighbour node, update the value
+                            this.shortestDistances.put(neighbourNode,weightValuePassingThroughNeighbour);
+                            // Update hashmap for previous nodes to specify the node we took to get to the neighbour node
+                            this.previousNodes.put(neighbourNode,examineNode);
+
+                            // Add neighbour node to the queue
+                            pQueue.add(neighbourNode);
+
+                        }
                     }
-
                 }
 
+                // Once the examineNode has been examined (went over all neighbours), mark it as visited
+                visitedNodes.add(examineNode);
             }
 
+            // Once queue is empty, we have all paths from source to any given node stored in the maps
+            // Thus construct the path and return it
+            return getPathFromMap(source,target);
+
+        } catch (NodePropertyNotFoundException e){
 
         }
-
-
-
-        return null;
+            return null;
     }
 
     @Override
@@ -87,7 +104,12 @@ public class Dijkstra implements PathFinder {
         };
     }
 
+    // Method to initialize values/variables
     private void init(Node source) {
+
+        // Clear maps
+        this.shortestDistances.clear();
+        this.previousNodes.clear();
 
         Iterator<Node> parentNodeIterator = this.referenceGraph.getParentNodeIterator();
 
@@ -106,6 +128,35 @@ public class Dijkstra implements PathFinder {
             previousNodes.put(curParentNode,curParentNode);
 
         }
+
+    }
+
+    // Method to construct the path from the two nodes after processing
+    private List<Node> getPathFromMap(Node source, Node target) {
+
+        List<Node> path = new ArrayList<>();
+
+        // Add the target node
+        path.add(target);
+
+        // Get the previous node that was used to get to target
+        Node previousNode = this.previousNodes.get(target);
+
+        // Keep adding all previous nodes used from one another until hitting the source node
+        while (previousNode != source) {
+
+            path.add(previousNode);
+
+            previousNode = this.previousNodes.get(previousNode);
+
+        }
+
+        // Add the source node and reverse the order of the list so the path becomes source -> target and not target -> source
+        path.add(source);
+        Collections.reverse(path);
+
+        return path;
+
 
     }
 
