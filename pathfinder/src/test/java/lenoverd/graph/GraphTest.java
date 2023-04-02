@@ -120,7 +120,10 @@ class GraphTest {
         testAddNodes.add(testNode);
 
         // Add nodes
+        assertEquals(testGraph.addNodes(testAddNodes),true);
         assertEquals(testGraph.getNodeNeighbourList(testNode).size(),0);
+        // Check if we cannot add the same node again
+        assertEquals(testGraph.addNodes(testAddNodes),false);
 
         // Remove nodes
         testGraph.removeNodes(testAddNodes);

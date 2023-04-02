@@ -199,6 +199,22 @@ public class Graph {
         };
     }
 
+    public ArrayList<Node> getNodeNeighbourList(String nodeName) {
+
+        for (Node curNode : this.adjacencyMap.keySet()) {
+
+            if (curNode.getNodeName() == nodeName) {
+
+                return this.adjacencyMap.get(curNode);
+
+            }
+
+        }
+
+        return null;
+
+    }
+
     // Method to check if a given node exists within the adj map
     private boolean doesExistInAdj(Node testNode) {
 
