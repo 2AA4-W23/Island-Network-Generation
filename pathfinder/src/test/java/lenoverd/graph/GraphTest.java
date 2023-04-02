@@ -132,5 +132,31 @@ class GraphTest {
 
     }
 
+    @Test
+    void checkEdges() {
+
+
+        Set<Node> testNodes = new HashSet<>();
+        testNodes.add(node1);
+        testNodes.add(node2);
+        testNodes.add(node3);
+        testNodes.add(node4);
+
+        Set<Edge> testEdges = new HashSet<>();
+        testEdges.add(edge12);
+        testEdges.add(edge13);
+        testEdges.add(edge21);
+        testEdges.add(edge42);
+
+        Graph testGraph = new Graph(testNodes,testEdges);
+
+        assertEquals(testGraph.hasEdgeBetween("1","2"),true);
+        assertEquals(testGraph.hasEdgeBetween("1","4"),false);
+
+        assertEquals(testGraph.hasEdgeBetween(node1,node2),true);
+        assertEquals(testGraph.hasEdgeBetween(node1,node4),false);
+
+    }
+
 
 }
