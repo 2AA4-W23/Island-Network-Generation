@@ -40,8 +40,13 @@ public class Dijkstra implements PathFinder {
                 // Get current smallest weight value
                 double currentSmallestWeight = this.shortestDistances.get(examineNode);
 
+                // Get all neighbouring nodes (children) of examine node and add to priority queue
+                // This will enable examining nodes in the order of least weight
+                PriorityQueue<Node> nodesToExamine = new PriorityQueue<>(getWeightComparator());
+                nodesToExamine.addAll(this.referenceGraph.getNodeNeighbourList(examineNode));
+
                 // Examine every edge that has not been visited by current node
-                for (Node neighbourNode : this.referenceGraph.getNodeNeighbourList(examineNode)) {
+                for (Node neighbourNode : nodesToExamine) {
 
                     if (!visitedNodes.contains(neighbourNode)) {
 
@@ -97,6 +102,36 @@ public class Dijkstra implements PathFinder {
                     return 1;
                 } else if (distanceo1 - distanceo2 < 0.0000001) {
                     return 0;
+                }
+
+                return 0;
+            }
+        };
+    }
+
+    public Comparator<Node> getWeightComparator() {
+        return new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+
+                try {
+
+                    Edge weightEdgeo1 = (Edge) o1.getProperty(weightPropertyName,new Edge(null,null)).getValue();
+                    Edge weightEdgeo2 = (Edge) o2.getProperty(weightPropertyName,new Edge(null,null)).getValue();
+
+                    double distanceo1 = (Double) weightEdgeo1.getProperty(weightValueName,0.0).getValue();
+                    double distanceo2 = (Double) weightEdgeo2.getProperty(weightValueName,0.0).getValue();
+
+                    if (distanceo1 < distanceo2) {
+                        return -1;
+                    } else if (distanceo1 > distanceo2) {
+                        return 1;
+                    } else if (distanceo1 - distanceo2 < 0.0000001) {
+                        return 0;
+                    }
+
+                } catch (NodePropertyNotFoundException e) {
+                    throw new RuntimeException(e);
                 }
 
                 return 0;
