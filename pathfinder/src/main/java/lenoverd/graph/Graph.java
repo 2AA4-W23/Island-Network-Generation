@@ -280,8 +280,33 @@ public class Graph {
 
     }
 
+    // Overrided method from above
+    private boolean doesExistInAdj(String testNode) {
+
+        for (Node curNode : adjacencyMap.keySet()) {
+
+            if (curNode.getNodeName() == testNode) {
+
+                return true;
+
+            }
+
+        }
+
+        return false;
+
+    }
+
+
+    /**
+     * Checks if the given two nodes share an edge (directed)
+     * @param firstNode the first Node object in the edge
+     * @param secondNode the second Node object in the edge
+     * @return true if (firstNode,secondNode) exists as an edge, false otherwise (including invalid edges).
+     * An invalid edge is an edge that does not exist within the Graph object
+     */
     // Method to check if two Nodes share an edge in the order of firstNode to secondNode
-    private boolean hasEdgeBetween(Node firstNode, Node secondNode) {
+    public boolean hasEdgeBetween(Node firstNode, Node secondNode) {
 
         // Check if both nodes exist within the graph
         if (doesExistInAdj(firstNode) && doesExistInAdj(secondNode)) {
@@ -297,6 +322,48 @@ public class Graph {
 
                         // return true if the second node exists with in the neighbour set
                         if (testNode == secondNode) {
+
+                            return true;
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return false;
+
+    }
+
+
+    /**
+     * Checks if the given two nodes share an edge (directed)
+     * @param firstNode the first node string in the edge
+     * @param secondNode the second node string in the edge
+     * @return true if (firstNode,secondNode) exists as an edge, false otherwise (including invalid edges).
+     * An invalid edge is an edge that does not exist within the Graph object
+     */
+    // Method to check if two Nodes share an edge in the order of firstNode to secondNode
+    public boolean hasEdgeBetween(String firstNode, String secondNode) {
+
+        // Check if both nodes exist within the graph
+        if (doesExistInAdj(firstNode) && doesExistInAdj(secondNode)) {
+
+            // Loop through each neighbour list for all nodes
+            for (Node curNode : adjacencyMap.keySet()) {
+
+                // Check if the current node we are looping on is the first node specified
+                if (curNode.getNodeName() == firstNode) {
+
+                    // Loop through it's neighbour set
+                    for (Node testNode : adjacencyMap.get(curNode)) {
+
+                        // return true if the second node exists with in the neighbour set
+                        if (testNode.getNodeName() == secondNode) {
 
                             return true;
 
