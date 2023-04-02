@@ -2,17 +2,20 @@ package lenoverd.graph;
 
 import lenoverd.graph.exceptions.UnknownNodeException;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class Graph {
 
     private static final String edgeDataName = "EdgeData";
 
     // 2D Array list where the inner list holds all nodes that share edges with the first indexed node
-    private ArrayList<ArrayList<Node>> adjacencyList = new ArrayList<>();
+    //private ArrayList<ArrayList<Node>> adjacencyList = new ArrayList<>();
+
+    // A using a map as a substitute for an adjacency list makes knowing the parent node a lot easier
+    // After all, for a 2D array list, a lot of people would probably not read that the first node in the arraylist corresponds to the parent node
+    // It makes more sense to use the key as a parent node here
+    private HashMap<Node,ArrayList<Node>> adjacencyMap = new HashMap<>();
+
     public Graph(Set<Node> nodeSet, Set<Edge> edgeSet) {
 
         constructAdjList(nodeSet,edgeSet);
@@ -29,7 +32,6 @@ public class Graph {
             if (!doesExistInAdj(curNode)) {
 
                 ArrayList<Node> adjacentNodes = new ArrayList<>();
-                adjacentNodes.add(curNode);
 
                 for (Edge curEdge : edgeSet) {
 
@@ -50,8 +52,8 @@ public class Graph {
 
                 }
 
-                // Add constructed neighbouring nodes list to adjacency list
-                adjacencyList.add(adjacentNodes);
+                // Add constructed neighbouring nodes list to adjacency map with the parent node as key
+                adjacencyMap.put(curNode,adjacentNodes);
 
             }
 
@@ -78,20 +80,12 @@ public class Graph {
             Node firstNode = curEdge.getFirstNode();
             Node secondNode = curEdge.getSecondNode();
 
-            // Check if both nodes exist within the adjacency list and that there does not already exist an edge between the two nodes
-            if (doesExistInAdj(firstNode) && doesExistInAdj(secondNode) && !hasEdgeBetween(firstNode,secondNode)) {
+            // Add edge property to secondNode
+            secondNode.addProperty(new Property<Edge>(edgeDataName,curEdge));
 
-                // Add edge property to secondNode
-                secondNode.addProperty(new Property<Edge>(edgeDataName,curEdge));
-
-                // Find neighbours list for first node and add second node
-                try {
-                    ArrayList<Node> firstNodeNeighbourList = getNodeNeighbourList(firstNode);
-                    firstNodeNeighbourList.add(secondNode);
-                } catch (UnknownNodeException e) {
-                    return false;
-                }
-            }
+            // Find neighbours list for first node and add second node
+            ArrayList<Node> firstNodeNeighbourList = getNodeNeighbourList(firstNode);
+            firstNodeNeighbourList.add(secondNode);
 
         }
 
@@ -111,13 +105,9 @@ public class Graph {
                 Node secondNode = curEdge.getSecondNode();
 
                 // Get the neighbour list for the first node
-                try {
-                    ArrayList<Node> neighbourList = getNodeNeighbourList(firstNode);
-                    // Remove the second node from said list
-                    neighbourList.remove(secondNode);
-                } catch (UnknownNodeException e) {
-                    return false;
-                }
+                ArrayList<Node> neighbourList = getNodeNeighbourList(firstNode);
+                // Remove the second node from said list
+                neighbourList.remove(secondNode);
 
             }
 
@@ -136,12 +126,8 @@ public class Graph {
 
             for (Node curNode : nodeSet) {
 
-                // Create a new neighbour arraylist for each node
-                ArrayList<Node> newNeighbourList = new ArrayList<>();
-                newNeighbourList.add(curNode);
-
-                // Add the new list to the adj list
-                this.adjacencyList.add(newNeighbourList);
+                // Add the new node to the adj map
+                this.adjacencyMap.put(curNode,new ArrayList<>());
 
             }
 
@@ -160,22 +146,8 @@ public class Graph {
 
             for (Node curNode : nodeSet) {
 
-                try {
-                    // Remove node neighbour list
-                    ArrayList<Node> removalList = getNodeNeighbourList(curNode);
-
-                    this.adjacencyList.remove(removalList);
-
-                    // Removal all references in other neighbouring lists
-                    for (ArrayList<Node> curNeighbours : this.adjacencyList) {
-
-                        // Calling to remove on an object for all array list does not throw an error thus it can be called for every list
-                        curNeighbours.remove(curNode);
-
-                    }
-                } catch (UnknownNodeException e) {
-                    return false;
-                }
+                // Remove node from map
+                this.adjacencyMap.remove(curNode);
 
             }
 
@@ -186,54 +158,56 @@ public class Graph {
 
     }
 
-    public ArrayList<Node> getNodeNeighbourList(Node node) throws UnknownNodeException {
+    public ArrayList<Node> getNodeNeighbourList(Node node) {
 
         // First check if node actually exists in adj
         if (doesExistInAdj(node)) {
 
             // Loop through adj and find the list for the given node
-            for (ArrayList<Node> curNeighbourList : this.adjacencyList) {
+            for (Node curNode : adjacencyMap.keySet()) {
 
-                if (curNeighbourList.get(0) == node) {
+                if (curNode == node) {
 
                     // Return the corresponding arraylist
-                    return curNeighbourList;
+                    return adjacencyMap.get(curNode);
                 }
 
             }
 
         }
 
-        throw new UnknownNodeException(node.getNodeName());
+        return null;
 
     }
 
     public Iterator<ArrayList<Node>> iterator() {
         return new Iterator<ArrayList<Node>>() {
-            private int pos = 0;
+            Iterator<Node> parentNodeIterator = adjacencyMap.keySet().iterator();
+
             @Override
             public boolean hasNext() {
-                return (adjacencyList.size() > pos);
+                return (parentNodeIterator.hasNext());
             }
 
             @Override
             public ArrayList<Node> next() {
 
-                return adjacencyList.get(pos++);
+                return adjacencyMap.get(parentNodeIterator.next());
 
 
             }
         };
     }
 
-    // Method to check if a given node exists within the adj list
+    // Method to check if a given node exists within the adj map
     private boolean doesExistInAdj(Node testNode) {
 
-        for (ArrayList<Node> currentNeighbours : this.adjacencyList) {
+        for (Node curNode : adjacencyMap.keySet()) {
 
-            if (currentNeighbours.get(0) == testNode) {
+            if (curNode == testNode) {
 
                 return true;
+
             }
 
         }
@@ -249,21 +223,22 @@ public class Graph {
         if (doesExistInAdj(firstNode) && doesExistInAdj(secondNode)) {
 
             // Loop through each neighbour list for all nodes
-            for (ArrayList<Node> curNeighbours : this.adjacencyList) {
+            for (Node curNode : adjacencyMap.keySet()) {
 
-                // Check if the first node in the sub ArrayList is the firstNode (this is the list that contains all neighbours of firstNode)
-                if (curNeighbours.get(0) == firstNode) {
+                // Check if the current node we are looping on is the first node specified
+                if (curNode == firstNode) {
 
-                    // Check if the secondNode exists within this list
-                    for (Node testNode : curNeighbours) {
+                    // Loop through it's neighbour set
+                    for (Node testNode : adjacencyMap.get(curNode)) {
 
+                        // return true if the second node exists with in the neighbour set
                         if (testNode == secondNode) {
+
                             return true;
+
                         }
 
                     }
-
-                    return false;
 
                 }
 
@@ -281,12 +256,12 @@ public class Graph {
         for (Node curNode : nodeSet) {
 
             if (doesExistInAdj(curNode)) {
-                return false;
+                return true;
             }
 
         }
 
-        return true;
+        return false;
     }
 
 

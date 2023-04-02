@@ -21,5 +21,21 @@ public class Node extends PropertiesHolder {
         return this.nodeName;
     }
 
+    public boolean equals(Object obj) {
+        if (obj.getClass() == this.getClass()) {
+
+            Node testNode = (Node) obj;
+
+            if (testNode.getNodeName() == this.getNodeName()) {
+
+                return true;
+
+            }
+
+        }
+
+        return false;
+    }
+
 
 }
