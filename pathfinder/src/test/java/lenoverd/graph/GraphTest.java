@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,10 +43,10 @@ class GraphTest {
 
         Graph testGraph = new DirectedGraph(testNodes,testEdges);
 
-        ArrayList<Node> testNeighbours3 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node3);
-        ArrayList<Node> testNeighbours1 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node1);
-        ArrayList<Node> testNeighbours2 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node2);
-        ArrayList<Node> testNeighbours4 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node4);
+        List<Node> testNeighbours3 = testGraph.getNodeNeighbourList(node3);
+        List<Node> testNeighbours1 = testGraph.getNodeNeighbourList(node1);
+        List<Node> testNeighbours2 = testGraph.getNodeNeighbourList(node2);
+        List<Node> testNeighbours4 = testGraph.getNodeNeighbourList(node4);
 
         assertEquals(testNeighbours3.size(),0);
         assertEquals(testNeighbours1.size(),2);
@@ -83,8 +84,8 @@ class GraphTest {
 
         testGraph.addEdges(testAddEdges);
 
-        ArrayList<Node> testNeighbours2 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node2);
-        ArrayList<Node> testNeighbours3 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node3);
+        List<Node> testNeighbours2 = testGraph.getNodeNeighbourList(node2);
+        List<Node> testNeighbours3 = testGraph.getNodeNeighbourList(node3);
 
         assertEquals(testNeighbours2.size(),2);
         assertEquals(testNeighbours3.size(),1);

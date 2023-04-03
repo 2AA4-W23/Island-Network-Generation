@@ -98,7 +98,7 @@ public class DirectedGraph implements Graph {
             secondNode.addProperty(new Property<Edge>(edgeDataName,curEdge));
 
             // Find neighbours list for first node and add second node
-            ArrayList<Node> firstNodeNeighbourList = (ArrayList<Node>) getNodeNeighbourList(firstNode);
+            ArrayList<Node> firstNodeNeighbourList = adjacencyMap.get(firstNode);
             firstNodeNeighbourList.add(secondNode);
 
         }
@@ -126,7 +126,7 @@ public class DirectedGraph implements Graph {
                 Node secondNode = curEdge.getSecondNode();
 
                 // Get the neighbour list for the first node
-                ArrayList<Node> neighbourList = (ArrayList<Node>) getNodeNeighbourList(firstNode);
+                ArrayList<Node> neighbourList = adjacencyMap.get(firstNode);
                 // Remove the second node from said list
                 neighbourList.remove(secondNode);
 
@@ -203,7 +203,7 @@ public class DirectedGraph implements Graph {
     /**
      * Gets the neighbour reference list for the given node (i.e., all child nodes of this parent node)
      * @param node the Node object to get the list from
-     * @return an ArrayList (Node) object containing all child node's. Null if the specified parent node is invalid.
+     * @return an IMMUTABLE ArrayList (Node) object containing all child node's. Null if the specified parent node is invalid.
      * A invalid node is a node that does not exist within the Graph object
      */
     public List<Node> getNodeNeighbourList(Node node) {
@@ -217,7 +217,8 @@ public class DirectedGraph implements Graph {
                 if (curNode == node) {
 
                     // Return the corresponding arraylist
-                    return adjacencyMap.get(curNode);
+                    return Collections.unmodifiableList(adjacencyMap.get(curNode));
+
                 }
 
             }

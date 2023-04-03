@@ -69,7 +69,7 @@ public class UndirectedGraph implements Graph {
 
                 // copyEdge method adds a node to the adj map if needed, thus it's possible for a node that has other edges to be skipped
                 // Thus if it does already exist in the map, we just add onto it's neighbour list if applicable
-                ArrayList<Node> adjacentNodes = (ArrayList<Node>) getNodeNeighbourList(curNode);
+                ArrayList<Node> adjacentNodes = adjacencyMap.get(curNode);
 
                 for (Edge curEdge : edgeSet) {
 
@@ -181,7 +181,7 @@ public class UndirectedGraph implements Graph {
             secondNode.addProperty(new Property<Edge>(edgeDataName,curEdge));
 
             // Find neighbours list for first node and add second node
-            ArrayList<Node> firstNodeNeighbourList = (ArrayList<Node>) getNodeNeighbourList(firstNode);
+            ArrayList<Node> firstNodeNeighbourList = adjacencyMap.get(firstNode);
             firstNodeNeighbourList.add(secondNode);
 
             // Call copy edge to copy the edge to the second node (as this graph is undirected)
@@ -212,13 +212,13 @@ public class UndirectedGraph implements Graph {
                 Node secondNode = curEdge.getSecondNode();
 
                 // Get the neighbour list for the first node
-                ArrayList<Node> neighbourList = (ArrayList<Node>) getNodeNeighbourList(firstNode);
+                ArrayList<Node> neighbourList = adjacencyMap.get(firstNode);
                 // Remove the second node from said list
                 neighbourList.remove(secondNode);
 
                 // Given this graph is undirected, we do the same with the second node
                 // Get the neighbour list for the second node
-                ArrayList<Node> neighbourListSecond = (ArrayList<Node>) getNodeNeighbourList(secondNode);
+                ArrayList<Node> neighbourListSecond = adjacencyMap.get(secondNode);
                 // Remove the first node from said list
                 neighbourListSecond.remove(firstNode);
 
@@ -295,7 +295,7 @@ public class UndirectedGraph implements Graph {
     /**
      * Gets the neighbour reference list for the given node (i.e., all child nodes of this parent node)
      * @param node the Node object to get the list from
-     * @return an ArrayList (Node) object containing all child node's. Null if the specified parent node is invalid.
+     * @return an IMMUTABLE ArrayList (Node) object containing all child node's. Null if the specified parent node is invalid.
      * A invalid node is a node that does not exist within the Graph object
      */
     public List<Node> getNodeNeighbourList(Node node) {
@@ -309,7 +309,7 @@ public class UndirectedGraph implements Graph {
                 if (curNode == node) {
 
                     // Return the corresponding arraylist
-                    return adjacencyMap.get(curNode);
+                    return Collections.unmodifiableList(adjacencyMap.get(curNode));
                 }
 
             }
