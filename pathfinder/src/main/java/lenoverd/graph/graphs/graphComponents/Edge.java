@@ -1,4 +1,6 @@
-package lenoverd.graph;
+package lenoverd.graph.graphs.graphComponents;
+
+import lenoverd.graph.property.PropertiesHolder;
 
 public class Edge extends PropertiesHolder {
 

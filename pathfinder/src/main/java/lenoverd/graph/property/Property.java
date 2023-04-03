@@ -1,4 +1,4 @@
-package lenoverd.graph;
+package lenoverd.graph.property;
 
 public class Property<T> {
 

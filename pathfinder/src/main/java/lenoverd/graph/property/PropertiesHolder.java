@@ -1,8 +1,8 @@
-package lenoverd.graph;
+package lenoverd.graph.property;
 
 import lenoverd.graph.exceptions.NodePropertyNotFoundException;
+import lenoverd.graph.property.Property;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 

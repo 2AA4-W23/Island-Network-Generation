@@ -1,7 +1,12 @@
-package lenoverd.graph.pathfinder;
+package lenoverd.graph.pathfinders;
 
-import lenoverd.graph.*;
 import lenoverd.graph.exceptions.NodePropertyNotFoundException;
+import lenoverd.graph.graphs.DirectedGraph;
+import lenoverd.graph.graphs.Graph;
+import lenoverd.graph.graphs.UndirectedGraph;
+import lenoverd.graph.graphs.graphComponents.Edge;
+import lenoverd.graph.graphs.graphComponents.Node;
+import lenoverd.graph.property.Property;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

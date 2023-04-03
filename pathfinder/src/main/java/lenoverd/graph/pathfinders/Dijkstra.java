@@ -1,9 +1,8 @@
-package lenoverd.graph.pathfinder;
+package lenoverd.graph.pathfinders;
 
-import lenoverd.graph.Edge;
-import lenoverd.graph.DirectedGraph;
-import lenoverd.graph.Graph;
-import lenoverd.graph.Node;
+import lenoverd.graph.graphs.graphComponents.Edge;
+import lenoverd.graph.graphs.Graph;
+import lenoverd.graph.graphs.graphComponents.Node;
 import lenoverd.graph.exceptions.NodePropertyNotFoundException;
 
 import java.util.*;

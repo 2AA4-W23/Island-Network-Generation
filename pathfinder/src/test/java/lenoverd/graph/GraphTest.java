@@ -1,5 +1,10 @@
 package lenoverd.graph;
 
+import lenoverd.graph.graphs.DirectedGraph;
+import lenoverd.graph.graphs.Graph;
+import lenoverd.graph.graphs.UndirectedGraph;
+import lenoverd.graph.graphs.graphComponents.Edge;
+import lenoverd.graph.graphs.graphComponents.Node;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

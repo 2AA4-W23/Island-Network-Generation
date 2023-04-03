@@ -1,6 +1,8 @@
 package lenoverd.graph;
 
 import lenoverd.graph.exceptions.NodePropertyNotFoundException;
+import lenoverd.graph.graphs.graphComponents.Node;
+import lenoverd.graph.property.Property;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 

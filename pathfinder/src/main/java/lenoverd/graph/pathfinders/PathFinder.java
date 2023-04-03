@@ -1,6 +1,6 @@
-package lenoverd.graph.pathfinder;
+package lenoverd.graph.pathfinders;
 
-import lenoverd.graph.Node;
+import lenoverd.graph.graphs.graphComponents.Node;
 
 import java.util.Comparator;
 import java.util.List;

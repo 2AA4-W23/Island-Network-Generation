@@ -1,4 +1,6 @@
-package lenoverd.graph;
+package lenoverd.graph.graphs.graphComponents;
+
+import lenoverd.graph.property.PropertiesHolder;
 
 // A node of a graph
 public class Node extends PropertiesHolder {

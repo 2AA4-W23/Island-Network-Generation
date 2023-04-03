@@ -1,4 +1,8 @@
-package lenoverd.graph;
+package lenoverd.graph.graphs;
+
+import lenoverd.graph.graphs.graphComponents.Edge;
+import lenoverd.graph.graphs.graphComponents.Node;
+import lenoverd.graph.property.Property;
 
 import java.util.*;
 
