@@ -1,6 +1,7 @@
 package lenoverd.graph.pathfinder;
 
 import lenoverd.graph.Edge;
+import lenoverd.graph.DirectedGraph;
 import lenoverd.graph.Graph;
 import lenoverd.graph.Node;
 import lenoverd.graph.exceptions.NodePropertyNotFoundException;

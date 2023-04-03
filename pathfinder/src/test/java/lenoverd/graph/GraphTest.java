@@ -1,6 +1,5 @@
 package lenoverd.graph;
 
-import lenoverd.graph.exceptions.UnknownNodeException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -36,12 +35,12 @@ class GraphTest {
         testEdges.add(edge21);
         testEdges.add(edge42);
 
-        Graph testGraph = new Graph(testNodes,testEdges);
+        Graph testGraph = new DirectedGraph(testNodes,testEdges);
 
-        ArrayList<Node> testNeighbours3 = testGraph.getNodeNeighbourList(node3);
-        ArrayList<Node> testNeighbours1 = testGraph.getNodeNeighbourList(node1);
-        ArrayList<Node> testNeighbours2 = testGraph.getNodeNeighbourList(node2);
-        ArrayList<Node> testNeighbours4 = testGraph.getNodeNeighbourList(node4);
+        ArrayList<Node> testNeighbours3 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node3);
+        ArrayList<Node> testNeighbours1 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node1);
+        ArrayList<Node> testNeighbours2 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node2);
+        ArrayList<Node> testNeighbours4 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node4);
 
         assertEquals(testNeighbours3.size(),0);
         assertEquals(testNeighbours1.size(),2);
@@ -68,7 +67,7 @@ class GraphTest {
         testEdges.add(edge21);
         testEdges.add(edge42);
 
-        Graph testGraph = new Graph(testNodes,testEdges);
+        Graph testGraph = new DirectedGraph(testNodes,testEdges);
 
         // Add edges
         Set<Edge> testAddEdges = new HashSet<>();
@@ -79,8 +78,8 @@ class GraphTest {
 
         testGraph.addEdges(testAddEdges);
 
-        ArrayList<Node> testNeighbours2 = testGraph.getNodeNeighbourList(node2);
-        ArrayList<Node> testNeighbours3 = testGraph.getNodeNeighbourList(node3);
+        ArrayList<Node> testNeighbours2 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node2);
+        ArrayList<Node> testNeighbours3 = (ArrayList<Node>) testGraph.getNodeNeighbourList(node3);
 
         assertEquals(testNeighbours2.size(),2);
         assertEquals(testNeighbours3.size(),1);
@@ -112,7 +111,7 @@ class GraphTest {
         testEdges.add(edge21);
         testEdges.add(edge42);
 
-        Graph testGraph = new Graph(testNodes,testEdges);
+        Graph testGraph = new DirectedGraph(testNodes,testEdges);
 
         Node testNode = new Node("AddMe");
 
@@ -148,13 +147,127 @@ class GraphTest {
         testEdges.add(edge21);
         testEdges.add(edge42);
 
-        Graph testGraph = new Graph(testNodes,testEdges);
+        Graph testGraph = new DirectedGraph(testNodes,testEdges);
 
         assertEquals(testGraph.hasEdgeBetween("1","2"),true);
         assertEquals(testGraph.hasEdgeBetween("1","4"),false);
 
         assertEquals(testGraph.hasEdgeBetween(node1,node2),true);
         assertEquals(testGraph.hasEdgeBetween(node1,node4),false);
+
+        // Check if a node contains an edge to itself
+        assertEquals(testGraph.hasEdgeBetween("4","4"),false);
+
+    }
+
+    @Test
+    void UndirectedGraphCreation() {
+        Set<Node> testNodes = new HashSet<>();
+        testNodes.add(node1);
+        testNodes.add(node2);
+        testNodes.add(node3);
+        testNodes.add(node4);
+
+        Set<Edge> testEdges = new HashSet<>();
+        testEdges.add(edge12);
+        testEdges.add(edge13);
+        testEdges.add(edge42);
+
+        Graph undirTest = new UndirectedGraph(testNodes,testEdges);
+
+        assertEquals(undirTest.hasEdgeBetween("1","2"),true);
+        assertEquals(undirTest.hasEdgeBetween("2","1"),true);
+
+        assertEquals(undirTest.hasEdgeBetween("1","3"),true);
+        assertEquals(undirTest.hasEdgeBetween("3","1"),true);
+
+        assertEquals(undirTest.hasEdgeBetween("4","2"),true);
+        assertEquals(undirTest.hasEdgeBetween("2","4"),true);
+
+        // Check if a node contains an edge to itself
+        assertEquals(undirTest.hasEdgeBetween("4","4"),false);
+
+    }
+
+    @Test
+    void UndirectedGraphAddAndRemoveEdges() {
+
+        Set<Node> testNodes = new HashSet<>();
+        testNodes.add(node1);
+        testNodes.add(node2);
+        testNodes.add(node3);
+        testNodes.add(node4);
+
+        Set<Edge> testEdges = new HashSet<>();
+        testEdges.add(edge12);
+        testEdges.add(edge13);
+        testEdges.add(edge42);
+
+        Graph undirTest = new UndirectedGraph(testNodes,testEdges);
+
+        // Test adding a duplicate edge
+        Set<Edge> duplicateEdge = new HashSet<>();
+        duplicateEdge.add(edge12);
+        assertEquals(undirTest.addEdges(duplicateEdge),false);
+
+        // Test adding a new edge
+        assertEquals(undirTest.hasEdgeBetween("3","2"),false);
+        assertEquals(undirTest.hasEdgeBetween("2","3"),false);
+        duplicateEdge.clear();
+        Edge newEdge = new Edge(node3,node2);
+        duplicateEdge.add(newEdge);
+        undirTest.addEdges(duplicateEdge);
+        assertEquals(undirTest.hasEdgeBetween("3","2"),true);
+        assertEquals(undirTest.hasEdgeBetween("2","3"),true);
+
+        // Test removing an edge
+        undirTest.removeEdges(duplicateEdge);
+        assertEquals(undirTest.hasEdgeBetween("3","2"),false);
+        assertEquals(undirTest.hasEdgeBetween("2","3"),false);
+    }
+
+    @Test
+    void UndirectedGraphAddAndRemoveNodes() {
+
+        Set<Node> testNodes = new HashSet<>();
+        testNodes.add(node1);
+        testNodes.add(node2);
+        testNodes.add(node3);
+        testNodes.add(node4);
+
+        Set<Edge> testEdges = new HashSet<>();
+        testEdges.add(edge12);
+        testEdges.add(edge13);
+        testEdges.add(edge42);
+
+        Graph undirTest = new UndirectedGraph(testNodes,testEdges);
+
+        // Add new node
+        Set<Node> addNodes = new HashSet<>();
+        Node newNode = new Node("newNode");
+        addNodes.add(newNode);
+        undirTest.addNodes(addNodes);
+
+        // Check nothing has happened yet
+        assertEquals(undirTest.hasEdgeBetween("newNode","2"),false);
+        assertEquals(undirTest.hasEdgeBetween("2","newNode"),false);
+
+        // Add edge
+        Edge newEdge = new Edge(newNode,node2);
+        Set<Edge> addEdges = new HashSet<>();
+        addEdges.add(newEdge);
+        undirTest.addEdges(addEdges);
+
+        // Check if the change applied
+        assertEquals(undirTest.hasEdgeBetween("newNode","2"),true);
+        assertEquals(undirTest.hasEdgeBetween("2","newNode"),true);
+
+        // Check removal
+        undirTest.removeNodes(addNodes);
+        assertEquals(undirTest.hasEdgeBetween("newNode","2"),false);
+        assertEquals(undirTest.hasEdgeBetween("2","newNode"),false);
+
+
 
     }
 
