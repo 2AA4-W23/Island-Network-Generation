@@ -16,12 +16,26 @@ public class Dijkstra implements PathFinder {
     private HashMap<Node,Double> shortestDistances = new HashMap<>();
     private HashMap<Node,Node> previousNodes = new HashMap<>();
 
+
+    /**
+     * Create a Dijkstra pathfinder
+     * @param graph the graph to compute paths from
+     * @param weightPropertyName the name of the edge object property that is stored in children nodes. This edge contains the weight value between two nodes.
+     * @param weightValueName the actual name of the weight property stored inside the weight property edge. This is used to compare weights between nodes.
+     * @return a Dijkstra object
+     */
     public Dijkstra(Graph graph, String weightPropertyName, String weightValueName) {
         this.referenceGraph = graph;
         this.weightPropertyName = weightPropertyName;
         this.weightValueName = weightValueName;
     }
 
+    /**
+     * Compute the minimal weighted path between two nodes
+     * @param source the source Node object (where the path starts from)
+     * @param target the target Node object to get to from source
+     * @return a List object containing the path between source (inclusive) and target (inclusive) IF the path exists, null otherwise
+     */
     @Override
     public List<Node> findPath(Node source, Node target) {
 
@@ -77,11 +91,12 @@ public class Dijkstra implements PathFinder {
             return getPathFromMap(source,target);
 
         } catch (NodePropertyNotFoundException e){
-            System.out.println(e.getMessage());
+
         }
             return null;
     }
 
+    // Pathfinder classes must implement a comparator class as they may have their own way to comparing weights
     @Override
     public Comparator<Node> getComparator() {
         return new Comparator<Node>() {
