@@ -1,5 +1,6 @@
 package ca.team50.generation;
 
+import ca.lenoverd.city.CityGenerator;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.team50.Tiles.Arctic.ArcticUtils;
 import ca.team50.Tiles.BiomeType;
@@ -98,6 +99,9 @@ public class NormalGenerator implements IslandGenerable {
             // Generate Rivers
             RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(mesh, specification.getNumRivers(), rivAltitude);
 
+            // Generate Cities
+            CityGenerator cityGenerator = new CityGenerator(mesh,30,islandShape);
+
             // ------ ASSIGN COLOURS TO POLYGONS ------ //
 
             // Assign colours to polygons
@@ -121,6 +125,13 @@ public class NormalGenerator implements IslandGenerable {
                         curPoly.unifyColor(ArcticUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
                     } else if (specification.getBiomeType().equals(BiomeType.Deserts)) {
                         curPoly.unifyColor(DesertsUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
+                    }
+
+                    // Check for city
+                    if (cityGenerator.isVertexACity(centroid)) {
+
+                        curPoly.unifyColor(cityGenerator.getCityType(centroid).getTileColour());
+
                     }
 
                 } else {
