@@ -386,10 +386,10 @@ public class UndirectedGraph implements Graph {
 
     /**
      * Iterate through all neighbour node lists
-     * @return an ArrayList (Node) object containing all child node's for the given iteration
+     * @return a shallow copied ArrayList (Node) object containing all child node's for the given iteration
      */
-    public Iterator<ArrayList<Node>> iterator() {
-        return new Iterator<ArrayList<Node>>() {
+    public Iterator<List<Node>> iterator() {
+        return new Iterator<List<Node>>() {
             Iterator<Node> parentNodeIterator = adjacencyMap.keySet().iterator();
 
             @Override
@@ -398,9 +398,18 @@ public class UndirectedGraph implements Graph {
             }
 
             @Override
-            public ArrayList<Node> next() {
+            public List<Node> next() {
 
-                return adjacencyMap.get(parentNodeIterator.next());
+                List<Node> copyList = new ArrayList<>();
+
+                // Create a shallow copy of arraylist
+                for (Node copyNode : adjacencyMap.get(parentNodeIterator.next())) {
+
+                    copyList.add(copyNode);
+
+                }
+
+                return copyList;
 
 
             }

@@ -20,7 +20,7 @@ public interface Graph {
     List<Node> getNodeNeighbourList(String nodeName);
 
     Iterator<Node> getParentNodeIterator();
-    Iterator<ArrayList<Node>> iterator();
+    Iterator<List<Node>> iterator();
 
     boolean hasEdgeBetween(Node firstNode, Node secondNode);
     boolean hasEdgeBetween(String firstNode, String secondNode);

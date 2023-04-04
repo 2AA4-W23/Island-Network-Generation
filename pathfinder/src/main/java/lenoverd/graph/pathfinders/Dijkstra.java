@@ -4,6 +4,7 @@ import lenoverd.graph.graphs.graphComponents.Edge;
 import lenoverd.graph.graphs.Graph;
 import lenoverd.graph.graphs.graphComponents.Node;
 import lenoverd.graph.exceptions.NodePropertyNotFoundException;
+import lenoverd.graph.property.Property;
 
 import java.util.*;
 
