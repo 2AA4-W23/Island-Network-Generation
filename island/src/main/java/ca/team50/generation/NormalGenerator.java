@@ -1,6 +1,7 @@
 package ca.team50.generation;
 
 import ca.lenoverd.city.CityGenerator;
+import ca.lenoverd.city.NetworkGenerator;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.team50.Tiles.Arctic.ArcticUtils;
 import ca.team50.Tiles.BiomeType;
@@ -101,6 +102,9 @@ public class NormalGenerator implements IslandGenerable {
 
             // Generate Cities
             CityGenerator cityGenerator = new CityGenerator(mesh,30,islandShape);
+
+            // Testing Network Generator
+            NetworkGenerator testGen = new NetworkGenerator(mesh,cityGenerator);
 
             // ------ ASSIGN COLOURS TO POLYGONS ------ //
 
