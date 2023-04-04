@@ -295,7 +295,7 @@ public class UndirectedGraph implements Graph {
     /**
      * Gets the neighbour reference list for the given node (i.e., all child nodes of this parent node)
      * @param node the Node object to get the list from
-     * @return an IMMUTABLE ArrayList (Node) object containing all child node's. Null if the specified parent node is invalid.
+     * @return a shallow copied ArrayList (Node) object containing all child node's. Null if the specified parent node is invalid.
      * A invalid node is a node that does not exist within the Graph object
      */
     public List<Node> getNodeNeighbourList(Node node) {
@@ -308,8 +308,17 @@ public class UndirectedGraph implements Graph {
 
                 if (curNode == node) {
 
-                    // Return the corresponding arraylist
-                    return Collections.unmodifiableList(adjacencyMap.get(curNode));
+                    List<Node> copyList = new ArrayList<>();
+
+                    // Create a shallow copy of arraylist
+                    for (Node copyNode : adjacencyMap.get(curNode)) {
+
+                        copyList.add(copyNode);
+
+                    }
+
+                    // Return the corresponding shallow copied arraylist
+                    return copyList;
                 }
 
             }
@@ -323,7 +332,7 @@ public class UndirectedGraph implements Graph {
     /**
      * Gets the neighbour reference list for the given node (i.e., all child nodes of this parent node)
      * @param nodeName the node name as a String to get the list from
-     * @return an ArrayList (Node) object containing all child node's. Null if the specified parent node is invalid.
+     * @return a shallow copied ArrayList (Node) object containing all child node's. Null if the specified parent node is invalid.
      * A invalid node is a node that does not exist within the Graph object
      */
     public List<Node> getNodeNeighbourList(String nodeName) {
@@ -332,7 +341,17 @@ public class UndirectedGraph implements Graph {
 
             if (curNode.getNodeName() == nodeName) {
 
-                return this.adjacencyMap.get(curNode);
+                List<Node> copyList = new ArrayList<>();
+
+                // Create a shallow copy of arraylist
+                for (Node copyNode : adjacencyMap.get(curNode)) {
+
+                    copyList.add(copyNode);
+
+                }
+
+                // Return the corresponding shallow copied arraylist
+                return copyList;
 
             }
 

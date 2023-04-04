@@ -95,7 +95,9 @@ class GraphTest {
         testRemoveEdges.add(edge24);
         testGraph.removeEdges(testRemoveEdges);
 
-        assertEquals(testNeighbours2.size(),1);
+        // Check if shallow copy list worked as intended
+        assertEquals(testNeighbours2.size(),2);
+        assertEquals(testGraph.getNodeNeighbourList(node2).size(),1);
         // Check that you cannot remove a now non-existent edge
         assertEquals(testGraph.removeEdges(testRemoveEdges),false);
 
