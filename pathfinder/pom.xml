@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>pathfinder</artifactId>
+    <artifactId>2aa4.mesh.pathfinder</artifactId>
     <name>McMaster :: CAS :: 2AA4 :: A4 :: PathFinder</name>
 
 
