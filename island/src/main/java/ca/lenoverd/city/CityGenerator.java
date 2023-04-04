@@ -15,9 +15,17 @@ public class CityGenerator {
 
     private HashMap<Polygons,TileType> cities = new HashMap<>();
 
+    // TEMP SEED FOR TESTING
     static long seed = 1234;
 
-
+    /**
+     * Generate a list of cities (and their types) for a given mesh
+     * @param mesh the PolyMesh object containing all canvas polygons
+     * @param islandShape the shape of the island used in the island generation method (same as the shape being used for island generation)
+     * @param maxNumberOfCities the maximum amount of cities to generate
+     * @return a CityGenerator object which contains a list of polygons which are designated as cities.
+     * @Note That when the term "maximum" is specified, this does NOT mean the generator will generate all cities.
+     */
     public CityGenerator(PolyMesh<Polygons> mesh, int maxNumberOfCities, IslandShape islandShape) {
 
         int curIter = 0;
@@ -57,5 +65,52 @@ public class CityGenerator {
 
     }
 
+
+    /**
+     * Check if a given centroid from a polygon is a city
+     * @param centroid the centroid of the given polygon
+     * @return true if the polygon is a city, false otherwise
+     */
+    public boolean isVertexACity(Structs.Vertex centroid) {
+
+        for (Polygons curPoly : cities.keySet()) {
+
+            Structs.Vertex curPolyCentroid = curPoly.getCentroid();
+
+            if (curPolyCentroid.getX() == centroid.getX() && curPolyCentroid.getY() == centroid.getY()) {
+
+                return true;
+
+            }
+
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Get the type of city (as a Tile) from a polygon centroid
+     * @param centroid the centroid of the given polygon
+     * @return a TileType object which contains a specific city colour
+     * @Note if the polygon centroid is not a city, this method will return null
+     */
+    public TileType getCityType(Structs.Vertex centroid) {
+
+        for (Polygons curPoly : cities.keySet()) {
+
+            Structs.Vertex curPolyCentroid = curPoly.getCentroid();
+
+            if (curPolyCentroid.getX() == centroid.getX() && curPolyCentroid.getY() == centroid.getY()) {
+
+                return cities.get(curPoly);
+
+            }
+
+        }
+
+        return null;
+
+    }
 
 }
