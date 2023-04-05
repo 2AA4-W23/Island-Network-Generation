@@ -132,13 +132,6 @@ public class NormalGenerator implements IslandGenerable {
                         curPoly.unifyColor(DesertsUtils.getTileFormProperty(polygonAltitude, polygonHumidity).getTileColour());
                     }
 
-                    // Check for city
-                    if (cityGenerator.isVertexACity(centroid)) {
-
-                        curPoly.unifyColor(cityGenerator.getCityType(centroid).getTileColour());
-
-                    }
-
                 } else {
                     curPoly.unifyColor(oceanTile.getTileColour());
                 }
@@ -148,10 +141,26 @@ public class NormalGenerator implements IslandGenerable {
                     curPoly.unifyColor(lakeTile.getTileColour());
                 }
 
+                // Check for city
+                if (cityGenerator.isVertexACity(centroid)) {
+
+                    curPoly.unifyColor(cityGenerator.getCityType(centroid).getTileColour());
+
+                }
+
+                // Check for road
+                if (testGen.isCentroidARoad(centroid)) {
+
+                    curPoly.addPathsIds(testGen.getPathConnections(centroid));
+                    System.out.println(curPoly.setCentroidColour(new int[]{21,21,21}));
+
+                }
+
             }
 
         } catch (Exception e) {
 
+            System.out.println(e.getMessage());
             ExceptionHandler.handleException(new GenerationException("Generation failed! Please check arguments and try again"));
 
         }

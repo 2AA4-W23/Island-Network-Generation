@@ -10,6 +10,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class IslandRender implements Renderable {
     @Override
@@ -25,6 +26,7 @@ public class IslandRender implements Renderable {
         drawSegments(polygons,canvas,vertices);
         drawVertices(vertices,canvas);
         drawRiver(polygons, canvas);
+        drawRoads(polygons,canvas);
     }
 
 
@@ -210,7 +212,52 @@ public class IslandRender implements Renderable {
         }
     }
 
+
+    private void drawRoads(PolyMesh<? extends Polygons> polygons, Graphics2D canvas) {
+
+        for (int index = 0; index < polygons.size(); index++) {
+
+            for (int index1 = 1; index1 < polygons.size(); index1++) {
+
+                if (polygons.isNeighbor(index, index1)) {
+
+                    Structs.Vertex start = polygons.get(index).getCentroid();
+                    Structs.Vertex end = polygons.get(index1).getCentroid();
+
+                    Color v1Color = Property.extractColor(start.getPropertiesList());
+                    Color v2Color = Property.extractColor(end.getPropertiesList());
+
+                    //calculate average color and set as segment color
+                    if (v1Color.getRed() == 21 && v1Color.getBlue() == 21 && v1Color.getGreen() == 21 && v2Color.getRed() == 21 && v2Color.getBlue() == 21 && v2Color.getGreen() == 21) {
+
+                        // Check if a road exists between the two centroids
+                        if (polygons.get(index).roadExistsBetweenCentroids(end)) {
+
+                            // If so, draw the road
+                            Point2D startPoint = new Point2D.Double(polygons.get(index).getCentroid().getX(), polygons.get(index).getCentroid().getY());
+                            Point2D endPoint = new Point2D.Double(polygons.get(index1).getCentroid().getX(), polygons.get(index1).getCentroid().getY());
+
+                            Float segmentThickness = 0.5f;
+                            Stroke segmentStroke = new BasicStroke(segmentThickness);
+                            canvas.setStroke(segmentStroke);
+
+                            int alpha = 1;
+                            canvas.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+
+                            Line2D line = new Line2D.Double(startPoint, endPoint);
+                            canvas.setColor(new Color(213, 54, 100));
+                            canvas.draw(line);
+                            canvas.fill(line);
+
+                        }
+                    }
+                }
+            }
+        }
+
     }
+
+}
 
 
 

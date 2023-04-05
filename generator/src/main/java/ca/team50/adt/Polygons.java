@@ -224,6 +224,82 @@ public class Polygons implements Serializable {
         newList.clear();
     }
 
+    // Method to add all road paths which the given polygon connects to as a property
+    public void addPathsIds(List<Structs.Vertex> adjacentPositionsList) {
+
+        // Construct string
+        String listData = "";
+
+        for (int index = 0; index < adjacentPositionsList.size(); index++) {
+
+            Structs.Vertex curVert = adjacentPositionsList.get(index);
+            System.out.println("X: " + curVert.getX());
+            System.out.println("Y: " + curVert.getX());
+            listData+=curVert.getX()+":"+ curVert.getY();
+
+            if (index+1 < adjacentPositionsList.size()) {
+
+                listData+=",";
+
+            }
+
+        }
+
+        System.out.println(listData);
+
+        // Construct property and apply to centroid
+        Structs.Property roadConnections = Structs.Property.newBuilder().setKey("roadConnections").setValue(listData).build();
+
+        Vertex centroid = this.getCentroid().toBuilder().addProperties(roadConnections).build();
+
+        this.centroid = centroid;
+
+    }
+
+    public boolean roadExistsBetweenCentroids(Vertex centroidToTest) {
+
+        // Get road property
+        String data = null;
+
+        for (Structs.Property curProp : this.centroid.getPropertiesList()) {
+            if (curProp.getKey().contains("roadConnections")) {
+
+                data = curProp.getValue();
+
+            }
+        }
+
+        if (data != null) {
+
+            // Get set of x and y stirng
+            for (String curVertStr : data.split(",")) {
+
+                System.out.println(curVertStr);
+
+                // Get x and y value for particular string
+                String[] xAndy = curVertStr.split(":");
+
+                System.out.println(xAndy[0]);
+                System.out.println(xAndy[1]);
+
+                double xVal = Double.valueOf(xAndy[0]);
+                double yVal = Double.valueOf(xAndy[1]);
+
+                // Check if their values are equal to the centroid inputted
+                if (centroidToTest.getX() == xVal && centroidToTest.getY() == yVal) {
+
+                    return true;
+
+                }
+
+            }
+
+        }
+
+        return false;
+
+    }
+
     //River Exists
     public void setAsRiver() {
         // Create centroid color to blue with opaque coloring for rendering
@@ -246,6 +322,71 @@ public class Polygons implements Serializable {
         }
         this.centroid = newList.get(0);
         newList.clear();
+    }
+
+    /**
+     * Set the polygon as a raod
+     * Adds a "road" property to the polygon which contains the value "True"
+     */
+    public void setAsRoad() {
+        ArrayList<Vertex> newList = new ArrayList<>();
+        // Create property
+        Structs.Property aquiferExistence = Structs.Property.newBuilder().setKey("road").setValue("True").build();
+
+        Vertex v = this.getCentroid();
+
+        // Replace altitude of vertex with new altitude
+        for (int index = 0; index < v.getPropertiesCount(); index++) {
+            Structs.Property curProperty = v.getProperties(index);
+            if (curProperty.getKey().contains("road")) {
+                Vertex newV = v.toBuilder().removeProperties(index).build();
+                newV = newV.toBuilder().addProperties(aquiferExistence).build();
+                newList.add(newV);
+                break;
+            }
+        }
+
+        this.centroid = newList.get(0);
+        newList.clear();
+    }
+
+    //Method to set centroid colour
+    /**
+     * Set the colour of the centroid of the given polygon
+     * @param RGBColour the 3 colours in an array as integer values (in-order of RGB (0-255))
+     * @return true if the colour was modified, false otherwise
+     */
+    public boolean setCentroidColour(int[] RGBColour) {
+
+        // Error checking
+        if (RGBColour.length != 3) {
+            return false;
+        }
+
+        // Create property
+        String colorCode = RGBColour[0] + "," + RGBColour[1] + "," + RGBColour[2];
+        Structs.Property color = Structs.Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
+
+        Vertex v = this.getCentroid();
+        ArrayList<Vertex> newList = new ArrayList<>();
+
+        // Replace colour of centroid with new colour
+        for (int index = 0; index < v.getPropertiesCount(); index++){
+            Structs.Property curProperty = v.getProperties(index);
+            if (curProperty.getKey().contains("rgb_color")) {
+                Vertex newV = v.toBuilder().removeProperties(index).build();
+                newV = newV.toBuilder().addProperties(color).build();
+                newList.add(newV);
+                break;
+            }
+
+        }
+
+        this.centroid = newList.get(0);
+        newList.clear();
+        return true;
+
+
     }
 
 

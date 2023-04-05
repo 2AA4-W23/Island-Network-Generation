@@ -20,6 +20,8 @@ public class NetworkGenerator {
     private Graph islandGraph;
     private PolyMesh<Polygons> mesh;
 
+    private List<List<Node>> starNetworkNodes = new ArrayList<>();
+
 
     public NetworkGenerator(PolyMesh<Polygons> mesh) {
 
@@ -107,7 +109,7 @@ public class NetworkGenerator {
                 Node testNode = parentNodes.next();
 
                 // Get centroid property
-                Structs.Vertex centroid = (Structs.Vertex) testNode.getProperty(String.valueOf(testNode.getNodeName()), Structs.Vertex.newBuilder().build()).getValue();
+                Structs.Vertex centroid = (Structs.Vertex) testNode.getProperty(testNode.getNodeName(), Structs.Vertex.newBuilder().build()).getValue();
 
                 // Check if the centroid is a city
                 if (cityGenerator.isVertexACity(centroid)) {
@@ -154,11 +156,106 @@ public class NetworkGenerator {
 
             }
 
-
+            // Set star network nodes
+            this.starNetworkNodes = listOfBestPaths;
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+    }
+
+    public List<Structs.Vertex> getPathConnections(Structs.Vertex centroid) {
+
+        List<Structs.Vertex> adjacentConnections = new ArrayList<>();
+
+        for (List<Node> curPath : this.starNetworkNodes) {
+
+            int index = 0;
+            for (Node curNode : curPath) {
+
+                try {
+
+                    // Get node vertex property
+                    Structs.Vertex curNodeCentroid = (Structs.Vertex) curNode.getProperty(curNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
+
+                    // Check if it's equivalent to the given centroid
+                    if (centroid.getX() == curNodeCentroid.getX() && centroid.getY() == curNodeCentroid.getY()) {
+
+                        // If so, said centroid is a vertex
+
+                        if (index-1 >= 0) {
+                            // Get previous node
+                            Node previousNode = curPath.get(index-1);
+                            Structs.Vertex previousNodeCentroid = (Structs.Vertex) previousNode.getProperty(previousNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
+                            adjacentConnections.add(previousNodeCentroid);
+                        }
+
+                        if (curPath.size() > index+1) {
+
+                            // Get next node
+                            Node nextNode = curPath.get(index+1);
+                            Structs.Vertex nextNodeCentroid = (Structs.Vertex) nextNode.getProperty(nextNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
+                            adjacentConnections.add(nextNodeCentroid);
+                        }
+
+                    }
+
+
+                } catch (Exception e) {
+
+                    System.out.println(e.getMessage());
+
+                }
+
+                index++;
+
+            }
+
+        }
+
+        return adjacentConnections;
+
+    }
+
+    public boolean isCentroidARoad(Structs.Vertex centroid) {
+
+        // Loop through all paths
+        for (List<Node> curPath : this.starNetworkNodes) {
+
+            // Loop through each node in a given path
+            for (Node curNode : curPath) {
+
+                // Check to make sure node is NOT a city (i.e. the first node and last node in the list are cities)
+                if (curNode != curPath.get(0) && curNode != curPath.get(curPath.size()-1)) {
+
+                    try {
+
+                        // Get node vertex property
+                        Structs.Vertex curNodeCentroid = (Structs.Vertex) curNode.getProperty(curNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
+
+                        // Check if it's equivalent to the given centroid
+                        if (centroid.getX() == curNodeCentroid.getX() && centroid.getY() == curNodeCentroid.getY()) {
+
+                            // If so, said centroid is a vertex
+                            return true;
+
+                        }
+
+
+                    } catch (Exception e) {
+
+                        System.out.println(e.getMessage());
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return false;
 
     }
 
