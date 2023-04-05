@@ -28,7 +28,7 @@ public class Node extends PropertiesHolder {
 
             Node testNode = (Node) obj;
 
-            if (testNode.getNodeName() == this.getNodeName()) {
+            if (testNode.getNodeName().equals(this.getNodeName())) {
 
                 return true;
 
@@ -37,6 +37,13 @@ public class Node extends PropertiesHolder {
         }
 
         return false;
+    }
+
+    // Nodes are determined to be equal by their name as a string, thus for hashing, the hashcode for the object is the same as it's string
+    public int hashCode() {
+
+        return this.nodeName.hashCode();
+
     }
 
 

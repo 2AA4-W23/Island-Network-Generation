@@ -40,7 +40,7 @@ public class DirectedGraph implements Graph {
 
                 for (Edge curEdge : edgeSet) {
 
-                    if (curEdge.getFirstNode() == curNode) {
+                    if (curEdge.getFirstNode().equals(curNode)) {
 
                         // Get the second node
                         Node neighbourNode = curEdge.getSecondNode();
@@ -214,7 +214,7 @@ public class DirectedGraph implements Graph {
             // Loop through adj and find the list for the given node
             for (Node curNode : adjacencyMap.keySet()) {
 
-                if (curNode == node) {
+                if (curNode.equals(node)) {
 
                     List<Node> copyList = new ArrayList<>();
 
@@ -330,7 +330,7 @@ public class DirectedGraph implements Graph {
 
         for (Node curNode : adjacencyMap.keySet()) {
 
-            if (curNode == testNode) {
+            if (curNode.equals(testNode)) {
 
                 return true;
 
@@ -377,7 +377,7 @@ public class DirectedGraph implements Graph {
             for (Node curNode : adjacencyMap.keySet()) {
 
                 // Check if the current node we are looping on is the first node specified
-                if (curNode == firstNode) {
+                if (curNode.equals(firstNode)) {
 
                     // Loop through it's neighbour set
                     for (Node testNode : adjacencyMap.get(curNode)) {

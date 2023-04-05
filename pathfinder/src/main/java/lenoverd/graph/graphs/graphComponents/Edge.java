@@ -33,5 +33,27 @@ public class Edge extends PropertiesHolder {
         return this.nodePair[1];
     }
 
+    public boolean equals(Object obj) {
+
+        if (obj.getClass() == this.getClass()) {
+
+            Edge objEdge = (Edge) obj;
+
+            if (objEdge.getFirstNode().equals(this.getFirstNode()) && objEdge.getSecondNode().equals(this.getSecondNode())) {
+                return true;
+            }
+
+        }
+
+        return false;
+
+    }
+
+    public int hashCode() {
+
+        return this.getFirstNode().hashCode() + this.getSecondNode().hashCode();
+
+    }
+
 
 }

@@ -9,10 +9,7 @@ import lenoverd.graph.graphs.graphComponents.Edge;
 import lenoverd.graph.graphs.graphComponents.Node;
 import lenoverd.graph.property.Property;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class NetworkGenerator {
 
@@ -75,7 +72,7 @@ public class NetworkGenerator {
         // Create an undirected graph with the given nodes and edges
         this.islandGraph = new UndirectedGraph(nodeSet,edgeSet);
 
-        Iterator<Node> iterator = this.islandGraph.getParentNodeIterator();
+
 
 
     }
