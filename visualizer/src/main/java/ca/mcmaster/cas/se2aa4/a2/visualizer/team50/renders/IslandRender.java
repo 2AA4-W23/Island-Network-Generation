@@ -228,7 +228,7 @@ public class IslandRender implements Renderable {
                     Color v2Color = Property.extractColor(end.getPropertiesList());
 
                     //calculate average color and set as segment color
-                    if (v1Color.getRed() == 21 && v1Color.getBlue() == 21 && v1Color.getGreen() == 21 && v2Color.getRed() == 21 && v2Color.getBlue() == 21 && v2Color.getGreen() == 21) {
+                    if (v1Color.getRed() == 21 && v1Color.getBlue() == 21 && v1Color.getGreen() == 21) {
 
                         // Check if a road exists between the two centroids
                         if (polygons.get(index).roadExistsBetweenCentroids(end)) {
