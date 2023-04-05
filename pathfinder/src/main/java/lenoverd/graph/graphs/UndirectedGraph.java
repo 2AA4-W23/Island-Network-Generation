@@ -423,7 +423,6 @@ public class UndirectedGraph implements Graph {
 
             if (curNode.equals(testNode)) {
 
-                System.out.println("YES!");
                 return true;
 
             }

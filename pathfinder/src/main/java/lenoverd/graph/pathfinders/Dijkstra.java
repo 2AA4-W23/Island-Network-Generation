@@ -8,7 +8,7 @@ import lenoverd.graph.property.Property;
 
 import java.util.*;
 
-public class Dijkstra implements PathFinder {
+public class Dijkstra implements WeightedPathFinder {
 
     private Graph referenceGraph;
     private String weightPropertyName;
@@ -39,6 +39,16 @@ public class Dijkstra implements PathFinder {
      */
     @Override
     public List<Node> findPath(Node source, Node target) {
+
+        // We can save some calculation complexity by checking if the result was already computed
+        if (this.shortestDistances.get(source) != null) {
+            if (this.shortestDistances.get(source) == 0 && this.previousNodes.get(source).equals(source)) {
+
+                return getPathFromMap(source,target);
+
+            }
+        }
+
 
         try {
 
@@ -118,6 +128,36 @@ public class Dijkstra implements PathFinder {
                 return 0;
             }
         };
+    }
+
+    /**
+     * Get the distance to any target node in the graph from the specified source node
+     * @param target the target Node object within the graph
+     * @return a double value containing the minimum distance to get from the source node to the specified target node.
+     */
+    public double getDistanceValueFromSource(Node source, Node target) {
+
+        // We can decrease the computation complexity by looking at what is already stored
+        // If source is 0 and the previous node is itself, then the shortest paths is currently set to this node
+        // Thus we do not need to re-run the algorithm
+        if (this.shortestDistances.get(source) != null) {
+
+            if (this.shortestDistances.get(source) == 0 && this.previousNodes.get(source).equals(source)) {
+
+                return this.shortestDistances.get(target);
+
+            } else {
+                findPath(source,target);
+            }
+
+            return this.shortestDistances.get(target);
+
+        } else {
+            findPath(source,target);
+        }
+
+        return this.shortestDistances.get(target);
+
     }
 
     // Method to initialize values/variables
