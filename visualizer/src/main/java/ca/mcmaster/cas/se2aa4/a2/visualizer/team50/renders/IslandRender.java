@@ -215,27 +215,36 @@ public class IslandRender implements Renderable {
 
     private void drawRoads(PolyMesh<? extends Polygons> polygons, Graphics2D canvas) {
 
-        for (int index = 0; index < polygons.size(); index++) {
+        // For every polygon loop through it's vertices properties
+        // If a roadConnection is found, get all connections as vertices
+        // Draw lines between them
+        for (Polygons curPoly : polygons) {
 
-            for (int index1 = 1; index1 < polygons.size(); index1++) {
+            for (Structs.Vertex curVertex : curPoly.getVerticesList()) {
 
-                if (polygons.isNeighbor(index, index1)) {
+                for (Structs.Property curVertProp : curVertex.getPropertiesList()) {
 
-                    Structs.Vertex start = polygons.get(index).getCentroid();
-                    Structs.Vertex end = polygons.get(index1).getCentroid();
+                    System.out.println("NO!");
 
-                    Color v1Color = Property.extractColor(start.getPropertiesList());
-                    Color v2Color = Property.extractColor(end.getPropertiesList());
+                    if (curVertProp.getKey().contains("roadConnections")) {
 
-                    //calculate average color and set as segment color
-                    if (v1Color.getRed() == 21 && v1Color.getBlue() == 21 && v1Color.getGreen() == 21) {
+                        System.out.println("YES!");
 
-                        // Check if a road exists between the two centroids
-                        if (polygons.get(index).roadExistsBetweenCentroids(end)) {
+                        // Get all road connections
+                        String connections = curVertProp.getValue();
 
-                            // If so, draw the road
-                            Point2D startPoint = new Point2D.Double(polygons.get(index).getCentroid().getX(), polygons.get(index).getCentroid().getY());
-                            Point2D endPoint = new Point2D.Double(polygons.get(index1).getCentroid().getX(), polygons.get(index1).getCentroid().getY());
+                        // Get set of x and y stirng
+                        for (String curVertStr : connections.split(",")) {
+
+                            // Get x and y value for particular string
+                            String[] xAndy = curVertStr.split(":");
+
+                            double xVal = Double.valueOf(xAndy[0]);
+                            double yVal = Double.valueOf(xAndy[1]);
+
+                            // Draw the road
+                            Point2D startPoint = new Point2D.Double(curVertex.getX(), curVertex.getY());
+                            Point2D endPoint = new Point2D.Double(xVal, yVal);
 
                             Float segmentThickness = 0.5f;
                             Stroke segmentStroke = new BasicStroke(segmentThickness);
@@ -249,12 +258,16 @@ public class IslandRender implements Renderable {
                             canvas.draw(line);
                             canvas.fill(line);
 
-                        }
-                    }
-                }
-            }
-        }
 
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
     }
 
 }

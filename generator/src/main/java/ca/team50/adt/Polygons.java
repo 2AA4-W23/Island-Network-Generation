@@ -225,75 +225,87 @@ public class Polygons implements Serializable {
     }
 
     // Method to add all road paths which the given polygon connects to as a property
-    public void addPathsIds(List<Structs.Vertex> adjacentPositionsList) {
+    public void addPathsIds(HashMap<Structs.Vertex,List<Structs.Vertex>> adjacentPositionsList) {
 
-        // Construct string
-        String listData = "";
+        for (int vertIndex = 0; vertIndex < this.getVerticesList().size(); vertIndex++) {
 
-        for (int index = 0; index < adjacentPositionsList.size(); index++) {
+            // Check if the vertex has a path
+            if (adjacentPositionsList.containsKey(this.verticesList.get(vertIndex))) {
 
-            Structs.Vertex curVert = adjacentPositionsList.get(index);
-            System.out.println("X: " + curVert.getX());
-            System.out.println("Y: " + curVert.getX());
-            listData+=curVert.getX()+":"+ curVert.getY();
+                // Construct string
+                String listData = "";
 
-            if (index+1 < adjacentPositionsList.size()) {
+                // Get vertex
+                Vertex curVert = this.getVerticesList().get(vertIndex);
+                // Get all connections for that vertex
+                List<Vertex> connectionsToCurVert = adjacentPositionsList.get(curVert);
 
-                listData+=",";
+                for (int index = 0; index < connectionsToCurVert.size(); index++) {
+
+                    Structs.Vertex adjVert = connectionsToCurVert.get(index);
+                    listData+=adjVert.getX()+":"+ adjVert.getY();
+
+                    if (index+1 < adjacentPositionsList.size()) {
+
+                        listData+=",";
+
+                    }
+                }
+
+                // Construct property and apply to vertex
+                Structs.Property roadConnections = Structs.Property.newBuilder().setKey("roadConnections").setValue(listData).build();
+                Vertex newVert = curVert.toBuilder().addProperties(roadConnections).build();
+
+                // Overwrite vertex in list
+                this.verticesList.add(vertIndex,newVert);
 
             }
 
         }
-
-        System.out.println(listData);
-
-        // Construct property and apply to centroid
-        Structs.Property roadConnections = Structs.Property.newBuilder().setKey("roadConnections").setValue(listData).build();
-
-        Vertex centroid = this.getCentroid().toBuilder().addProperties(roadConnections).build();
-
-        this.centroid = centroid;
 
     }
 
-    public boolean roadExistsBetweenCentroids(Vertex centroidToTest) {
+    public boolean roadExistsBetweenVertices(Vertex vertexToTest) {
 
-        // Get road property
-        String data = null;
+        for (Vertex curVert : this.getVerticesList()) {
 
-        for (Structs.Property curProp : this.centroid.getPropertiesList()) {
-            if (curProp.getKey().contains("roadConnections")) {
+            // Get road property
+            String data = null;
 
-                data = curProp.getValue();
+            for (Structs.Property curProp : curVert.getPropertiesList()) {
+                if (curProp.getKey().contains("roadConnections")) {
 
-            }
-        }
+                    data = curProp.getValue();
 
-        if (data != null) {
+                    if (data != null) {
 
-            // Get set of x and y stirng
-            for (String curVertStr : data.split(",")) {
+                        // Get set of x and y stirng
+                        for (String curVertStr : data.split(",")) {
 
-                System.out.println(curVertStr);
+                            System.out.println(curVertStr);
 
-                // Get x and y value for particular string
-                String[] xAndy = curVertStr.split(":");
+                            // Get x and y value for particular string
+                            String[] xAndy = curVertStr.split(":");
 
-                System.out.println(xAndy[0]);
-                System.out.println(xAndy[1]);
+                            System.out.println(xAndy[0]);
+                            System.out.println(xAndy[1]);
 
-                double xVal = Double.valueOf(xAndy[0]);
-                double yVal = Double.valueOf(xAndy[1]);
+                            double xVal = Double.valueOf(xAndy[0]);
+                            double yVal = Double.valueOf(xAndy[1]);
 
-                // Check if their values are equal to the centroid inputted
-                if (centroidToTest.getX() == xVal && centroidToTest.getY() == yVal) {
+                            // Check if their values are equal to the vertex inputted
+                            if (vertexToTest.getX() == xVal && vertexToTest.getY() == yVal) {
 
-                    return true;
+                                return true;
+
+                            }
+
+                        }
+
+                    }
 
                 }
-
             }
-
         }
 
         return false;

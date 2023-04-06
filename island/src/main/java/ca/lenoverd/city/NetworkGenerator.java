@@ -27,62 +27,66 @@ public class NetworkGenerator {
 
         this.mesh = mesh;
 
-        int idNode = 0;
-
         Set<Node> nodeSet = new HashSet<>();
         Set<Edge> edgeSet = new HashSet<>();
 
         for (Polygons curPoly : mesh) {
 
-            // Create a new node to represent the polygon
-            Node newNode = new Node(String.valueOf(idNode));
+            // Get list of verticies in polygon
+            for (Structs.Vertex curVertex : curPoly.getVerticesList()) {
 
-            // Create a new Property to store the centroid in
-            Property<Structs.Vertex> newProp = new Property<>(String.valueOf(idNode),curPoly.getCentroid());
+                // idVertex is for the vertex index inside the polygon
 
-            // Apply property to node
-            newNode.addProperty(newProp);
+                // Each vertex corresponds to a node in the graph
+                Node newNode = new Node(curVertex.getX()+":"+curVertex.getY());
 
-            // Add node to set
-            nodeSet.add(newNode);
+                // Create a new Property to store the vertex
+                // The name will be the index of the polygon concatenated with the index of the vertex
+                Property<Structs.Vertex> newProp = new Property<>(curVertex.getX()+":"+curVertex.getY(),curVertex);
 
-            // Find all neighbours of the polygon to add as edges
-            for (int index1 = 0; index1 < mesh.size(); index1++) {
+                // Apply property to node
+                newNode.addProperty(newProp);
 
-                // Since the idNode corresponds to the current index of curPoly in the mesh list, we can use it to check for neighbours
-                if (mesh.isNeighbor(idNode,index1)) {
+                // Add node to set
+                nodeSet.add(newNode);
 
-                    Polygons neighbourPoly = mesh.get(index1);
+                // Find all neighbours of the vertex by looping through segments (to add as edges)'
+                for(Structs.Segment curSeg : curPoly.getSegmentsList()) {
 
-                    // Construct an new node
-                    Node neighbourNode = new Node(String.valueOf(index1));
+                    // Get the first vertex of the segment
+                    Structs.Vertex vertex1 = curPoly.getVerticesList().get(curSeg.getV1Idx());
+                    Structs.Vertex vertex2 = curPoly.getVerticesList().get(curSeg.getV2Idx());
 
-                    // Construct property with centroid
-                    Property<Structs.Vertex> neighbourProp = new Property<>(String.valueOf(index1),neighbourPoly.getCentroid());
+                    // Check if it's equal to curVertex
+                    if (vertex1.equals(curVertex)) {
 
-                    // Apply property to node
-                    neighbourNode.addProperty(neighbourProp);
+                        // Construct a new node
+                        Node neighbourNode = new Node(vertex2.getX()+":"+vertex2.getY());
 
-                    // Construct edge
-                    Edge newEdge = new Edge(newNode,neighbourNode);
+                        // Construct property with centroid
+                        Property<Structs.Vertex> neighbourProp = new Property<>(vertex2.getX()+":"+vertex2.getY(),vertex2);
 
-                    // Create a property with the distance between the two polygons as the weight value of the edge
-                    Property<Double> weightValue = new Property<>("weightValue",getDistanceBetweenPolygons(curPoly,neighbourPoly));
+                        // Apply property to node
+                        neighbourNode.addProperty(neighbourProp);
 
-                    // Apply property to edge
-                    newEdge.addProperty(weightValue);
+                        // Construct edge
+                        Edge newEdge = new Edge(newNode,neighbourNode);
 
-                    // Add node and edge to sets
-                    nodeSet.add(neighbourNode);
-                    edgeSet.add(newEdge);
+                        // Create a property with the distance between the two polygons as the weight value of the edge
+                        Property<Double> weightValue = new Property<>("weightValue",getDistanceBetweenPoints(vertex1,vertex2));
 
+                        // Apply property to edge
+                        newEdge.addProperty(weightValue);
+
+                        // Add node and edge to sets
+                        nodeSet.add(neighbourNode);
+                        edgeSet.add(newEdge);
+
+                    }
 
                 }
 
             }
-
-            // Increment idNode
-            idNode++;
 
         }
 
@@ -108,11 +112,13 @@ public class NetworkGenerator {
 
                 Node testNode = parentNodes.next();
 
-                // Get centroid property
-                Structs.Vertex centroid = (Structs.Vertex) testNode.getProperty(testNode.getNodeName(), Structs.Vertex.newBuilder().build()).getValue();
+                // Get x and y of the vertex
+                String[] data = testNode.getNodeName().split(":");
+
+                Structs.Vertex testVert = Structs.Vertex.newBuilder().setX(Double.valueOf(data[0])).setY(Double.valueOf(data[1])).build();
 
                 // Check if the centroid is a city
-                if (cityGenerator.isVertexACity(centroid)) {
+                if (cityGenerator.isVertexACity(testVert)) {
 
                     // If it is, add to list of city nodes
                     cityNodes.add(testNode);
@@ -120,6 +126,8 @@ public class NetworkGenerator {
                 }
 
             }
+
+            System.out.println(cityNodes.size());
 
             // Initialize path finder and best values variables
             WeightedPathFinder pathFinder = new Dijkstra(this.islandGraph,"EdgeData","weightValue");
@@ -158,6 +166,7 @@ public class NetworkGenerator {
 
             // Set star network nodes
             this.starNetworkNodes = listOfBestPaths;
+            System.out.println(listOfBestPaths.size());
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -165,60 +174,77 @@ public class NetworkGenerator {
 
     }
 
-    public List<Structs.Vertex> getPathConnections(Structs.Vertex centroid) {
+    // Get all adjacent connections for all vertices in a polygon
+    // For the returned list, the index corresponds to the index of vertices found within polygons
+    public HashMap<Structs.Vertex,List<Structs.Vertex>> getPathConnections(Polygons polygon) {
 
-        List<Structs.Vertex> adjacentConnections = new ArrayList<>();
+        HashMap<Structs.Vertex,List<Structs.Vertex>> allAdjacentConnections = new HashMap<>();
 
-        for (List<Node> curPath : this.starNetworkNodes) {
+        for (Structs.Vertex curVertex : polygon.getVerticesList()) {
 
-            int index = 0;
-            for (Node curNode : curPath) {
+            List<Structs.Vertex> adjacentConnections = new ArrayList<>();
 
-                try {
+            for (List<Node> curPath : this.starNetworkNodes) {
 
-                    // Get node vertex property
-                    Structs.Vertex curNodeCentroid = (Structs.Vertex) curNode.getProperty(curNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
+                int index = 0;
+                for (Node curNode : curPath) {
 
-                    // Check if it's equivalent to the given centroid
-                    if (centroid.getX() == curNodeCentroid.getX() && centroid.getY() == curNodeCentroid.getY()) {
+                    try {
 
-                        // If so, said centroid is a vertex
+                        // Get node vertex property
+                        Structs.Vertex curNodeVertex = (Structs.Vertex) curNode.getProperty(curNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
 
-                        if (index-1 >= 0) {
-                            // Get previous node
-                            Node previousNode = curPath.get(index-1);
-                            Structs.Vertex previousNodeCentroid = (Structs.Vertex) previousNode.getProperty(previousNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
-                            adjacentConnections.add(previousNodeCentroid);
+                        // Check if it's equivalent to the given vertex
+                        if (curVertex.getX() == curNodeVertex.getX() && curVertex.getY() == curNodeVertex.getY()) {
+
+                            System.out.println("EQUIV!");
+
+                            // If so, said get nodes before and after specified vertex (if applicable)
+
+                            if (index-1 >= 0) {
+                                // Get previous node
+                                Node previousNode = curPath.get(index-1);
+                                Structs.Vertex previousNodeVertex = (Structs.Vertex) previousNode.getProperty(previousNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
+                                adjacentConnections.add(previousNodeVertex);
+                            }
+
+                            if (curPath.size() > index+1) {
+
+                                // Get next node
+                                Node nextNode = curPath.get(index+1);
+                                Structs.Vertex nextNodeVertex = (Structs.Vertex) nextNode.getProperty(nextNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
+                                adjacentConnections.add(nextNodeVertex);
+                            }
+
                         }
 
-                        if (curPath.size() > index+1) {
 
-                            // Get next node
-                            Node nextNode = curPath.get(index+1);
-                            Structs.Vertex nextNodeCentroid = (Structs.Vertex) nextNode.getProperty(nextNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
-                            adjacentConnections.add(nextNodeCentroid);
-                        }
+                    } catch (Exception e) {
+
+                        System.out.println(e.getMessage());
 
                     }
 
-
-                } catch (Exception e) {
-
-                    System.out.println(e.getMessage());
+                    index++;
 
                 }
 
-                index++;
+            }
+
+            if (adjacentConnections.size() > 0) {
+
+                allAdjacentConnections.put(curVertex,adjacentConnections);
 
             }
 
         }
 
-        return adjacentConnections;
+        System.out.println("Adj Size: "+ allAdjacentConnections.size());
+        return allAdjacentConnections;
 
     }
 
-    public boolean isCentroidARoad(Structs.Vertex centroid) {
+    public boolean isVertexARoad(Structs.Vertex vertex) {
 
         // Loop through all paths
         for (List<Node> curPath : this.starNetworkNodes) {
@@ -232,12 +258,12 @@ public class NetworkGenerator {
                     try {
 
                         // Get node vertex property
-                        Structs.Vertex curNodeCentroid = (Structs.Vertex) curNode.getProperty(curNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
+                        Structs.Vertex curNodeVertex = (Structs.Vertex) curNode.getProperty(curNode.getNodeName(),Structs.Vertex.newBuilder().build()).getValue();
 
-                        // Check if it's equivalent to the given centroid
-                        if (centroid.getX() == curNodeCentroid.getX() && centroid.getY() == curNodeCentroid.getY()) {
+                        // Check if it's equivalent to the given vertex
+                        if (vertex.getX() == curNodeVertex.getX() && vertex.getY() == curNodeVertex.getY()) {
 
-                            // If so, said centroid is a vertex
+                            // If so, said vertex is apart of a road
                             return true;
 
                         }
@@ -259,9 +285,9 @@ public class NetworkGenerator {
 
     }
 
-    private double getDistanceBetweenPolygons(Polygons poly1, Polygons poly2) {
+    private double getDistanceBetweenPoints(Structs.Vertex vertex1, Structs.Vertex vertex2) {
 
-        return Math.sqrt(Math.pow((poly1.getCentroid().getX() - poly2.getCentroid().getX()), 2) + Math.pow((poly1.getCentroid().getY() - poly2.getCentroid().getY()), 2));
+        return Math.sqrt(Math.pow((vertex1.getX() - vertex2.getX()), 2) + Math.pow((vertex1.getY() - vertex2.getY()), 2));
 
     }
 

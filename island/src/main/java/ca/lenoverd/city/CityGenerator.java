@@ -67,17 +67,28 @@ public class CityGenerator {
 
 
     /**
-     * Check if a given centroid from a polygon is a city
-     * @param centroid the centroid of the given polygon
+     * Check if a given vertex or centroid from a polygon is a city
+     * @param vertex any vertex/centroid of the given polygon
      * @return true if the polygon is a city, false otherwise
      */
-    public boolean isVertexACity(Structs.Vertex centroid) {
+    public boolean isVertexACity(Structs.Vertex vertex) {
 
         for (Polygons curPoly : cities.keySet()) {
 
+            // Loop through vertices
+            for (Structs.Vertex curVert : curPoly.getVerticesList()) {
+
+                if (curVert.getX() == vertex.getX() && curVert.getY() == vertex.getY()) {
+
+                    return true;
+
+                }
+
+            }
+
             Structs.Vertex curPolyCentroid = curPoly.getCentroid();
 
-            if (curPolyCentroid.getX() == centroid.getX() && curPolyCentroid.getY() == centroid.getY()) {
+            if (curPolyCentroid.getX() == vertex.getX() && curPolyCentroid.getY() == vertex.getY()) {
 
                 return true;
 

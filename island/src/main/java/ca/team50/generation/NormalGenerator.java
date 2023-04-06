@@ -148,11 +148,15 @@ public class NormalGenerator implements IslandGenerable {
 
                 }
 
-                // Check for road
-                if (testGen.isCentroidARoad(centroid)) {
+                for (Structs.Vertex curVert : curPoly.getVerticesList()) {
 
-                    curPoly.addPathsIds(testGen.getPathConnections(centroid));
-                    System.out.println(curPoly.setCentroidColour(new int[]{21,21,21}));
+                    // Check for road
+                    if (testGen.isVertexARoad(curVert)) {
+
+                        curPoly.addPathsIds(testGen.getPathConnections(curPoly));
+                        break;
+
+                    }
 
                 }
 
