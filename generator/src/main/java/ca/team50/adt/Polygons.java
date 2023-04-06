@@ -227,7 +227,7 @@ public class Polygons implements Serializable {
     // Method to add all road paths which the given polygon connects to as a property
     public void addPathsIds(HashMap<Structs.Vertex,List<Structs.Vertex>> adjacentPositionsList) {
 
-        for (int vertIndex = 0; vertIndex < this.getVerticesList().size(); vertIndex++) {
+        for (int vertIndex = 0; vertIndex < this.verticesList.size(); vertIndex++) {
 
             // Check if the vertex has a path
             if (adjacentPositionsList.containsKey(this.verticesList.get(vertIndex))) {
@@ -257,7 +257,7 @@ public class Polygons implements Serializable {
                 Vertex newVert = curVert.toBuilder().addProperties(roadConnections).build();
 
                 // Overwrite vertex in list
-                this.verticesList.add(vertIndex,newVert);
+                this.verticesList.set(vertIndex,newVert);
 
             }
 
