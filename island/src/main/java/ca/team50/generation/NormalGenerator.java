@@ -144,6 +144,7 @@ public class NormalGenerator implements IslandGenerable {
                 // Check for city
                 if (cityGenerator.isVertexACity(centroid)) {
 
+                    curPoly.addProperty("IsCity","True");
                     curPoly.unifyColor(cityGenerator.getCityType(centroid).getTileColour());
 
                 }

@@ -224,11 +224,7 @@ public class IslandRender implements Renderable {
 
                 for (Structs.Property curVertProp : curVertex.getPropertiesList()) {
 
-                    System.out.println("NO!");
-
                     if (curVertProp.getKey().contains("roadConnections")) {
-
-                        System.out.println("YES!");
 
                         // Get all road connections
                         String connections = curVertProp.getValue();
@@ -254,7 +250,7 @@ public class IslandRender implements Renderable {
                             canvas.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 
                             Line2D line = new Line2D.Double(startPoint, endPoint);
-                            canvas.setColor(new Color(213, 54, 100));
+                            canvas.setColor(new Color(0, 0, 0));
                             canvas.draw(line);
                             canvas.fill(line);
 
@@ -264,6 +260,42 @@ public class IslandRender implements Renderable {
                     }
 
                 }
+
+            }
+
+            // Draw the entry point to the city
+            class testForCity {
+
+                public static boolean isCity(Polygons curPoly) {
+
+                    for (Structs.Property curProp : curPoly.getCentroid().getPropertiesList()) {
+
+                        if (curProp.getKey().equals("IsCity")) {
+                            return true;
+                        }
+
+                    }
+
+                    return false;
+
+                }
+
+            }
+
+            // First check if there exists a city property
+            if (testForCity.isCity(curPoly)) {
+
+                Structs.Vertex entryPoint = curPoly.getVerticesList().get(0);
+
+                double entryThickness = 10;
+
+                Color entryColor = new Color(255, 0, 0);
+
+                double centre_x = entryPoint.getX() - (entryThickness / 2.0d);
+                double centre_y = entryPoint.getY() - (entryThickness / 2.0d);
+                canvas.setColor(entryColor);
+                Ellipse2D point = new Ellipse2D.Double(centre_x, centre_y, entryThickness, entryThickness);
+                canvas.fill(point);
 
             }
 

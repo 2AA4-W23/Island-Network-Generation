@@ -75,14 +75,12 @@ public class CityGenerator {
 
         for (Polygons curPoly : cities.keySet()) {
 
-            // Loop through vertices
-            for (Structs.Vertex curVert : curPoly.getVerticesList()) {
+            // The first vertex in a polygon is considered the entry point to a city
+            Structs.Vertex firstVert = curPoly.getVerticesList().get(0);
 
-                if (curVert.getX() == vertex.getX() && curVert.getY() == vertex.getY()) {
+            if (firstVert.getX() == vertex.getX() && firstVert.getY() == vertex.getY()) {
 
-                    return true;
-
-                }
+                return true;
 
             }
 

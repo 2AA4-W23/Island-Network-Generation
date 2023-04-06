@@ -224,6 +224,16 @@ public class Polygons implements Serializable {
         newList.clear();
     }
 
+    // Add any property to the centroid
+    public void addProperty(String propertyName, String propertyValue) {
+
+        Structs.Property newProp = Structs.Property.newBuilder().setKey(propertyName).setValue(propertyValue).build();
+        Vertex centroid = this.getCentroid().toBuilder().addProperties(newProp).build();
+
+        this.centroid = centroid;
+
+    }
+
     // Method to add all road paths which the given polygon connects to as a property
     public void addPathsIds(HashMap<Structs.Vertex,List<Structs.Vertex>> adjacentPositionsList) {
 
@@ -245,7 +255,7 @@ public class Polygons implements Serializable {
                     Structs.Vertex adjVert = connectionsToCurVert.get(index);
                     listData+=adjVert.getX()+":"+ adjVert.getY();
 
-                    if (index+1 < adjacentPositionsList.size()) {
+                    if (connectionsToCurVert.size()-1 >= index+1) {
 
                         listData+=",";
 
