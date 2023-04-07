@@ -225,6 +225,11 @@ public class Polygons implements Serializable {
     }
 
     // Add any property to the centroid
+    /**
+     * Add any property to the Polygons centroid
+     * @param propertyName the name of the property as a String
+     * @param propertyValue the the value of the property as a String
+     */
     public void addProperty(String propertyName, String propertyValue) {
 
         Structs.Property newProp = Structs.Property.newBuilder().setKey(propertyName).setValue(propertyValue).build();
@@ -234,91 +239,25 @@ public class Polygons implements Serializable {
 
     }
 
-    // Method to add all road paths which the given polygon connects to as a property
-    public void addPathsIds(HashMap<Structs.Vertex,List<Structs.Vertex>> adjacentPositionsList) {
+    /**
+     * Add any property to a given vertex within the polygon
+     * @param vertexIndex the index of the vertex within the Polygon
+     * @param propertyName the name of the property as a String
+     * @param propertyValue the value of the property as a String
+     * @Throws IndexOutOfBoundsException if vertexIndex is out of bounds
+     */
+    public void addPropertyToVertex(int vertexIndex, String propertyName, String propertyValue) {
 
-        for (int vertIndex = 0; vertIndex < this.verticesList.size(); vertIndex++) {
+        // Get specified vertex
+        Structs.Vertex selVert = this.verticesList.get(vertexIndex);
 
-            // Check if the vertex has a path
-            if (adjacentPositionsList.containsKey(this.verticesList.get(vertIndex))) {
+        // Apply property
+        // Construct property and apply to vertex
+        Structs.Property prop = Structs.Property.newBuilder().setKey(propertyName).setValue(propertyValue).build();
+        Vertex newVert = selVert.toBuilder().addProperties(prop).build();
 
-                // Construct string
-                String listData = "";
-
-                // Get vertex
-                Vertex curVert = this.getVerticesList().get(vertIndex);
-                // Get all connections for that vertex
-                List<Vertex> connectionsToCurVert = adjacentPositionsList.get(curVert);
-
-                for (int index = 0; index < connectionsToCurVert.size(); index++) {
-
-                    Structs.Vertex adjVert = connectionsToCurVert.get(index);
-                    listData+=adjVert.getX()+":"+ adjVert.getY();
-
-                    if (connectionsToCurVert.size()-1 >= index+1) {
-
-                        listData+=",";
-
-                    }
-                }
-
-                // Construct property and apply to vertex
-                Structs.Property roadConnections = Structs.Property.newBuilder().setKey("roadConnections").setValue(listData).build();
-                Vertex newVert = curVert.toBuilder().addProperties(roadConnections).build();
-
-                // Overwrite vertex in list
-                this.verticesList.set(vertIndex,newVert);
-
-            }
-
-        }
-
-    }
-
-    public boolean roadExistsBetweenVertices(Vertex vertexToTest) {
-
-        for (Vertex curVert : this.getVerticesList()) {
-
-            // Get road property
-            String data = null;
-
-            for (Structs.Property curProp : curVert.getPropertiesList()) {
-                if (curProp.getKey().contains("roadConnections")) {
-
-                    data = curProp.getValue();
-
-                    if (data != null) {
-
-                        // Get set of x and y stirng
-                        for (String curVertStr : data.split(",")) {
-
-                            System.out.println(curVertStr);
-
-                            // Get x and y value for particular string
-                            String[] xAndy = curVertStr.split(":");
-
-                            System.out.println(xAndy[0]);
-                            System.out.println(xAndy[1]);
-
-                            double xVal = Double.valueOf(xAndy[0]);
-                            double yVal = Double.valueOf(xAndy[1]);
-
-                            // Check if their values are equal to the vertex inputted
-                            if (vertexToTest.getX() == xVal && vertexToTest.getY() == yVal) {
-
-                                return true;
-
-                            }
-
-                        }
-
-                    }
-
-                }
-            }
-        }
-
-        return false;
+        // Overwrite vertex in list
+        this.verticesList.set(vertexIndex,newVert);
 
     }
 

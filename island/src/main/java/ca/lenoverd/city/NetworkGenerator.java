@@ -23,6 +23,12 @@ public class NetworkGenerator {
     private List<List<Node>> starNetworkNodes = new ArrayList<>();
 
 
+    /**
+     * Generate a graph representation of a mesh
+     * @param mesh the mesh as a Polymesh object
+     * @return a NetworkGenerator object containing the graph representation of the Polymesh object
+     * @Note Nodes are represented as vertices and edges are segments connecting said vertices
+     */
     public NetworkGenerator(PolyMesh<Polygons> mesh) {
 
         this.mesh = mesh;
@@ -96,6 +102,11 @@ public class NetworkGenerator {
 
     }
 
+    /**
+     * Generate a star network for a given set of city polygons
+     * @param cityGenerator the generator object which contains the selected city polygons
+     * @Note One can call getPathConnections to get specific vertices which are apart of the star network
+     */
     public void createStarNetwork(CityGenerator cityGenerator) {
 
         try {
@@ -126,8 +137,6 @@ public class NetworkGenerator {
                 }
 
             }
-
-            System.out.println(cityNodes.size());
 
             // Initialize path finder and best values variables
             WeightedPathFinder pathFinder = new Dijkstra(this.islandGraph,"EdgeData","weightValue");
@@ -166,7 +175,6 @@ public class NetworkGenerator {
 
             // Set star network nodes
             this.starNetworkNodes = listOfBestPaths;
-            System.out.println(listOfBestPaths.size());
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -176,7 +184,12 @@ public class NetworkGenerator {
 
     // Get all adjacent connections for all vertices in a polygon
     // For the returned list, the index corresponds to the index of vertices found within polygons
-    public HashMap<Structs.Vertex,List<Structs.Vertex>> getPathConnections(Polygons polygon) {
+    /**
+     * Get all path connections that a given polygon contains
+     * @param polygon the polygon to test
+     * @return a Map containing the corresponding vertex and the vertices it connects to via paths
+     */
+    public Map<Structs.Vertex,List<Structs.Vertex>> getPathConnections(Polygons polygon) {
 
         HashMap<Structs.Vertex,List<Structs.Vertex>> allAdjacentConnections = new HashMap<>();
 
@@ -196,8 +209,6 @@ public class NetworkGenerator {
 
                         // Check if it's equivalent to the given vertex
                         if (curVertex.getX() == curNodeVertex.getX() && curVertex.getY() == curNodeVertex.getY()) {
-
-                            System.out.println("EQUIV!");
 
                             // If so, said get nodes before and after specified vertex (if applicable)
 
@@ -238,12 +249,15 @@ public class NetworkGenerator {
             }
 
         }
-
-        System.out.println("Adj Size: "+ allAdjacentConnections.size());
         return allAdjacentConnections;
 
     }
 
+    /**
+     * Check if a given vertex is apart of a road path
+     * @param vertex the vertex to test
+     * @return true if the vertex is apart of a road, false otherwise
+     */
     public boolean isVertexARoad(Structs.Vertex vertex) {
 
         // Loop through all paths
@@ -282,6 +296,57 @@ public class NetworkGenerator {
         }
 
         return false;
+
+    }
+
+    /**
+     * Apply the generated star network to the mesh for visualization
+     */
+    public void applyStarNetworkToMesh() {
+
+        for (Polygons curPoly : this.mesh) {
+
+            // Get all path connections for ths given polygon
+            Map<Structs.Vertex,List<Structs.Vertex>> adjacentPositionsList = this.getPathConnections(curPoly);
+
+            // Get all vertices
+            List<Structs.Vertex> vertList = curPoly.getVerticesList();
+
+            // Loop through all vertices within the polygon
+            for (int vertIndex = 0; vertIndex < vertList.size(); vertIndex++) {
+
+                // Get vertex
+                Structs.Vertex curVert = vertList.get(vertIndex);
+
+                // Check if the vertex has a path
+                if (adjacentPositionsList.containsKey(curVert)) {
+
+                    // Construct string
+                    String listData = "";
+
+                    // Get all connections for that vertex
+                    List<Structs.Vertex> connectionsToCurVert = adjacentPositionsList.get(curVert);
+
+                    for (int index = 0; index < connectionsToCurVert.size(); index++) {
+
+                        Structs.Vertex adjVert = connectionsToCurVert.get(index);
+                        listData+=adjVert.getX()+":"+ adjVert.getY();
+
+                        if (connectionsToCurVert.size()-1 >= index+1) {
+
+                            listData+=",";
+
+                        }
+                    }
+
+                    // Apply property to vertex
+                    curPoly.addPropertyToVertex(vertIndex,"roadConnections",listData);
+
+                }
+
+            }
+
+        }
 
     }
 

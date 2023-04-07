@@ -104,8 +104,8 @@ public class NormalGenerator implements IslandGenerable {
             CityGenerator cityGenerator = new CityGenerator(mesh,30,islandShape);
 
             // Testing Network Generator
-            NetworkGenerator testGen = new NetworkGenerator(mesh);
-            testGen.createStarNetwork(cityGenerator);
+            NetworkGenerator netGen = new NetworkGenerator(mesh);
+            netGen.createStarNetwork(cityGenerator);
 
             // ------ ASSIGN COLOURS TO POLYGONS ------ //
 
@@ -149,19 +149,10 @@ public class NormalGenerator implements IslandGenerable {
 
                 }
 
-                for (Structs.Vertex curVert : curPoly.getVerticesList()) {
-
-                    // Check for road
-                    if (testGen.isVertexARoad(curVert)) {
-
-                        curPoly.addPathsIds(testGen.getPathConnections(curPoly));
-                        break;
-
-                    }
-
-                }
-
             }
+
+            // Finally, apply network to mesh for visualizer to render
+            netGen.applyStarNetworkToMesh();
 
         } catch (Exception e) {
 
