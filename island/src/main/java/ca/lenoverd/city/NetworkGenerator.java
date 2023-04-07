@@ -3,6 +3,7 @@ package ca.lenoverd.city;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
+import ca.team50.shapes.IslandShape;
 import lenoverd.graph.exceptions.NodePropertyNotFoundException;
 import lenoverd.graph.graphs.Graph;
 import lenoverd.graph.graphs.UndirectedGraph;
@@ -29,7 +30,7 @@ public class NetworkGenerator {
      * @return a NetworkGenerator object containing the graph representation of the Polymesh object
      * @Note Nodes are represented as vertices and edges are segments connecting said vertices
      */
-    public NetworkGenerator(PolyMesh<Polygons> mesh) {
+    public NetworkGenerator(PolyMesh<Polygons> mesh, IslandShape shape) {
 
         this.mesh = mesh;
 
@@ -38,55 +39,59 @@ public class NetworkGenerator {
 
         for (Polygons curPoly : mesh) {
 
-            // Get list of verticies in polygon
-            for (Structs.Vertex curVertex : curPoly.getVerticesList()) {
+            if (shape.isVertexInside(curPoly.getCentroid())) {
 
-                // idVertex is for the vertex index inside the polygon
+                // Get list of verticies in polygon
+                for (Structs.Vertex curVertex : curPoly.getVerticesList()) {
 
-                // Each vertex corresponds to a node in the graph
-                Node newNode = new Node(curVertex.getX()+":"+curVertex.getY());
+                    // idVertex is for the vertex index inside the polygon
 
-                // Create a new Property to store the vertex
-                // The name will be the index of the polygon concatenated with the index of the vertex
-                Property<Structs.Vertex> newProp = new Property<>(curVertex.getX()+":"+curVertex.getY(),curVertex);
+                    // Each vertex corresponds to a node in the graph
+                    Node newNode = new Node(curVertex.getX()+":"+curVertex.getY());
 
-                // Apply property to node
-                newNode.addProperty(newProp);
+                    // Create a new Property to store the vertex
+                    // The name will be the index of the polygon concatenated with the index of the vertex
+                    Property<Structs.Vertex> newProp = new Property<>(curVertex.getX()+":"+curVertex.getY(),curVertex);
 
-                // Add node to set
-                nodeSet.add(newNode);
+                    // Apply property to node
+                    newNode.addProperty(newProp);
 
-                // Find all neighbours of the vertex by looping through segments (to add as edges)'
-                for(Structs.Segment curSeg : curPoly.getSegmentsList()) {
+                    // Add node to set
+                    nodeSet.add(newNode);
 
-                    // Get the first vertex of the segment
-                    Structs.Vertex vertex1 = curPoly.getVerticesList().get(curSeg.getV1Idx());
-                    Structs.Vertex vertex2 = curPoly.getVerticesList().get(curSeg.getV2Idx());
+                    // Find all neighbours of the vertex by looping through segments (to add as edges)'
+                    for(Structs.Segment curSeg : curPoly.getSegmentsList()) {
 
-                    // Check if it's equal to curVertex
-                    if (vertex1.equals(curVertex)) {
+                        // Get the first vertex of the segment
+                        Structs.Vertex vertex1 = curPoly.getVerticesList().get(curSeg.getV1Idx());
+                        Structs.Vertex vertex2 = curPoly.getVerticesList().get(curSeg.getV2Idx());
 
-                        // Construct a new node
-                        Node neighbourNode = new Node(vertex2.getX()+":"+vertex2.getY());
+                        // Check if it's equal to curVertex
+                        if (vertex1.equals(curVertex)) {
 
-                        // Construct property with centroid
-                        Property<Structs.Vertex> neighbourProp = new Property<>(vertex2.getX()+":"+vertex2.getY(),vertex2);
+                            // Construct a new node
+                            Node neighbourNode = new Node(vertex2.getX()+":"+vertex2.getY());
 
-                        // Apply property to node
-                        neighbourNode.addProperty(neighbourProp);
+                            // Construct property with centroid
+                            Property<Structs.Vertex> neighbourProp = new Property<>(vertex2.getX()+":"+vertex2.getY(),vertex2);
 
-                        // Construct edge
-                        Edge newEdge = new Edge(newNode,neighbourNode);
+                            // Apply property to node
+                            neighbourNode.addProperty(neighbourProp);
 
-                        // Create a property with the distance between the two polygons as the weight value of the edge
-                        Property<Double> weightValue = new Property<>("weightValue",getDistanceBetweenPoints(vertex1,vertex2));
+                            // Construct edge
+                            Edge newEdge = new Edge(newNode,neighbourNode);
 
-                        // Apply property to edge
-                        newEdge.addProperty(weightValue);
+                            // Create a property with the distance between the two polygons as the weight value of the edge
+                            Property<Double> weightValue = new Property<>("weightValue",getDistanceBetweenPoints(vertex1,vertex2));
 
-                        // Add node and edge to sets
-                        nodeSet.add(neighbourNode);
-                        edgeSet.add(newEdge);
+                            // Apply property to edge
+                            newEdge.addProperty(weightValue);
+
+                            // Add node and edge to sets
+                            nodeSet.add(neighbourNode);
+                            edgeSet.add(newEdge);
+
+                        }
 
                     }
 
@@ -155,15 +160,20 @@ public class NetworkGenerator {
 
                     if (!curNode.equals(testNode)) {
 
-                        weightsTotaled += pathFinder.getDistanceValueFromSource(curNode,testNode);
-                        listOfCurrentPaths.add(pathFinder.findPath(curNode,testNode));
+                        // If the path value comes back as null, then a valid path between the two cities does not exist
+                        // Thus the path is ignored
+                        if (pathFinder.getDistanceValueFromSource(curNode,testNode) != null) {
+                            weightsTotaled += pathFinder.getDistanceValueFromSource(curNode,testNode);
+                            listOfCurrentPaths.add(pathFinder.findPath(curNode,testNode));
+                        }
 
                     }
 
                 }
 
                 // If the current city had a smaller weighting than what is currently known, update values
-                if (weightsTotaled < minWeight) {
+                // List of size 0 deals with any potential disconnections from the graph (them being weight 0 thus they might be chosen as the shortest path which we don't want)
+                if (weightsTotaled < minWeight && listOfCurrentPaths.size() != 0) {
 
                     minWeight = weightsTotaled;
                     hubNode = curNode;

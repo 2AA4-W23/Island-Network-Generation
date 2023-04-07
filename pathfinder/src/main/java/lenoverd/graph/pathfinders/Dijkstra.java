@@ -133,9 +133,9 @@ public class Dijkstra implements WeightedPathFinder {
     /**
      * Get the distance to any target node in the graph from the specified source node
      * @param target the target Node object within the graph
-     * @return a double value containing the minimum distance to get from the source node to the specified target node.
+     * @return a double value containing the minimum distance to get from the source node to the specified target node. Null if path is invalid
      */
-    public double getDistanceValueFromSource(Node source, Node target) {
+    public Double getDistanceValueFromSource(Node source, Node target) {
 
         // We can decrease the computation complexity by looking at what is already stored
         // If source is 0 and the previous node is itself, then the shortest paths is currently set to this node
@@ -200,6 +200,14 @@ public class Dijkstra implements WeightedPathFinder {
 
         // Keep adding all previous nodes used from one another until hitting the source node
         while (previousNode != source) {
+
+            // Check if the previous node is equivalent to itself (and we already checked that the previous node was not source)
+            if (this.previousNodes.get(previousNode) == previousNode) {
+
+                // This means the graph does not contain a valid path between source and target
+                return null;
+
+            }
 
             path.add(previousNode);
 

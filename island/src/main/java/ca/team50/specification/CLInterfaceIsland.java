@@ -198,6 +198,7 @@ public class CLInterfaceIsland {
         options.addOption(rivers);
         options.addOption(seed);
         options.addOption(soilContent);
+        options.addOption(cities);
 
 
         formatter.printHelp("-<short or -- for long command> <numerical or string argument if required>",options);

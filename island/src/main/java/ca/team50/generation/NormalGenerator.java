@@ -104,7 +104,7 @@ public class NormalGenerator implements IslandGenerable {
             CityGenerator cityGenerator = new CityGenerator(mesh, specification.getNumCities(), islandShape, specification.getSeed());
 
             // Network Generator
-            NetworkGenerator netGen = new NetworkGenerator(mesh);
+            NetworkGenerator netGen = new NetworkGenerator(mesh,islandShape);
             netGen.createStarNetwork(cityGenerator);
 
             // ------ ASSIGN COLOURS TO POLYGONS ------ //
