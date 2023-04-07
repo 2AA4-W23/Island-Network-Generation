@@ -15,18 +15,20 @@ public class CityGenerator {
 
     private HashMap<Polygons,TileType> cities = new HashMap<>();
 
-    // TEMP SEED FOR TESTING
-    static long seed = 1234;
+    long seed;
 
     /**
      * Generate a list of cities (and their types) for a given mesh
      * @param mesh the PolyMesh object containing all canvas polygons
      * @param islandShape the shape of the island used in the island generation method (same as the shape being used for island generation)
      * @param maxNumberOfCities the maximum amount of cities to generate
+     * @param seed the seed to use for generation
      * @return a CityGenerator object which contains a list of polygons which are designated as cities.
      * @Note That when the term "maximum" is specified, this does NOT mean the generator will generate all cities.
      */
-    public CityGenerator(PolyMesh<Polygons> mesh, int maxNumberOfCities, IslandShape islandShape) {
+    public CityGenerator(PolyMesh<Polygons> mesh, int maxNumberOfCities, IslandShape islandShape, long seed) {
+
+        this.seed = seed;
 
         int curIter = 0;
 

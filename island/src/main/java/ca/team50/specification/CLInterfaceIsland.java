@@ -27,6 +27,8 @@ public class CLInterfaceIsland {
 
     private static final Option soilContent = new Option("so", "soil", true, "Specify the type of Soil Profile (Clay, Loam, Sand, or Special)");
 
+    public static final Option cities = new Option("c", "cities", true, "Specify the maximum number of cities to be generated (as an integer)");
+
     private ModeType islandMode;
     private BiomeType biomeType;
     private ElevationType elevationType;
@@ -38,6 +40,7 @@ public class CLInterfaceIsland {
     private Integer numAquifers;
     private int numLakes;
     private int numRivers;
+    private int numCities;
     private long numSeed;
 
 
@@ -59,6 +62,7 @@ public class CLInterfaceIsland {
         options.addOption(rivers);
         options.addOption(seed);
         options.addOption(soilContent);
+        options.addOption(cities);
 
         try {
 
@@ -127,8 +131,8 @@ public class CLInterfaceIsland {
             this.numRivers = Integer.parseInt(commandLine.getOptionValue(rivers,"0"));
             this.numSeed = Integer.parseInt(commandLine.getOptionValue(seed,"90915"));
 
-
-
+            // Cities
+            this.numCities = Integer.parseInt(commandLine.getOptionValue(cities,"0"));
 
         } catch (Exception e) {
             ExceptionHandler.handleException(new InvalidCommandFormatException("Failed to parse arguments. Were commands inputted correctly?"));
@@ -171,6 +175,9 @@ public class CLInterfaceIsland {
     }
     public Long getSeed() {
         return numSeed;
+    }
+    public Integer getNumCities() {
+        return numCities;
     }
 
 

@@ -101,9 +101,9 @@ public class NormalGenerator implements IslandGenerable {
             RiverCentroidsGenerator rivers = new RiverCentroidsGenerator(mesh, specification.getNumRivers(), rivAltitude);
 
             // Generate Cities
-            CityGenerator cityGenerator = new CityGenerator(mesh,30,islandShape);
+            CityGenerator cityGenerator = new CityGenerator(mesh, specification.getNumCities(), islandShape, specification.getSeed());
 
-            // Testing Network Generator
+            // Network Generator
             NetworkGenerator netGen = new NetworkGenerator(mesh);
             netGen.createStarNetwork(cityGenerator);
 
@@ -151,7 +151,7 @@ public class NormalGenerator implements IslandGenerable {
 
             }
 
-            // Finally, apply network to mesh for visualizer to render
+            // Finally, apply star network to mesh for visualizer to render
             netGen.applyStarNetworkToMesh();
 
         } catch (Exception e) {
