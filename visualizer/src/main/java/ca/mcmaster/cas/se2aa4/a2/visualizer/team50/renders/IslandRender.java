@@ -238,13 +238,13 @@ public class IslandRender implements Renderable {
                             double xVal = Double.valueOf(xAndy[0]);
                             double yVal = Double.valueOf(xAndy[1]);
 
-                            // Draw the road
-                            Point2D startPoint = new Point2D.Double(curVertex.getX(), curVertex.getY());
-                            Point2D endPoint = new Point2D.Double(xVal, yVal);
-
                             Float segmentThickness = 0.5f;
                             Stroke segmentStroke = new BasicStroke(segmentThickness);
                             canvas.setStroke(segmentStroke);
+
+                            // Draw the road
+                            Point2D startPoint = new Point2D.Double(curVertex.getX() - (segmentThickness), curVertex.getY()-(segmentThickness));
+                            Point2D endPoint = new Point2D.Double(xVal-(segmentThickness), yVal-(segmentThickness));
 
                             int alpha = 1;
                             canvas.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
@@ -262,32 +262,37 @@ public class IslandRender implements Renderable {
                 }
 
             }
+        }
 
-            // Draw the entry point to the city
-            class testForCity {
+        // Draw city entry points
+        // Draw the entry point to the city
+        // Class in method declaration because this method is not needed anywhere else
+        class testForCity {
 
-                public static boolean isCity(Polygons curPoly) {
+            public static boolean isCity(Polygons curPoly) {
 
-                    for (Structs.Property curProp : curPoly.getCentroid().getPropertiesList()) {
+                for (Structs.Property curProp : curPoly.getCentroid().getPropertiesList()) {
 
-                        if (curProp.getKey().equals("IsCity")) {
-                            return true;
-                        }
-
+                    if (curProp.getKey().equals("IsCity")) {
+                        return true;
                     }
-
-                    return false;
 
                 }
 
+                return false;
+
             }
+
+        }
+
+        for (Polygons curPoly : polygons) {
 
             // First check if there exists a city property
             if (testForCity.isCity(curPoly)) {
 
                 Structs.Vertex entryPoint = curPoly.getVerticesList().get(0);
 
-                double entryThickness = 10;
+                double entryThickness = 5;
 
                 Color entryColor = new Color(255, 0, 0);
 
@@ -300,6 +305,7 @@ public class IslandRender implements Renderable {
             }
 
         }
+
     }
 
 }
