@@ -124,7 +124,8 @@ To generate an island:
    | Biome | -b |   --biomes   | Specify the biomes of island generation | Use -h to find out all biomes available |
    | Elevation (altitude) | -al |   --altitude  | Specify the altitude type of island generation | Use -h to find out all elevations available |
    | Island Shape | -sh |  --shape | Specify the shape type of island generation | Use -h to find out all shapes available |
-   | soilContent | -s0 |  --soil | Specify the type of Soil Profile | Use -h to find out all soil profiles available |
+   | soilContent | -s0 |  --soil | Specify the type of Soil Profile | Use -h to find out all soil profiles available | 
+   | Cities | -c |  --cities | Specify the maximum number of cities to generate | A red dot specifies the entry point to a city. The darker the square, the more populated the city is. When creating a star network, oceans are not considered island land and thus paths between cities only via oceans are invalid and thus are not calculated. |
 3) Run visualizer.jar with the outputted mesh from island.jar in island generation mode
 
 Ex:
@@ -177,7 +178,7 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 |    4F04    | Implement the notion of graph edge properties    | 2023-04-01 | 2023-04-01                  | D      |
 |    4F05    | Implement Graph ADT                              | 2023-04-01 | 2023-04-02                  | D      |
 | 4F06 (_R3) | Implement Pathfinder ADT and sample algorithm    | 2023-04-02 | 2023-04-02 (_R3 2023-04-03) | D      |
-|    4F07    | Implement seperate city tiles based on city size | 2023-04-04 | 2023-04-04                  | D      |
+|    4F07    | Implement separate city tiles based on city size | 2023-04-04 | 2023-04-04                  | D      |
 |    4F08    | Implement road property                          | 2023-04-04 | 2023-04-07                  | D      |
 |    4F09    | Implement city generator                         | 2023-04-04 | 2023-04-07                  | D      |
-|    4F10    | Implement maximum number of cities via CMD       | 2023-04-04 |                             | S      |
+|    4F10    | Implement maximum number of cities via CMD       | 2023-04-04 | 2023-04-07                  | D      |
