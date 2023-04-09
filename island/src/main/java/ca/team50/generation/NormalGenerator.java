@@ -1,6 +1,7 @@
 package ca.team50.generation;
 
 import ca.lenoverd.city.CityGenerator;
+import ca.lenoverd.city.NameGenerator;
 import ca.lenoverd.city.NetworkGenerator;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.team50.Tiles.Arctic.ArcticUtils;
@@ -106,6 +107,14 @@ public class NormalGenerator implements IslandGenerable {
             // Network Generator
             NetworkGenerator netGen = new NetworkGenerator(mesh,islandShape);
             netGen.createStarNetwork(cityGenerator);
+
+            // Name generator
+            NameGenerator nameGen = new NameGenerator();
+            for (int i = 0; i<10;i++) {
+
+                System.out.println(nameGen.generateName());
+
+            }
 
             // ------ ASSIGN COLOURS TO POLYGONS ------ //
 
