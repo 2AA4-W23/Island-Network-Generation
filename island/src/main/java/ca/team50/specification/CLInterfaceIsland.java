@@ -223,6 +223,7 @@ public class CLInterfaceIsland {
         options.addOption(seed);
         options.addOption(soilContent);
         options.addOption(cities);
+        options.addOption(cityDataset);
 
 
         formatter.printHelp("-<short or -- for long command> <numerical or string argument if required>",options);
