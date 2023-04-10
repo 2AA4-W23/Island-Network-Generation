@@ -196,6 +196,10 @@ Alongside generating an island, one can also use the following commands when exe
 | n-order | -or |  --order | Specify the length of a given n-gram for city name generation | Must be greater than 0. Each possible beginning of a name will have this n-order length. If City Name Data Set Path is not provided, this field is ignored |
 | Max Name Length to Add | -le |  --length | Specify the addon length of a given name for city name generation. | Must be greater than 0. The max length of the string is (n-order + addon length). If City Name Data Set Path is not provided, this field is ignored |
 
+## A4: Data Set Credits
+cityNameSet.txt is comprised of data retrieved from the Canadian Geographical Names Database. A publicly accessible database containing names for geographical locations across Canada.
+View here: https://natural-resources.canada.ca/earth-sciences/geography/download-geographical-names-data/9245
+
 ## A4: Example
 ```
 # First, generate mesh
