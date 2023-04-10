@@ -217,3 +217,4 @@ mosser@azrael visualizer % java -jar visualizer.jar ../island/island.mesh island
 ![alt text](https://github.com/2AA4-W23/a4-urbanism-davislenover/blob/main/A4VISUAL.png?raw=true)
 - The red dot indicates the entry point to the given polygon city
 - The colour of the polygon corresponds to the type of city (where darker means higher populations)
+- The String next to the red dot indicates the name of the city (if applicable)
