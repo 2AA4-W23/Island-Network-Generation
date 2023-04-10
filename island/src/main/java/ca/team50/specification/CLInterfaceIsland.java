@@ -136,9 +136,25 @@ public class CLInterfaceIsland {
 
             // Cities
             this.numCities = Integer.parseInt(commandLine.getOptionValue(cities,"0"));
-            this.nameDatasetFilePath = commandLine.getOptionValue(cityDataset,"null");
+
+            if (this.numCities == 0) {
+
+                this.nameDatasetFilePath = null;
+
+            } else {
+                this.nameDatasetFilePath = commandLine.getOptionValue(cityDataset,null);
+
+                if (this.nameDatasetFilePath == null) {
+
+                    throw new InvalidCommandFormatException("Num of cities was specified to be greater than 0 thus, name data set is required");
+
+                }
+
+            }
 
 
+        } catch (InvalidCommandFormatException e) {
+            ExceptionHandler.handleException(e);
         } catch (Exception e) {
             ExceptionHandler.handleException(new InvalidCommandFormatException("Failed to parse arguments. Were commands inputted correctly?"));
         }

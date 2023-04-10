@@ -1,5 +1,6 @@
 package ca.lenoverd.city;
 
+import ca.team50.exceptions.GenerationException;
 import ca.team50.fileIO.TextFileToString;
 
 import java.io.FileReader;
@@ -12,7 +13,7 @@ public class NameGenerator {
     private HashMap<String, List<String>> ngrams = new HashMap<>();
     private List<String> nameBeginnings = new ArrayList<>();
 
-    public NameGenerator(String datasetPath, int nOrder) {
+    public NameGenerator(String datasetPath, int nOrder) throws GenerationException {
 
         // Set order and load data set
         this.nOrder = nOrder;
@@ -54,7 +55,6 @@ public class NameGenerator {
     }
 
     public String generateName(int maxLength) {
-
 
         // Get a random beginning
         String currentGram = nameBeginnings.get(randomNumber(0, nameBeginnings.size()-1));
@@ -99,13 +99,24 @@ public class NameGenerator {
     }
 
     // Get list of strings from file to use
-    private void loadDataSet(String filePath) {
+    private void loadDataSet(String filePath) throws GenerationException {
 
-        for (String name : TextFileToString.getStringListFromFile(filePath)) {
+        List<String> dataSet;
 
-            this.dataSet.add(name);
+        try {
+            dataSet = TextFileToString.getStringListFromFile(filePath);
+
+            for (String name : dataSet) {
+
+                this.dataSet.add(name);
+
+            }
+        } catch (Exception e) {
+
+            throw new GenerationException(e.getMessage());
 
         }
+
 
     }
 
