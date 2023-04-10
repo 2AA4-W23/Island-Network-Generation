@@ -126,6 +126,9 @@ To generate an island:
    | Island Shape | -sh |  --shape | Specify the shape type of island generation | Use -h to find out all shapes available |
    | soilContent | -s0 |  --soil | Specify the type of Soil Profile | Use -h to find out all soil profiles available | 
    | Cities | -c |  --cities | Specify the maximum number of cities to generate | A red dot specifies the entry point to a city. The darker the square, the more populated the city is. When creating a star network, oceans are not considered island land and thus paths between cities only via oceans are invalid and thus are not calculated. |
+   | City Name Data Set Path | -d |  --dataset | Specify the file path containing lines of strings to use in name generation | If this field is unused then cities will generate with no names. If specifying a .txt file from the same directory as island.jar, no file path is needed |
+   | n-order | -or |  --order | Specify the length of a given n-gram for city name generation | Must be greater than 0. Each possible beginning of a name will have this n-order length. If City Name Data Set Path is not provided, this field is ignored | 
+   | Max Name Length to Add | -le |  --length | Specify the addon length of a given name for city name generation. | Must be greater than 0. The max length of the string is (n-order + addon length). If City Name Data Set Path is not provided, this field is ignored |
 3) Run visualizer.jar with the outputted mesh from island.jar in island generation mode
 
 Ex:
@@ -182,4 +185,30 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 |    4F08    | Implement road property                          | 2023-04-04 | 2023-04-07                  | D      |
 |    4F09    | Implement city generator                         | 2023-04-04 | 2023-04-07                  | D      |
 |    4F10    | Implement maximum number of cities via CMD       | 2023-04-04 | 2023-04-07                  | D      |
-|    4F11    | Implement city names via a markov process        | 2023-04-08 |                 | S      |
+|    4F11    | Implement city names via a Markov process        | 2023-04-08 | 2023-04-10                  | D      |
+
+## A4: Specific Commands
+Alongside generating an island, one can also use the following commands when executing island.jar:
+| Argument name | Command Abbreviation | Command | Description | Additional Notes |
+| Cities | -c |  --cities | Specify the maximum number of cities to generate | A red dot specifies the entry point to a city. The darker the square, the more populated the city is. When creating a star network, oceans are not considered island land and thus paths between cities only via oceans are invalid and thus are not calculated. |
+| City Name Data Set Path | -d |  --dataset | Specify the file path containing lines of strings to use in name generation | If this field is unused then cities will generate with no names. If specifying a .txt file from the same directory as island.jar, no file path is needed |
+| n-order | -or |  --order | Specify the length of a given n-gram for city name generation | Must be greater than 0. Each possible beginning of a name will have this n-order length. If City Name Data Set Path is not provided, this field is ignored |
+| Max Name Length to Add | -le |  --length | Specify the addon length of a given name for city name generation. | Must be greater than 0. The max length of the string is (n-order + addon length). If City Name Data Set Path is not provided, this field is ignored |
+
+## A4: Example
+```
+# First, generate mesh
+mosser@azrael A2 % cd generator
+mosser@azrael generator % java -jar generator.jar -mt IRREGULAR -n sample -w 1000 -l 1000 -pc 800 -r 30
+
+mosser@azrael A2 % cd ..
+mosser@azrael A2 % cd island
+# The following command specifies the generated mesh from generator.jar to convert to an island with 3 lakes, arctic biome, mountain elevation, the shape of a circle, a seed of 1234, 2 river iterations, maximum of ten cities with names generated from cityNameSet.txt with an order of 4 and a max length of 13 (4+9)
+mosser@azrael island % java -jar island.jar -i ../generator/sample.mesh -o island.mesh -m normal -l 3 -b Arctic -al MOUNTAINS -sh CIRCLE -s 21543 -r 2 -c 10 -d cityNameSet.txt -or 4 -le 9
+
+
+mosser@azrael A2 % cd ..
+mosser@azrael A2 % cd visualizer
+# Run visualizer on the generated island from island.jar and use the -ig command to specify island visualization
+mosser@azrael visualizer % java -jar visualizer.jar ../island/island.mesh island.svg -ig
+```
