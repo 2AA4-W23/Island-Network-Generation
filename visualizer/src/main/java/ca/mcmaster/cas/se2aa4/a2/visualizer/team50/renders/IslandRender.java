@@ -6,6 +6,10 @@ import ca.team50.adt.PolyMesh;
 import ca.team50.adt.Polygons;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -283,6 +287,20 @@ public class IslandRender implements Renderable {
 
             }
 
+            public static String getCityName(Polygons curPoly) {
+
+                for (Structs.Property curProp : curPoly.getCentroid().getPropertiesList()) {
+
+                    if (curProp.getKey().equals("CityName")) {
+                        return curProp.getValue();
+                    }
+
+                }
+
+                return null;
+
+            }
+
         }
 
         for (Polygons curPoly : polygons) {
@@ -298,9 +316,15 @@ public class IslandRender implements Renderable {
 
                 double centre_x = entryPoint.getX() - (entryThickness / 2.0d);
                 double centre_y = entryPoint.getY() - (entryThickness / 2.0d);
+                canvas.setStroke(new BasicStroke(0f));
                 canvas.setColor(entryColor);
                 Ellipse2D point = new Ellipse2D.Double(centre_x, centre_y, entryThickness, entryThickness);
                 canvas.fill(point);
+
+                // Display names
+                String cityName = testForCity.getCityName(curPoly);
+                canvas.drawString(cityName,(int)centre_x,(int)centre_y);
+
 
             }
 
