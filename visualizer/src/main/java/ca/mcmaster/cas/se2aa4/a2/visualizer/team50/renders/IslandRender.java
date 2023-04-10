@@ -273,6 +273,7 @@ public class IslandRender implements Renderable {
         // Class in method declaration because this method is not needed anywhere else
         class testForCity {
 
+            // Test for city property
             public static boolean isCity(Polygons curPoly) {
 
                 for (Structs.Property curProp : curPoly.getCentroid().getPropertiesList()) {
@@ -287,6 +288,22 @@ public class IslandRender implements Renderable {
 
             }
 
+            // Get name
+            public static boolean hasName(Polygons curPoly) {
+
+                for (Structs.Property curProp : curPoly.getCentroid().getPropertiesList()) {
+
+                    if (curProp.getKey().equals("CityName")) {
+                        return true;
+                    }
+
+                }
+
+                return false;
+
+            }
+
+            // Test for name property
             public static String getCityName(Polygons curPoly) {
 
                 for (Structs.Property curProp : curPoly.getCentroid().getPropertiesList()) {
@@ -322,8 +339,10 @@ public class IslandRender implements Renderable {
                 canvas.fill(point);
 
                 // Display names
-                String cityName = testForCity.getCityName(curPoly);
-                canvas.drawString(cityName,(int)centre_x,(int)centre_y);
+                if (testForCity.hasName(curPoly)) {
+                    String cityName = testForCity.getCityName(curPoly);
+                    canvas.drawString(cityName,(int)centre_x,(int)centre_y);
+                }
 
 
             }

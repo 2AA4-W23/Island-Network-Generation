@@ -55,7 +55,7 @@ public class NameGenerator {
 
     }
 
-    public String generateName(int maxLength) {
+    public String generateName(int maxLengthToAdd) {
 
         // Get a random beginning to build from
         String currentGram = nameBeginnings.get(randomNumber(0, nameBeginnings.size()-1));
@@ -64,7 +64,7 @@ public class NameGenerator {
         // Loop through each current n-gram and get the next possible character
         // Add the next character and then repeat the process with the next n-gram with that new letter
         // (i.e. look at the last n characters of the result)
-        for (int i = 0; i<maxLength; i++) {
+        for (int i = 0; i<maxLengthToAdd; i++) {
 
             // Get the list of all possible next characters
             List<String> possibleCharacters = ngrams.get(currentGram);

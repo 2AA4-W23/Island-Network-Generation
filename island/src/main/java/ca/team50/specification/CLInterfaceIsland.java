@@ -27,8 +27,12 @@ public class CLInterfaceIsland {
 
     private static final Option soilContent = new Option("so", "soil", true, "Specify the type of Soil Profile (Clay, Loam, Sand, or Special)");
 
-    public static final Option cities = new Option("c", "cities", true, "Specify the maximum number of cities to be generated (as an integer)");
-    public static final Option cityDataset = new Option("d", "dataset", true, "Specify the text file for the base of city name generation");
+    private static final Option cities = new Option("c", "cities", true, "Specify the maximum number of cities to be generated (as an integer)");
+    private static final Option cityDataset = new Option("d", "dataset", true, "Specify the text file for the base of city name generation");
+    private static final int defaultNorder = 4;
+    private static final int defaultWordLength = 9;
+    private static final Option nOrder = new Option("or", "order", true, "Specify the length of a given n-gram for city name generation, default: " + defaultNorder);
+    private static final Option maxNameLengthToAdd = new Option("le", "length", true, "Specify the addon length of a given name for city name generation. The max length of the string is (order + addon length) default: " + defaultWordLength);
 
     private ModeType islandMode;
     private BiomeType biomeType;
@@ -44,6 +48,9 @@ public class CLInterfaceIsland {
     private int numRivers;
     private int numCities;
     private long numSeed;
+    private boolean hasNameDatasetPath = false;
+    private int nOrderInt;
+    private int maxNameLengthToAddInt;
 
 
     public CLInterfaceIsland(String[] args) {
@@ -66,6 +73,8 @@ public class CLInterfaceIsland {
         options.addOption(soilContent);
         options.addOption(cities);
         options.addOption(cityDataset);
+        options.addOption(nOrder);
+        options.addOption(maxNameLengthToAdd);
 
         try {
 
@@ -137,17 +146,18 @@ public class CLInterfaceIsland {
             // Cities
             this.numCities = Integer.parseInt(commandLine.getOptionValue(cities,"0"));
 
-            if (this.numCities == 0) {
-
-                this.nameDatasetFilePath = null;
-
-            } else {
+            // Check if names are wanted to cities
+            if (this.numCities != 0 && commandLine.hasOption(cityDataset)) {
+                this.hasNameDatasetPath = true;
                 this.nameDatasetFilePath = commandLine.getOptionValue(cityDataset,null);
+                // Get generation parameters
+                this.nOrderInt = Integer.parseInt(commandLine.getOptionValue(nOrder, String.valueOf(defaultNorder)));
+                this.maxNameLengthToAddInt = Integer.parseInt(commandLine.getOptionValue(maxNameLengthToAdd, String.valueOf(defaultWordLength)));
 
-                if (this.nameDatasetFilePath == null) {
-
-                    throw new InvalidCommandFormatException("Num of cities was specified to be greater than 0 thus, name data set is required");
-
+                if (nOrderInt <= 0) {
+                    throw new InvalidCommandFormatException("n-order (" + nOrderInt +") must be greater than 0");
+                } else if (maxNameLengthToAddInt <= 0) {
+                    throw new InvalidCommandFormatException("max name length (" + maxNameLengthToAddInt +") must be greater than 0");
                 }
 
             }
@@ -203,6 +213,15 @@ public class CLInterfaceIsland {
     public String getNameDatasetFilePath() {
         return this.nameDatasetFilePath;
     }
+    public boolean hasNameDatasetPath() {
+        return this.hasNameDatasetPath;
+    }
+    public int getnOrder() {
+        return this.nOrderInt;
+    }
+    public int getMaxNameLengthToAdd() {
+        return this.maxNameLengthToAddInt;
+    }
 
 
     // Method to print generator command line input help
@@ -224,7 +243,8 @@ public class CLInterfaceIsland {
         options.addOption(soilContent);
         options.addOption(cities);
         options.addOption(cityDataset);
-
+        options.addOption(nOrder);
+        options.addOption(maxNameLengthToAdd);
 
         formatter.printHelp("-<short or -- for long command> <numerical or string argument if required>",options);
 

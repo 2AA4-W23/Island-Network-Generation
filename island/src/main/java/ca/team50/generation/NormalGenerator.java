@@ -109,7 +109,10 @@ public class NormalGenerator implements IslandGenerable {
             netGen.createStarNetwork(cityGenerator);
 
             // Name generator
-            NameGenerator nameGen = new NameGenerator(specification.getNameDatasetFilePath(),4);
+            NameGenerator nameGen = null;
+            if (specification.hasNameDatasetPath()) {
+                nameGen = new NameGenerator(specification.getNameDatasetFilePath(), specification.getnOrder());
+            }
 
             // ------ ASSIGN COLOURS TO POLYGONS ------ //
 
@@ -148,8 +151,13 @@ public class NormalGenerator implements IslandGenerable {
                 // Check for city
                 if (cityGenerator.isVertexACity(centroid)) {
 
+                    // Set polygon as a city
                     curPoly.addProperty("IsCity","True");
-                    curPoly.addProperty("CityName",nameGen.generateName(9));
+                    // Apply a generated name to city if applicable
+                    if (specification.hasNameDatasetPath()) {
+                        curPoly.addProperty("CityName",nameGen.generateName(specification.getMaxNameLengthToAdd()));
+                    }
+                    // Set colour of city
                     curPoly.unifyColor(cityGenerator.getCityType(centroid).getTileColour());
 
                 }
