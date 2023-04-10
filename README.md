@@ -190,6 +190,7 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 ## A4: Specific Commands
 Alongside generating an island, one can also use the following commands when executing island.jar:
 | Argument name | Command Abbreviation | Command | Description | Additional Notes |
+   |:--:|--|---------|-------|-----|
 | Cities | -c |  --cities | Specify the maximum number of cities to generate | A red dot specifies the entry point to a city. The darker the square, the more populated the city is. When creating a star network, oceans are not considered island land and thus paths between cities only via oceans are invalid and thus are not calculated. |
 | City Name Data Set Path | -d |  --dataset | Specify the file path containing lines of strings to use in name generation | If this field is unused then cities will generate with no names. If specifying a .txt file from the same directory as island.jar, no file path is needed |
 | n-order | -or |  --order | Specify the length of a given n-gram for city name generation | Must be greater than 0. Each possible beginning of a name will have this n-order length. If City Name Data Set Path is not provided, this field is ignored |
