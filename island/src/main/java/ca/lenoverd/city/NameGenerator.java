@@ -13,6 +13,13 @@ public class NameGenerator {
     private HashMap<String, List<String>> ngrams = new HashMap<>();
     private List<String> nameBeginnings = new ArrayList<>();
 
+    /**
+     * Create a Markov sequence generator for names
+     * @param datasetPath the path to the data set for use in generation
+     * @param nOrder the n-gram size (i.e., the starting length of the word to generate (add) onto)
+     * @return a NameGenerator object if file path is valid and format is correct
+     * @Throws GenerationException if file path or file formatting is invalid
+     */
     public NameGenerator(String datasetPath, int nOrder) throws GenerationException {
 
         // Set order and load data set
@@ -55,6 +62,11 @@ public class NameGenerator {
 
     }
 
+    /**
+     * Generate a name
+     * @param maxLengthToAdd the maximum length to add onto the order (i.e., each string will start with the n-gram then add upto the n-gram plus the maximum length)
+     * @return a String containing the name generated
+     */
     public String generateName(int maxLengthToAdd) {
 
         // Get a random beginning to build from
@@ -75,10 +87,10 @@ public class NameGenerator {
                 break;
             }
 
-            // Pick a random element (between 0 and max index)
+            // Pick a random character from the list (between 0 and max index)
             String character = possibleCharacters.get(randomNumber(0, possibleCharacters.size()-1));
 
-            // Create the word
+            // Add the picked character onto the word
             generatedName+=character;
 
             // Get length
