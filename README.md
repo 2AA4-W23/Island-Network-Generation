@@ -173,19 +173,20 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 | F17-3 (2) R2 |      Implemented unified island generator |  lenoverd   |   2023-03-25  | 2023-03-29  |  D  |
 
 # Assignment A4: Urbanism
-|     Id     | Feature title                                    | Start      | End                         | Status |
-|:----------:|--------------------------------------------------|------------|-----------------------------|--------|
-|    4F01    | Implement the notion of a graph Node             | 2023-03-30 | 2023-03-30                  | D      |
-|    4F02    | Implement the notion of graph node properties    | 2023-03-30 | 2022-04-01                  | D      |
-|    4F03    | Implement the notion of a graph edge             | 2023-04-01 | 2023-04-01                  | D      |
-|    4F04    | Implement the notion of graph edge properties    | 2023-04-01 | 2023-04-01                  | D      |
-|    4F05    | Implement Graph ADT                              | 2023-04-01 | 2023-04-02                  | D      |
+|     Id     | Feature title                                    | Start      | End                       | Status |
+|:----------:|--------------------------------------------------|------------|---------------------------|--------|
+|    4F01    | Implement the notion of a graph Node             | 2023-03-30 | 2023-03-30                | D      |
+|    4F02    | Implement the notion of graph node properties    | 2023-03-30 | 2022-04-01                | D      |
+|    4F03    | Implement the notion of a graph edge             | 2023-04-01 | 2023-04-01                | D      |
+|    4F04    | Implement the notion of graph edge properties    | 2023-04-01 | 2023-04-01                | D      |
+|    4F05    | Implement Graph ADT                              | 2023-04-01 | 2023-04-02                | D      |
 | 4F06 (_R3) | Implement Pathfinder ADT and sample algorithm    | 2023-04-02 | 2023-04-02 (_R3 2023-04-03) | D      |
-|    4F07    | Implement separate city tiles based on city size | 2023-04-04 | 2023-04-04                  | D      |
-|    4F08    | Implement road property                          | 2023-04-04 | 2023-04-07                  | D      |
-|    4F09    | Implement city generator                         | 2023-04-04 | 2023-04-07                  | D      |
-|    4F10    | Implement maximum number of cities via CMD       | 2023-04-04 | 2023-04-07                  | D      |
-|    4F11    | Implement city names via a Markov process        | 2023-04-08 | 2023-04-10                  | D      |
+|    4F07    | Implement separate city tiles based on city size | 2023-04-04 | 2023-04-04                | D      |
+|    4F08    | Implement road property                          | 2023-04-04 | 2023-04-07                | D      |
+|    4F09    | Implement city generator                         | 2023-04-04 | 2023-04-07                | D      |
+|    4F10    | Implement maximum number of cities via CMD       | 2023-04-04 | 2023-04-07                | D      |
+|    4F11    | Implement city names via a Markov process        | 2023-04-08 | 2023-04-10                | D      |
+|    4F12    | Document Pathfinder in a new README              | 2023-04-10 |                   | S      |
 
 ## A4: Specific Commands
 Alongside generating an island, one can also use the following commands when executing island.jar:
