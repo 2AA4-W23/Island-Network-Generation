@@ -4,11 +4,11 @@
 - Jasmine Wang [wangj500@mcmaster.ca]
 - Michael Baskaran [baskam1@mcmaster.ca]
 
-## A4 detailed is below A3. Please scroll to bottom to read more about A4.
+### A4 detailed is below A3. Please scroll to bottom to read more about A4.
 ### Generation
 To generate an island:
 1) Generate a mesh using generator.jar (It is recommended that you generate an irregular mesh with at least 350 polygons)
-2) Run island.jar with command arguments below
+2) Run island.jar with command arguments below (Note this list of commands includes A4, for what commands are specific to A4, please scroll to A4 section below)
    It takes in multiple arguments to generate a desired mesh:
    | Argument name | Command Abbreviation | Command | Description | Additional Notes |
    |:--:|--|---------|-------|-----|
@@ -48,7 +48,7 @@ mosser@azrael A2 % cd visualizer
 mosser@azrael visualizer % java -jar visualizer.jar ../island/island.mesh island.svg -ig
 ```
 
-### A3 Product Backlog
+## A3 Product Backlog
 Status: Pending (P), Started (S), Blocked (B), Done (D)
 
 | Id | Feature title | Who? | Start | End | Status |
@@ -111,7 +111,7 @@ mosser@azrael visualizer % java -jar visualizer.jar ../island/island.mesh island
 - The colour of the polygon corresponds to the type of city (where darker means higher populations)
 - The String next to the red dot indicates the name of the city (if applicable)
 
-### A4 Product Backlog
+## A4 Product Backlog
 |     Id     | Feature title                                   | Start      | End                         | Status |
 |:----------:|-------------------------------------------------|------------|-----------------------------|--------|
 |    4F01    | Implement the notion of a graph Node            | 2023-03-30 | 2023-03-30                  | D      |
