@@ -212,3 +212,4 @@ mosser@azrael A2 % cd visualizer
 # Run visualizer on the generated island from island.jar and use the -ig command to specify island visualization
 mosser@azrael visualizer % java -jar visualizer.jar ../island/island.mesh island.svg -ig
 ```
+![alt text](https://github.com/2AA4-W23/a4-urbanism-davislenover/blob/main/A4VISUAL.png?raw=true)
