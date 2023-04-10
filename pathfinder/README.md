@@ -2,19 +2,19 @@
 
   - Written by Davis Lenover [lenoverd@mcmaster.ca]
 
-## Usage
+## Documentation
 ### graphComponents
 #### Node (extends PropertiesHolder)
 |       Method       | Description                                                       | Additional Notes                                                                                         |
 |:------------------:|-------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
-| Node(String name)  | Instanciate a new node with a given name                          |                                                                                                          |
+| Node(String name)  | Instantiate a new node with a given name                          |                                                                                                          |
 |   getNodeName()    | Get the node name as a string                                     |                                                                                                          |
 | equals(Object obj) | Check if two nodes are equal                                      | Returns true if both nodes have the same name. False otherwise. It does NOT take into account properties |
 |     hashCode()     | Returns an integer representing the hashcode of the Node instance | hashcode is equivalent to the hashcode of the instance name                                              |
 #### Edge (extends PropertiesHolder)
 |            Method            | Description                                                       | Additional Notes                                                                                                         |
 |:----------------------------:|-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| Edge(Node node1, Node node2) | Instanciate a new edge with two nodes (in-order)                  |                                                                                                                          |
+| Edge(Node node1, Node node2) | Instantiate a new edge with two nodes (in-order)                  |                                                                                                                          |
 |        getFirstNode()        | Get the first node in the edge                                    |                                                                                                                          |
 |       getSecondNode()        | Get the second node in the edge                                   |                                                                                                                          |
 | equals(Object obj) | Check if two edges are equal                                      | Returns true if both edges contain the same nodes (in-order). False otherwise. It does NOT take into account properties  |
@@ -24,11 +24,11 @@
 #### Property
 |             Method             | Description                                                           | Additional Notes                                                                                                      |
 |:------------------------------:|-----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
-| Property(String name, T value) | Instanciate a new Property object with a given name and a given value | value can be any instance that generalizes from Object                                                                |
+| Property(String name, T value) | Instantiate a new Property object with a given name and a given value | value can be any instance that generalizes from Object                                                                |
 |           getValue()           | Get the value within the Property object                              | One must be aware the type value is returning and cast accordingly                                                    |
 |           getName()            | Get the name of the Property object as a String                       |                                                                                                                       |
 |      changeValue(T value)      | change the value within the property                                  | value must be the same as type T specified on creation of Property object                                             |
-|       equals(Object obj)       | Compare Property object's     | returns true if the object is: a Property object, has the same value type (class), has the same name. False otherwise |
+|       equals(Object obj)       | Compare Property object's                                             | returns true if the object is: a Property object, has the same value type (class), has the same name. False otherwise |
 #### PropertiesHolder
 |                       Method                        | Description                          | Additional Notes                                                                                                                                                                                                                                                                                       |
 |:---------------------------------------------------:|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -64,3 +64,13 @@
 |       Method       | Description                               | Additional Notes                                                                                                                         |
 |:------------------:|-------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
 | getDistanceValueFromSource(Node source, Node target)  | Get the distance to any target node in the graph from the specified source node      | Returns a double value containing the minimum distance to get from the source node to the specified target node. Null if path is invalid |
+
+# General Usage
+1) Import the Pathfinder library into your project
+2) Create Nodes and Edges as desired with Properties (if applicable)
+3) Add nodes and edges to sets
+4) Instantiate a graph, there exists two types of Graphs implemented: DirectedGraph, UndirectedGraph
+   - UndirectedGraph behaves like DirectedGraph however, each edge inputted is duplicated and the node order is reversed
+5) Instantiate a Pathfinder. There exists an example implementation, Dijkstra.
+   - Dijkstra computes the shortest paths from a source node to all other nodes
+6) Call findPath() method (or any other pathfinder applicable method) to retrieve a list of shortest paths from a given source to target node
