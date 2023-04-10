@@ -109,11 +109,13 @@ public class NormalGenerator implements IslandGenerable {
             netGen.createStarNetwork(cityGenerator);
 
             // Name generator
-            NameGenerator nameGen = new NameGenerator();
-            for (int i = 0; i<10;i++) {
+            if (specification.getNumCities() != 0) {
+                NameGenerator nameGen = new NameGenerator(specification.getNameDatasetFilePath(),4);
+                for (int i = 0; i<10;i++) {
 
-                System.out.println(nameGen.generateName());
+                    System.out.println(nameGen.generateName(9));
 
+                }
             }
 
             // ------ ASSIGN COLOURS TO POLYGONS ------ //
@@ -164,7 +166,7 @@ public class NormalGenerator implements IslandGenerable {
             netGen.applyStarNetworkToMesh();
 
         } catch (Exception e) {
-
+            e.printStackTrace();
             System.out.println(e.getMessage());
             ExceptionHandler.handleException(new GenerationException("Generation failed! Please check arguments and try again"));
 

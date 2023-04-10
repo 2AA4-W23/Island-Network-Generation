@@ -8,13 +8,17 @@ import java.util.*;
 public class NameGenerator {
 
     private List<String> dataSet = new ArrayList<>();
-    public int nOrder = 8;
+    public int nOrder;
     private HashMap<String, List<String>> ngrams = new HashMap<>();
     private List<String> nameBeginnings = new ArrayList<>();
 
-    public NameGenerator(String datasetPath) {
+    public NameGenerator(String datasetPath, int nOrder) {
 
+        // Set order and load data set
+        this.nOrder = nOrder;
         loadDataSet(datasetPath);
+
+        //System.out.println(Arrays.toString(dataSet.toArray()));
 
         // Loop through each name
         for (int nameIndex = 0; nameIndex < dataSet.size(); nameIndex++) {
@@ -22,7 +26,7 @@ public class NameGenerator {
             String curName = dataSet.get(nameIndex);
 
             // Build the table of n-grams and all their next possible states
-            for (int i = 0; i <= curName.length() - nOrder; i++) {
+            for (int i = 0; i <= curName.length() - nOrder - 1; i++) {
 
                 String gram = curName.substring(i,i+nOrder);
 
@@ -40,7 +44,7 @@ public class NameGenerator {
                 }
 
                 // Get the next character after the n-gram and add it
-                ngrams.get(gram).add(curName.substring(i+nOrder,i+nOrder));
+                ngrams.get(gram).add(String.valueOf(curName.charAt(i+nOrder)));
 
             }
 
@@ -49,7 +53,8 @@ public class NameGenerator {
 
     }
 
-    public String generateName() {
+    public String generateName(int maxLength) {
+
 
         // Get a random beginning
         String currentGram = nameBeginnings.get(randomNumber(0, nameBeginnings.size()-1));
@@ -58,12 +63,14 @@ public class NameGenerator {
         // Loop through each current n-gram and get the next possible character
         // Add the next character and then repeat the process with the next n-gram with that new letter
         // (i.e. look at the last n characters of the result)
-        for (int i = 0; i<20; i++) {
+        for (int i = 0; i<maxLength; i++) {
 
             List<String> possibleCharacters = ngrams.get(currentGram);
 
+            //System.out.println(Arrays.toString(possibleCharacters.toArray()));
+
             // Check if there are no possible characters to add
-            if (possibleCharacters.size() == 0) {
+            if (possibleCharacters == null || possibleCharacters.size() == 0) {
                 // If so just break
                 break;
             }
@@ -76,7 +83,7 @@ public class NameGenerator {
 
             // Get length
             int lengthOfResult = result.length();
-            // The next n-gram is the last three characters of the generated result
+            // The next n-gram is the last n characters of the generated result
             currentGram = result.substring(lengthOfResult-nOrder,lengthOfResult);
 
         }
@@ -94,7 +101,11 @@ public class NameGenerator {
     // Get list of strings from file to use
     private void loadDataSet(String filePath) {
 
-        TextFileToString.getStringListFromFile(filePath);
+        for (String name : TextFileToString.getStringListFromFile(filePath)) {
+
+            this.dataSet.add(name);
+
+        }
 
     }
 

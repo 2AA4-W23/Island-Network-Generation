@@ -3,7 +3,9 @@ package ca.team50.fileIO;
 import ca.team50.exceptions.ExceptionHandler;
 import ca.team50.exceptions.FileReadException;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -23,17 +25,19 @@ public class TextFileToString {
 
             List<String> returnString = new ArrayList<>();
 
-            // Get file input stream from file path
-            File file = new File(inputFilePath);
+            BufferedReader reader = new BufferedReader(new FileReader(inputFilePath));
 
-            Scanner scanner = new Scanner(file);
+            // Get first line
+            String line = reader.readLine();
 
             // Read each line
-            while (scanner.hasNextLine()) {
+            while (line != null) {
 
                 // Add line to list
-                String stringToAdd = scanner.next().replace("\n","");
+                String stringToAdd = line.replace("\n","");
                 returnString.add(stringToAdd);
+                // Read next line
+                line = reader.readLine();
 
             }
 

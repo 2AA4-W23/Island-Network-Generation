@@ -28,6 +28,7 @@ public class CLInterfaceIsland {
     private static final Option soilContent = new Option("so", "soil", true, "Specify the type of Soil Profile (Clay, Loam, Sand, or Special)");
 
     public static final Option cities = new Option("c", "cities", true, "Specify the maximum number of cities to be generated (as an integer)");
+    public static final Option cityDataset = new Option("d", "dataset", true, "Specify the text file for the base of city name generation");
 
     private ModeType islandMode;
     private BiomeType biomeType;
@@ -36,6 +37,7 @@ public class CLInterfaceIsland {
     private String meshInputString;
     private String meshOutputString;
     private String soilType;
+    private String nameDatasetFilePath;
 
     private Integer numAquifers;
     private int numLakes;
@@ -63,6 +65,7 @@ public class CLInterfaceIsland {
         options.addOption(seed);
         options.addOption(soilContent);
         options.addOption(cities);
+        options.addOption(cityDataset);
 
         try {
 
@@ -133,6 +136,8 @@ public class CLInterfaceIsland {
 
             // Cities
             this.numCities = Integer.parseInt(commandLine.getOptionValue(cities,"0"));
+            this.nameDatasetFilePath = commandLine.getOptionValue(cityDataset,"null");
+
 
         } catch (Exception e) {
             ExceptionHandler.handleException(new InvalidCommandFormatException("Failed to parse arguments. Were commands inputted correctly?"));
@@ -178,6 +183,9 @@ public class CLInterfaceIsland {
     }
     public Integer getNumCities() {
         return numCities;
+    }
+    public String getNameDatasetFilePath() {
+        return this.nameDatasetFilePath;
     }
 
 
