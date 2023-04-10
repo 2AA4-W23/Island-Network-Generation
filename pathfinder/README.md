@@ -76,12 +76,17 @@
 6) Call findPath() method (or any other pathfinder applicable method) to retrieve a list of shortest paths from a given source to target node
 
 # Rational and Explanations
+## Nodes and Edges
 To respect the semantics of graphs as described in SFWRENG 2DM3, graphs were to take in two sets, one containing nodes and one for edges. Thus, two classes handle Node and Edge logic.
 Because graphs have to have a way of comparing nodes and edges, both Node and Edge classes override the equals method as well as hashcode. One may realize that only names are considered for equivalence. The reason for this is to reduce confusion when utilizing graphs. After-all, it would be very weird to have two nodes with the same name that are different.
 Properties don't take into account the actual value that they hold but rather their name and type for the same reason. It just doesn't make sense to have properties with the same name and same data type under the same Node or Edge, that would be very confusing in calculations.
+
+## Property Holders
 Both nodes and edges can contain data, thus it was imperative to implement this sort of logic to these classes. The solution being Property and PropertyHolder. PropertyHolder was created to delegate the responsibility of managing properties to a specific class.
 From there, one can quickly extend the PropertyHolder class to accept properties. From A2/3, the implementation of properties was not particularly usable in pathfinder for two main reasons. Firstly, they could only store Strings as data, this meant if one wanted to store more than just a string, one would need to add more code to deal with the translation between strings and the corresponding data type, thus forcing the developers hand and leading to more overhead.
 This overhead can directly translate into more performance issues as graphs can tend to be very large. Second was that pathfinder was to be completely independent of all other subprojects. The implementation of properties in pathfinder allows developers more freedom by allowing them to choose the data types they store. PropertiesHolder allows more than one data type to be stored too.
+
+## Graphs and PathFinders
 As graphs hold nodes and edges, that is exactly how they were designed, they take in a sets and construct the graph. From there, it is easy to modify and traverse the graph. Because graphs are the class that deals with handling of the overall graph structure, everytime a request is made for a specific chunk of the structure (such as which parent node is connected to other nodes), shallow copies of the internal lists used are returned to the user instead of the actual ones.
 One might wonder why graphs take in sets put output lists. This is because users will spend large amounts of their time traversing the graph, and with lists, much less overhead is needed to traverse them as compared to sets. Really, Graph classes encapsulate the low-level structure of the actual graph and make it easy for users to interact with it.
 There are many ways one can traverse a graph and find paths. It all really depends on the type of graph. Is it weighted? Unweighted? This is exactly why a hierarchy of interfaces is used for pathfinders. There exists a higher level PathFinder interface and a lower level WeightedPathFinder for algorithms that also take into consideration a specific Property within nodes and edges. The idea is to make the services classes can offer as cohesive as possible.
