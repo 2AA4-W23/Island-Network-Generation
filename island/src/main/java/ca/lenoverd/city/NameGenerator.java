@@ -3,13 +3,13 @@ package ca.lenoverd.city;
 import ca.team50.exceptions.GenerationException;
 import ca.team50.fileIO.TextFileToString;
 
-import java.io.FileReader;
+
 import java.util.*;
 
 public class NameGenerator {
 
     private List<String> dataSet = new ArrayList<>();
-    public int nOrder;
+    private int nOrder;
     private HashMap<String, List<String>> ngrams = new HashMap<>();
     private List<String> nameBeginnings = new ArrayList<>();
 
@@ -19,19 +19,20 @@ public class NameGenerator {
         this.nOrder = nOrder;
         loadDataSet(datasetPath);
 
-        //System.out.println(Arrays.toString(dataSet.toArray()));
-
+        // Build a map for every possible character that comes after each n-gram
+        // Use a list for increased chance of certain letters that appear more frequently
         // Loop through each name
         for (int nameIndex = 0; nameIndex < dataSet.size(); nameIndex++) {
 
             String curName = dataSet.get(nameIndex);
 
-            // Build the table of n-grams and all their next possible states
+            // Build a map of n-grams and all their next possible states
             for (int i = 0; i <= curName.length() - nOrder - 1; i++) {
 
+                // Get current n-gram
                 String gram = curName.substring(i,i+nOrder);
 
-                // Add beginning of name to beginnings list if i = 0 (as this tells us gram is the first n characters)
+                // Add beginning of name to beginnings list if i = 0 (as this tells us gram is the first n characters in the current name)
                 if (i == 0) {
                     nameBeginnings.add(gram);
                 }
@@ -56,18 +57,17 @@ public class NameGenerator {
 
     public String generateName(int maxLength) {
 
-        // Get a random beginning
+        // Get a random beginning to build from
         String currentGram = nameBeginnings.get(randomNumber(0, nameBeginnings.size()-1));
-        String result = currentGram;
+        String generatedName = currentGram;
 
         // Loop through each current n-gram and get the next possible character
         // Add the next character and then repeat the process with the next n-gram with that new letter
         // (i.e. look at the last n characters of the result)
         for (int i = 0; i<maxLength; i++) {
 
+            // Get the list of all possible next characters
             List<String> possibleCharacters = ngrams.get(currentGram);
-
-            //System.out.println(Arrays.toString(possibleCharacters.toArray()));
 
             // Check if there are no possible characters to add
             if (possibleCharacters == null || possibleCharacters.size() == 0) {
@@ -79,16 +79,16 @@ public class NameGenerator {
             String character = possibleCharacters.get(randomNumber(0, possibleCharacters.size()-1));
 
             // Create the word
-            result+=character;
+            generatedName+=character;
 
             // Get length
-            int lengthOfResult = result.length();
+            int lengthOfResult = generatedName.length();
             // The next n-gram is the last n characters of the generated result
-            currentGram = result.substring(lengthOfResult-nOrder,lengthOfResult);
+            currentGram = generatedName.substring(lengthOfResult-nOrder,lengthOfResult);
 
         }
 
-        return result;
+        return generatedName;
 
     }
 
