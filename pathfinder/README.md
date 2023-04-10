@@ -75,6 +75,48 @@
    - Dijkstra computes the shortest paths from a source node to all other nodes
 6) Call findPath() method (or any other pathfinder applicable method) to retrieve a list of shortest paths from a given source to target node
 
+# Example Usage
+```
+        // Create nodes
+        Node node1 = new Node("1");
+        Node node2 = new Node("2");
+        // Node .... (could be looped)
+        
+        // Create edges
+        Edge edge2 = new Edge(node1,node2);
+        // .... (again, could be looped)
+        
+        // Create a property with the name "weightValue" and a value type Double of 1.0
+        Property<Double> weightValue1 = new Property<>("weightValue",1.0);
+        
+        // We will apply this to edge2
+        edge2.addProperty(weightValue1);
+        
+        // Then add both nodes and edges to their own sets
+        Set<Node> nodeSet = new HashSet<>();
+        Set<Edge> edgeSet = new HashSet<>();
+        
+
+        nodeSet.add(node1);
+        nodeSet.add(node2);
+        // .....
+        
+        edgeSet.add(edge2);
+        // .....
+        
+        // Let's create an undirected graph
+        // This means every edge will be treated as bidirectional and will be stored as such
+        Graph undir = new UndirectedGraph(nodeSet,edgeSet);
+        
+        // Now let's create create a weightedPathFinder
+        // undir is the graph variable name, "EdgeData" is what UndirectedGraph stores it's edge data name as and weightValue is the name of the weight property we want to consider in the path calculation (i.e. what we made above)
+        WeightedPathFinder pathFinder = new Dijkstra(undir,"EdgeData","weightValue");
+        
+        // Finally, let's get a list of the shortest path between any two nodes
+        List<Node> path = pathFinder.findPath(node1,node2);
+        
+```
+
 # Rational and Explanations
 ## Nodes and Edges
 To respect the semantics of graphs as described in SFWRENG 2DM3, graphs were to take in two sets, one containing nodes and one for edges. Thus, two classes handle Node and Edge logic.
