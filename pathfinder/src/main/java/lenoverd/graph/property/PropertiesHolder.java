@@ -43,7 +43,7 @@ public abstract class PropertiesHolder {
     }
 
     /**
-     * Get a property object from the nset
+     * Get a property object from the set
      * @param propertyName the property name
      * @param propertyType the property value type (does NOT have to be the same value, just the same type)
      * @return the property object. This object is LIVE, meaning making changes to the returned object will automatically update the property in the node
