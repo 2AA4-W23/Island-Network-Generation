@@ -88,6 +88,11 @@ Alongside generating an island, one can also use the following commands when exe
 cityNameSet.txt is comprised of data retrieved from the Canadian Geographical Names Database. A publicly accessible database containing names for geographical locations across Canada.
 View here: https://natural-resources.canada.ca/earth-sciences/geography/download-geographical-names-data/9245
 
+## A4: Data Set Justification
+The overall idea was to support loading of different data sets. Thus, users can load any .txt file and specify the generation parameters via the command line. This also scales much better as apposed to a fixed dataset hardcoded as this would make for a very large class file.
+This process was introduced as a generator in the island subproject because that's exactly what it is, it is generating names thus, it is delegated as such and can be used in any island generation classes as a tool if need be.
+This also means one class carries the responsibility of the generation process and simplifies said generation interactions with users, it simply asks for the data set and the two generation parameters. From there a string is created.
+
 ## A4: Example
 ```
 # First, generate mesh
