@@ -110,7 +110,8 @@ edgeSet.add(edge2);
 Graph undir = new UndirectedGraph(nodeSet,edgeSet);
         
 // Now let's create create a weightedPathFinder
-// undir is the graph variable name, "EdgeData" is what UndirectedGraph stores it's edge data name as and weightValue is the name of the weight property we want to consider in the path calculation (i.e. what we made above)
+// undir is the graph variable name, "EdgeData" is what UndirectedGraph stores it's edge data name as and weightValue is the name- 
+// of the weight property we want to consider in the path calculation (i.e. what we made above)
 WeightedPathFinder pathFinder = new Dijkstra(undir,"EdgeData","weightValue");
         
 // Finally, let's get a list of the shortest path between any two nodes
