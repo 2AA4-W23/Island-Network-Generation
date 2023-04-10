@@ -25,6 +25,8 @@ public interface Graph {
     boolean hasEdgeBetween(Node firstNode, Node secondNode);
     boolean hasEdgeBetween(String firstNode, String secondNode);
 
+    String getEdgeDataName();
+
 
 
 }

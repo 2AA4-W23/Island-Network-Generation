@@ -534,6 +534,14 @@ public class UndirectedGraph implements Graph {
 
     }
 
+    /**
+     * Get the name of the Property stored in any node containing the specific Edge object for any node (stored in the graph)
+     * @return an Edge object containing the parent node and the neighbour node
+     */
+    public String getEdgeDataName()  {
+        return edgeDataName;
+    }
+
     // Method to check if the all nodes in a set exist within the adj list
     private boolean isValidNodes(Set<Node> nodeSet) {
 

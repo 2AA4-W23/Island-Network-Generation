@@ -114,7 +114,7 @@ class DijkstraTest {
 
         DirectedGraph testGraph = new DirectedGraph(nodes,edges);
 
-        List<Node> path = new Dijkstra(testGraph,"EdgeData","weightValue").findPath(node1,node5);
+        List<Node> path = new Dijkstra(testGraph,testGraph.getEdgeDataName(),"weightValue").findPath(node1,node5);
 
         // The minimal weighted shortest path for this is 1-2-4-3-5
         assertEquals(path.get(0).getNodeName(),"1");
@@ -180,7 +180,7 @@ class DijkstraTest {
 
         Graph undirTest = new UndirectedGraph(nodes,edges);
 
-        List<Node> path = new Dijkstra(undirTest,"EdgeData","weightValue").findPath(node1,node5);
+        List<Node> path = new Dijkstra(undirTest, undirTest.getEdgeDataName(), "weightValue").findPath(node1,node5);
 
         // The minimal weighted shortest path for this is 1-3-5
         assertEquals(path.get(0).getNodeName(),"1");
