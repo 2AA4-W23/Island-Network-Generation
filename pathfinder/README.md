@@ -120,6 +120,13 @@ List<Node> path = pathFinder.findPath(node1,node2);
         
 ```
 
+# Realizing the PathFinder(s) interface
+Any class can implement the pathfinder interface. There are two options
+1) PathFinder - Used for general purpose path finding algorithms that don't require edge weights
+2) WeightedPathFinder - Used for weighted path finder algorithms (i.e., they require edge weights). One extra method is required in which the programmer must specify a means of getting the "distance" (total edge weights) value from a given source and target node.
+Afterwards, one may instantiate your pathfinder!
+Please read the documentation above for further information about the methods one must implement (specifically under pathfinders).
+
 # Rational and Explanations
 ## Nodes and Edges
 To respect the semantics of graphs as described in SFWRENG 2DM3, graphs were to take in two sets, one containing nodes and one for edges. Thus, two classes handle Node and Edge logic.
