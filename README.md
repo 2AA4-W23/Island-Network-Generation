@@ -110,21 +110,45 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
   - Polygons as a group of verticies w/segments
   - PolyMesh as a realization of Java Collections Framework
   - PolyMesh to Java AWT Mesh (Irregular)
-  - Voronoi Generation
-  - JTS to Polymesh (and vice-versa) translation
-  - Mesh to OBJ Exporter
+  - Voronoi generation logic
+  - JTS to PolyMesh (and vice-versa) translation
+  - Mesh to OBJ exporter
   - Commmand Line Interfacing (arguments (non visualizer debug mode), definition of arguments)
-  - Exception Handling
+  - Exception handling
  ### Jasmine Wang
-  - Polymmesh to Java AWT Mesh (Grid with assitance to irregular)
-  - Convex Hull calculation
-  - Visualizer Generation (color/alpha calculations, and placement of AWT shapes on screen)
-  - Visualizer Debug mode
+  - PolyMesh to Java AWT Mesh (Grid with assitance to irregular)
+  - Convex hull calculation
+  - Visualizer generation (color/alpha calculations, and placement of AWT shapes on screen)
+  - Visualizer debug mode
   - File IO
   - Canvas Cropping
 ### Michael Baskaran
   - File IO
-  - Delaunay Triangle calculations
+  - Delaunay triangle calculations
   - Visualizer Generation (assistance to color and alpha calculations with Jasmine Wang)
   - Visualizer Debug mode command line interfacing
 ## A3
+  ### Davis Lenover
+  - Island shapes (including Lagoon)
+  - Seed logic (to control random variance with noise generation)
+  - Lake generation logic
+  - Tile definitions
+  - File IO
+  - Island utils (Is a point on island land/canvas size calculations) and Generation utils (encapsulation of noise generation library)
+  - Command line interfacing (excluding soil and aquafier)
+  - Exception handling
+  ### Jasmine Wang
+  - Elevation calculations/profiles
+  - River generation logic
+  - Biome generation logic/Biome profiles
+  - Added island visualizer support to main mesh visualizer (with assitance from Davis Lenover)
+  - Added properties support to Polygons class
+  ### Michael Baskaran
+  - Soil generation logic/profiles
+  - Aquafier generation logic
+  - Soil and aquafier command line interfacing
+## A4
+  ### Davis Lenover
+  - Island city generation logic
+  - City name Generation
+  - Pathfinder library
