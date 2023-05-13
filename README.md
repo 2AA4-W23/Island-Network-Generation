@@ -107,3 +107,14 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
 # Credits
 ## A2
   ### Davis Lenover
+  - Polygons as a group of verticies w/segments
+  - PolyMesh as a realization of Java Collections Framework
+  - PolyMesh to Java AWT Mesh (Irregular)
+  - Voronoi Generation
+  - JTS to Polymesh (and vice-versa) translation
+  - Mesh to OBJ Exporter
+  - Commmand Line Interfacing (arguments, definition of arguments)
+  - Exception Handling
+ ### Jasmine Wang
+  - Polymmesh to Java AWT Mesh (Grid with assitance to irregular)
+  - Convex Hull calculation
