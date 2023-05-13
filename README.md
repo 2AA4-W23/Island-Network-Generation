@@ -1,9 +1,9 @@
-# Assignment A2: Mesh Generator
+# Mesh and Island Generaton
 
   - Davis Lenover [lenoverd@mcmaster.ca]
   - Jasmine Wang [wangj500@mcmaster.ca]
   - Michael Baskaran [baskam1@mcmaster.ca]
-
+### For a list of full project credits, please view the bottom of this README
 ### If looking for A3 or A4 information, please view the island subproject
 ### If looking for the PathFinder library, please view the pathfinder subproject
 
