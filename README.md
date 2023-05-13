@@ -113,8 +113,18 @@ Status: Pending (P), Started (S), Blocked (B), Done (D)
   - Voronoi Generation
   - JTS to Polymesh (and vice-versa) translation
   - Mesh to OBJ Exporter
-  - Commmand Line Interfacing (arguments, definition of arguments)
+  - Commmand Line Interfacing (arguments (non visualizer debug mode), definition of arguments)
   - Exception Handling
  ### Jasmine Wang
   - Polymmesh to Java AWT Mesh (Grid with assitance to irregular)
   - Convex Hull calculation
+  - Visualizer Generation (color/alpha calculations, and placement of AWT shapes on screen)
+  - Visualizer Debug mode
+  - File IO
+  - Canvas Cropping
+### Michael Baskaran
+  - File IO
+  - Delaunay Triangle calculations
+  - Visualizer Generation (assistance to color and alpha calculations with Jasmine Wang)
+  - Visualizer Debug mode command line interfacing
+## A3
